@@ -1,0 +1,11 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+preprocessing:
+  flux_stream: PDCSAP_FLUX
+  # Provisional development values; common to every product, never tuned per target.
+  gap_days: 0.5
+  trend_window_cadences: 101
+  positive_spike_mad: 8.0

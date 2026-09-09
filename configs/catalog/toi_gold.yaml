@@ -1,0 +1,25 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+catalog:
+  source: nasa_exoplanet_archive
+  table: toi
+  endpoint: https://exoplanetarchive.ipac.caltech.edu/TAP/sync
+  requested_fields:
+    - tid
+    - toi
+    - tfopwg_disp
+    - pl_orbper
+    - pl_tranmid
+    - pl_trandurh
+    - pl_trandep
+    - toi_created
+    - rowupdate
+  disposition_policy_version: toi-gold-v1
+  pilot:
+    # Temporary development cohort, not the final experimental cohort.
+    positive_target_count: 5
+    negative_target_count: 5
+    seed_component: catalog_pilot_cohort

@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "transiteye"
+version = "0.1.0"
+description = "Reproducible ML research infrastructure for exoplanet transit candidates."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+license = { text = "MIT" }
+authors = [{ name = "TransitEye contributors" }]
+dependencies = [
+  "astropy>=6,<9",
+  "astroquery>=0.4.11,<1",
+  "matplotlib>=3.8,<4",
+  "pandas>=2.2,<3",
+  "pydantic>=2.7,<3",
+  "pyarrow>=16,<25",
+  "PyYAML>=6.0,<7",
+]
+
+[dependency-groups]
+dev = [
+  "mypy>=1.10,<2",
+  "pandas-stubs>=2.2,<3",
+  "pre-commit>=3.7,<5",
+  "pytest>=8.2,<9",
+  "pytest-cov>=5,<7",
+  "ruff>=0.5,<1",
+  "types-PyYAML>=6.0.12,<7",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/transiteye"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers -m 'not network'"
+markers = [
+  "network: test requires an external network service and is excluded by default",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["transiteye"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 90
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+warn_unreachable = true

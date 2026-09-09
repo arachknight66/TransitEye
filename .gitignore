@@ -1,0 +1,64 @@
+# Python and virtual environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.so
+
+# Test, type-checking, lint, and build artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+build/
+dist/
+*.egg-info/
+
+# Notebooks and temporary files
+.ipynb_checkpoints/
+*.tmp
+*.temp
+*.swp
+*~
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local configuration only; shared configs remain tracked
+configs/local/
+*.local.yaml
+*.local.yml
+
+# Immutable or generated scientific data
+data/raw/
+data/catalogs/
+data/interim/
+data/processed/
+data/candidates/
+data/features/
+data/splits/
+data/synthetic/
+*.fits
+*.fit
+*.fts
+
+# Generated experiments and artifacts
+runs/*
+!runs/.gitkeep
+reports/figures/
+reports/tables/
+reports/final/
+models/
+artifacts/
+*.joblib
+*.skops
+*.pt
+*.pth
+*.npz

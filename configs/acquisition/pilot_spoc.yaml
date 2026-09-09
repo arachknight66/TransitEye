@@ -1,0 +1,19 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+acquisition:
+  source: mast
+  mission: TESS
+  product_kind: lightcurve
+  # The preferred family is deliberately homogeneous; no fallback enters the core cohort.
+  preferred_author: TESS-SPOC
+  # TBD: lock a cadence preference only after the product availability review.
+  preferred_exposure_seconds: null
+  sector_policy: all_available
+  duplicate_resolution: latest_release
+  allow_fallback: false
+  # Temporary operational limits for the B016 download pilot, not scientific selection rules.
+  download_pilot_target_limit: 3
+  download_pilot_sectors_per_target: 1

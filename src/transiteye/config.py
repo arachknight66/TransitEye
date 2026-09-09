@@ -1,0 +1,141 @@
+"""Typed, deterministic project configuration."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from pathlib import Path
+from typing import Any, Literal
+
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
+
+from transiteye.serialization import canonical_json, content_hash
+
+
+class ConfigurationError(ValueError):
+    """Raised when a configuration file cannot be parsed or validated."""
+
+
+class ProjectSettings(BaseModel):
+    """Non-scientific project identity settings."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    name: str = Field(min_length=1)
+
+
+class ReproducibilitySettings(BaseModel):
+    """Minimal reproducibility settings shared by future stages."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    master_seed: int = Field(ge=0, le=(2**32) - 1)
+
+
+class PilotCohortSettings(BaseModel):
+    """Development-only target counts and deterministic sampling settings."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    positive_target_count: int = Field(gt=0)
+    negative_target_count: int = Field(gt=0)
+    seed_component: str = Field(min_length=1)
+
+
+class CatalogSettings(BaseModel):
+    """Settings required to retrieve and select a frozen TOI catalog snapshot."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    source: Literal["nasa_exoplanet_archive"]
+    table: Literal["toi"]
+    endpoint: str = Field(min_length=1)
+    requested_fields: tuple[str, ...] = Field(min_length=1)
+    disposition_policy_version: str = Field(min_length=1)
+    pilot: PilotCohortSettings
+
+
+class AcquisitionSettings(BaseModel):
+    """Narrow MAST search and product-selection settings for the acquisition stage."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    source: Literal["mast"]
+    mission: Literal["TESS"]
+    product_kind: Literal["lightcurve"]
+    preferred_author: str = Field(min_length=1)
+    preferred_exposure_seconds: float | None = Field(default=None, gt=0)
+    sector_policy: Literal["all_available"]
+    duplicate_resolution: Literal["latest_release"]
+    allow_fallback: bool = False
+    download_pilot_target_limit: int = Field(gt=0, le=3)
+    download_pilot_sectors_per_target: int = Field(gt=0)
+
+
+class PreprocessingSettings(BaseModel):
+    """Provisional, common MVP preprocessing parameters."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    flux_stream: Literal["PDCSAP_FLUX"]
+    gap_days: float = Field(gt=0)
+    trend_window_cadences: int = Field(ge=5)
+    positive_spike_mad: float = Field(gt=0)
+
+
+class ProjectConfig(BaseModel):
+    """Foundation-stage configuration contract.
+
+    Scientific parameters are intentionally absent until their corresponding
+    implementation stages have approved values.
+    """
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    config_version: Literal[1]
+    project: ProjectSettings
+    reproducibility: ReproducibilitySettings
+    catalog: CatalogSettings | None = None
+    acquisition: AcquisitionSettings | None = None
+    preprocessing: PreprocessingSettings | None = None
+
+
+ConfigInput = ProjectConfig | Mapping[str, Any]
+
+
+def _validate_config(value: ConfigInput) -> ProjectConfig:
+    if isinstance(value, ProjectConfig):
+        return value
+    try:
+        return ProjectConfig.model_validate(value)
+    except ValidationError as exc:
+        raise ConfigurationError("Configuration does not match the project schema.") from exc
+
+
+def load_config(path: str | Path) -> ProjectConfig:
+    """Load and validate one YAML configuration file."""
+    config_path = Path(path)
+    try:
+        with config_path.open("r", encoding="utf-8") as handle:
+            raw = yaml.safe_load(handle)
+    except (OSError, yaml.YAMLError) as exc:
+        raise ConfigurationError(f"Could not load configuration: {config_path}") from exc
+
+    if not isinstance(raw, Mapping):
+        raise ConfigurationError("Configuration root must be a YAML mapping.")
+    return _validate_config(raw)
+
+
+def resolve_config(config: ConfigInput) -> dict[str, Any]:
+    """Return a JSON-compatible, deterministic representation of a config."""
+    validated = _validate_config(config)
+    return validated.model_dump(mode="json", exclude_none=True)
+
+
+def stable_config_json(config: ConfigInput) -> str:
+    """Return canonical JSON suitable for a provenance record."""
+    return canonical_json(resolve_config(config))
+
+
+def config_hash(config: ConfigInput) -> str:
+    """Return the content hash of the resolved scientific configuration."""
+    return content_hash(resolve_config(config))
