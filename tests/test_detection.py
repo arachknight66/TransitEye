@@ -24,17 +24,19 @@ def _settings() -> BlsSettings:
     )
 
 
-def _curve(period: float = 2.5) -> pd.DataFrame:
+def _curve(period: float = 2.5, *, epoch: float = 0.3, depth: float = 0.01) -> pd.DataFrame:
     time = np.arange(0, 20, 0.02)
     time = time[~((time > 8) & (time < 9))]
     flux = np.ones_like(time)
-    phase = ((time - 0.3 + 0.5 * period) % period) - 0.5 * period
-    flux[np.abs(phase) < 0.05] -= 0.01
+    phase = ((time - epoch + 0.5 * period) % period) - 0.5 * period
+    flux[np.abs(phase) < 0.05] -= depth
     return pd.DataFrame({"time": time, "detrended_flux": flux, "valid": True})
 
 
-def _outcome(period: float, *, gap: bool = False, irregular: bool = False) -> str:
-    frame = _curve(period)
+def _outcome(
+    period: float, *, gap: bool = False, irregular: bool = False, depth: float = 0.01
+) -> str:
+    frame = _curve(period, depth=depth)
     if gap:
         frame = frame.loc[~frame.time.between(2.4, 2.6)].reset_index(drop=True)
     if irregular:
@@ -93,3 +95,51 @@ def test_no_transit_is_not_claimed_as_injected_recovery() -> None:
     candidates = extract_peaks(result, _settings())
     events = pd.DataFrame([{"toi_id": "synthetic", "period_days": 2.5, "transit_epoch_bjd": 0.3}])
     assert not match_candidates(candidates, events, _settings()).matched.any()
+
+
+def test_weak_transit_has_deterministic_graceful_outcome() -> None:
+    frame = _curve(depth=0.001)
+    first = _outcome(2.5, depth=0.001)
+    result = run_bls(
+        frame, settings=_settings(), observation_group_id="og-weak", preprocessing_hash="d" * 20
+    )
+    peaks = extract_peaks(result, _settings())
+    assert np.isfinite(result.periodogram.power).all()
+    assert len(peaks) > 0
+    assert first == _outcome(2.5, depth=0.001)
+    assert first in {"fundamental", "harmonic", "not_recovered"}
+
+
+def test_long_period_baseline_limit_is_deterministic() -> None:
+    settings = _settings().model_copy(update={"max_period_days": 20.0})
+    frame = _curve(period=9.5)
+    result = run_bls(
+        frame, settings=settings, observation_group_id="og-baseline", preprocessing_hash="e" * 20
+    )
+    effective_maximum = min(
+        settings.max_period_days, (frame.time.max() - frame.time.min()) / settings.min_transits
+    )
+    assert effective_maximum == 9.99
+    assert result.periodogram.period.max() <= effective_maximum
+    assert len(extract_peaks(result, settings)) > 0
+
+
+def test_noninteger_cadence_epoch_alignment_recovers_period() -> None:
+    frame = _curve(period=2.7, epoch=0.337)
+    result = run_bls(
+        frame,
+        settings=_settings(),
+        observation_group_id="og-noninteger",
+        preprocessing_hash="f" * 20,
+    )
+    peaks = extract_peaks(result, _settings())
+    assert any(abs(float(period) / 2.7 - 1) < 0.03 for period in peaks.period)
+
+
+def test_double_period_matching_is_not_fundamental() -> None:
+    candidates = pd.DataFrame([{"candidate_id": "cand-double", "period": 5.0, "epoch": 5.3}])
+    events = pd.DataFrame([{"toi_id": "1.01", "period_days": 2.5, "transit_epoch_bjd": 0.3}])
+    match = match_candidates(candidates, events, _settings())
+    assert match.loc[0, "match_type"] == "double_period"
+    assert bool(match.loc[0, "matched"])
+    assert match.loc[0, "harmonic_ratio"] == 2.0

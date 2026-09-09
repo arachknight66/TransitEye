@@ -10,6 +10,7 @@ import pandas as pd
 
 from transiteye.acquisition.checksums import sha256_file
 from transiteye.acquisition.mast import AstroqueryMastClient, normalize_mast_products
+from transiteye.serialization import content_hash
 
 
 def retrieve_pending(observations: pd.DataFrame, root: str | Path) -> pd.DataFrame:
@@ -72,13 +73,20 @@ def freeze_products(root: str | Path) -> Path:
     )
     products = products.drop_duplicates(subset=["mast_obs_id", "data_uri"]).reset_index(drop=True)
     products.to_parquet(directory / "normalized_products.parquet", index=False)
+    products_sha256 = sha256_file(directory / "normalized_products.parquet")
+    identity = {
+        "coverage": coverage[["mast_obs_id", "status"]].to_dict(orient="records"),
+        "products_sha256": products_sha256,
+    }
+    snapshot_id = f"mast-products-{content_hash(identity)}"
     (directory / "metadata.json").write_text(
         json.dumps(
             {
+                "snapshot_id": snapshot_id,
                 "observation_count": len(coverage),
                 "coverage_counts": coverage.status.value_counts().to_dict(),
                 "product_rows": len(products),
-                "products_sha256": sha256_file(directory / "normalized_products.parquet"),
+                "products_sha256": products_sha256,
             },
             sort_keys=True,
         )

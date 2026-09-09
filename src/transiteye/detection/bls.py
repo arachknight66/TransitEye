@@ -61,25 +61,26 @@ def run_bls(
         maximum_period=maximum,
         frequency_factor=settings.frequency_factor,
     )
+    valid_period = np.asarray(power.period) <= maximum
     pg = pd.DataFrame(
         {
-            "period": np.asarray(power.period),
-            "power": power.power,
-            "duration": np.asarray(power.duration),
-            "epoch": np.asarray(power.transit_time),
-            "depth": power.depth,
+            "period": np.asarray(power.period)[valid_period],
+            "power": np.asarray(power.power)[valid_period],
+            "duration": np.asarray(power.duration)[valid_period],
+            "epoch": np.asarray(power.transit_time)[valid_period],
+            "depth": np.asarray(power.depth)[valid_period],
         }
     )
-    best = int(np.nanargmax(power.power))
+    best = int(np.nanargmax(pg.power.to_numpy()))
     config_hash = content_hash(
         {"bls": settings.model_dump(mode="json"), "preprocessing_hash": preprocessing_hash}
     )
     return BlsResult(
         pg,
-        float(power.period[best]),
-        float(power.duration[best]),
-        float(power.transit_time[best]),
-        float(power.depth[best]),
+        float(pg.iloc[best].period),
+        float(pg.iloc[best].duration),
+        float(pg.iloc[best].epoch),
+        float(pg.iloc[best].depth),
         config_hash,
         observation_group_id,
     )

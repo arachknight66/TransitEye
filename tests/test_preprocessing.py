@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from transiteye.preprocessing.pipeline import LightCurveRecord, preprocess
+from transiteye.preprocessing.qa import plot_preprocessing_qa
 
 
 def test_synthetic_box_transits_are_preserved() -> None:
@@ -50,3 +51,20 @@ def test_nonfinite_and_gaps_are_explicit() -> None:
     )
     result = preprocess(record, gap_days=0.5, trend_window=5, positive_spike_mad=8)
     assert {"nonfinite_time", "nonfinite_pdcsap_flux"}.issubset(set(result.data.rejection_reason))
+
+
+def test_qa_plot_is_written(tmp_path) -> None:
+    record = LightCurveRecord(
+        pd.DataFrame(
+            {
+                "time": [0.0, 1.0],
+                "pdcsap_flux": [1.0, 1.0],
+                "valid": [True, True],
+                "normalized_flux": [1.0, 1.0],
+                "trend": [1.0, 1.0],
+                "detrended_flux": [1.0, 1.0],
+            }
+        ),
+        {},
+    )
+    assert plot_preprocessing_qa(record, tmp_path / "qa.png").exists()
