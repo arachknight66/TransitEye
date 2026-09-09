@@ -82,6 +82,22 @@ class PreprocessingSettings(BaseModel):
     positive_spike_mad: float = Field(gt=0)
 
 
+class BlsSettings(BaseModel):
+    """Shared, blind MVP Box Least Squares search policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    min_period_days: float = Field(gt=0)
+    max_period_days: float = Field(gt=0)
+    min_transits: int = Field(ge=2)
+    durations_days: tuple[float, ...] = Field(min_length=1)
+    frequency_factor: float = Field(gt=0)
+    top_k: int = Field(gt=0)
+    local_peak_fraction: float = Field(gt=0, lt=1)
+    harmonic_tolerance: float = Field(gt=0, lt=1)
+    period_match_tolerance: float = Field(gt=0, lt=1)
+    phase_match_tolerance: float = Field(gt=0, lt=0.5)
+
+
 class ProjectConfig(BaseModel):
     """Foundation-stage configuration contract.
 
@@ -97,6 +113,7 @@ class ProjectConfig(BaseModel):
     catalog: CatalogSettings | None = None
     acquisition: AcquisitionSettings | None = None
     preprocessing: PreprocessingSettings | None = None
+    bls: BlsSettings | None = None
 
 
 ConfigInput = ProjectConfig | Mapping[str, Any]

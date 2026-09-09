@@ -1,0 +1,17 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+bls:
+  # Provisional shared MVP values; effective maximum is baseline/min_transits.
+  min_period_days: 0.5
+  max_period_days: 20.0
+  min_transits: 2
+  durations_days: [0.04, 0.08, 0.12, 0.2]
+  frequency_factor: 5.0
+  top_k: 5
+  local_peak_fraction: 0.01
+  harmonic_tolerance: 0.02
+  period_match_tolerance: 0.02
+  phase_match_tolerance: 0.1
