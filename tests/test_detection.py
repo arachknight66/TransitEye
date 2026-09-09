@@ -33,6 +33,24 @@ def _curve(period: float = 2.5) -> pd.DataFrame:
     return pd.DataFrame({"time": time, "detrended_flux": flux, "valid": True})
 
 
+def _outcome(period: float, *, gap: bool = False, irregular: bool = False) -> str:
+    frame = _curve(period)
+    if gap:
+        frame = frame.loc[~frame.time.between(2.4, 2.6)].reset_index(drop=True)
+    if irregular:
+        frame = frame.iloc[np.arange(len(frame)) % 7 != 0].reset_index(drop=True)
+    result = run_bls(
+        frame, settings=_settings(), observation_group_id="og-matrix", preprocessing_hash="b" * 20
+    )
+    peaks = extract_peaks(result, _settings())
+    ratios = [float(value) / period for value in peaks.period]
+    if any(abs(ratio - 1) < 0.03 for ratio in ratios):
+        return "fundamental"
+    if any(abs(ratio - 0.5) < 0.03 or abs(ratio - 2) < 0.03 for ratio in ratios):
+        return "harmonic"
+    return "not_recovered"
+
+
 def test_blind_synthetic_recovery_is_deterministic() -> None:
     result = run_bls(
         _curve(),
@@ -58,3 +76,20 @@ def test_post_detection_matching_recognizes_harmonic() -> None:
     events = pd.DataFrame([{"toi_id": "1.01", "period_days": 2.5, "transit_epoch_bjd": 0.3}])
     match = match_candidates(candidates, events, _settings())
     assert match.loc[0, "match_type"] == "half_period" and bool(match.loc[0, "matched"])
+
+
+def test_synthetic_recovery_matrix_is_deterministic() -> None:
+    outcomes = [_outcome(2.5), _outcome(3.1, gap=True), _outcome(2.7, irregular=True)]
+    assert outcomes == [_outcome(2.5), _outcome(3.1, gap=True), _outcome(2.7, irregular=True)]
+    assert outcomes[0] == "fundamental"
+
+
+def test_no_transit_is_not_claimed_as_injected_recovery() -> None:
+    frame = _curve(2.5)
+    frame["detrended_flux"] = 1.0
+    result = run_bls(
+        frame, settings=_settings(), observation_group_id="og-null", preprocessing_hash="c" * 20
+    )
+    candidates = extract_peaks(result, _settings())
+    events = pd.DataFrame([{"toi_id": "synthetic", "period_days": 2.5, "transit_epoch_bjd": 0.3}])
+    assert not match_candidates(candidates, events, _settings()).matched.any()
