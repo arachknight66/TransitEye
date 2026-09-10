@@ -435,6 +435,9 @@ def _build_expanded_dataset(
     usable_detection = detection_receipts.loc[
         detection_receipts["status"].isin(["success", "reused", "failed"])
     ].copy()
+    detection_lineage = usable_detection[
+        ["source_raw_checksum", "observation_group_id", "bls_config_hash", "status"]
+    ].rename(columns={"status": "detection_status"})
     complete = usable_downloads.merge(
         usable_preprocessed[
             ["source_raw_checksum", "processed_checksum", "preprocessing_config_hash"]
@@ -443,13 +446,10 @@ def _build_expanded_dataset(
         right_on="source_raw_checksum",
         how="inner",
     ).merge(
-        usable_detection[
-            ["source_raw_checksum", "observation_group_id", "bls_config_hash", "status"]
-        ],
+        detection_lineage,
         left_on="sha256",
         right_on="source_raw_checksum",
         how="inner",
-        suffixes=("", "_detection"),
     )
     lineage = build_artifact_lineage(
         products,
@@ -457,8 +457,8 @@ def _build_expanded_dataset(
         complete[["sha256", "processed_checksum", "preprocessing_config_hash"]].rename(
             columns={"sha256": "source_raw_checksum"}
         ),
-        complete[["sha256", "observation_group_id", "bls_config_hash", "status"]].rename(
-            columns={"sha256": "source_raw_checksum"}
+        complete[["sha256", "observation_group_id", "bls_config_hash", "detection_status"]].rename(
+            columns={"sha256": "source_raw_checksum", "detection_status": "status"}
         ),
     )
     frozen_candidates = pd.concat(candidate_frames, ignore_index=True)
@@ -497,6 +497,7 @@ def _build_expanded_dataset(
             {
                 "dataset_config_hash": config_hash(dataset_config),
                 "expansion_policy_hash": manifest.policy_hash,
+                "materialization_schema_version": "expanded-development-v2",
             }
         ),
     )

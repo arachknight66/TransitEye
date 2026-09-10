@@ -61,11 +61,18 @@ def _real_artifacts(root: Path) -> tuple[BuiltDataset, DatasetIdentityInputs, di
     )
     events = pd.read_parquet(cohort_root / "selected_target_events.parquet")
     preprocessing_hash = config_hash(preprocessing_config)
-    candidate_root = _one(
-        [path for path in (root / "data/candidates").iterdir() if path.is_dir()],
-        "frozen BLS configuration directory",
+    # This replay is intentionally for the accepted historical pilot dataset.
+    # New frozen BLS configurations may coexist in ``data/candidates`` and must
+    # not change which artifacts reconstruct this dataset version.
+    historical_metadata = json.loads(
+        (root / "data/datasets/dataset-7848048e67497fdace7d/dataset_metadata.json").read_text(
+            encoding="utf-8"
+        )
     )
-    bls_hash = candidate_root.name
+    bls_hash = str(historical_metadata["identity_inputs"]["bls_config_hash"])
+    candidate_root = root / "data/candidates" / bls_hash
+    if not candidate_root.is_dir():
+        raise ValueError("Historical frozen BLS configuration directory is unavailable.")
 
     processed_rows: list[dict[str, object]] = []
     detection_rows: list[dict[str, object]] = []
