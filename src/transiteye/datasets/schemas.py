@@ -137,6 +137,20 @@ FORBIDDEN_MODEL_INPUT_COLUMNS = frozenset(
         "matched_event_id",
         "match_type",
         "match_harmonic_ratio",
+        "synthetic_event_class",
+        "demo_gold_class",
+        "injected_period_days",
+        "injected_epoch",
+        "injected_duration_days",
+        "injected_depth_or_amplitude",
+        "injected_secondary_depth",
+        "injection_seed",
+        "difficulty",
+        "variant_id",
+        "synthetic_event_id",
+        "truth_match_result",
+        "truth_source",
+        "dataset_role",
     }
 )
 
@@ -145,4 +159,6 @@ def assert_model_input_boundary(columns: list[str] | tuple[str, ...] | set[str])
     """Reject catalog/label fields from a future model-input column list."""
     leaked = sorted(FORBIDDEN_MODEL_INPUT_COLUMNS.intersection(columns))
     if leaked:
-        raise ValueError(f"Catalog evaluation metadata cannot be model inputs: {leaked}")
+        raise ValueError(
+            f"Catalog evaluation or synthetic truth metadata cannot be model inputs: {leaked}"
+        )

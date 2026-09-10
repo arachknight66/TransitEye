@@ -1,0 +1,42 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+demo:
+  # Controlled software-validation benchmark; never a real-TESS performance dataset.
+  policy_version: tess-substrate-demo-v1
+  generator_version: deterministic-trapezoid-eb-sinusoid-v1
+  artifact_schema_version: demo-artifact-lineage-v1
+  base_expansion_manifest_id: expansion-be59541b9388b685e1f9
+  seed_component: demo_variant_injection
+  split_policy: all_development
+  variants:
+    - name: planet_easy
+      event_class: planet_like
+      difficulty: easy
+      period_days: 2.5
+      duration_days: 0.12
+      depth_or_amplitude: 0.02
+    - name: planet_medium
+      event_class: planet_like
+      difficulty: medium
+      period_days: 4.25
+      duration_days: 0.16
+      depth_or_amplitude: 0.006
+    - name: eclipsing_binary
+      event_class: eclipsing_binary_like
+      difficulty: easy
+      period_days: 3.2
+      duration_days: 0.16
+      depth_or_amplitude: 0.06
+      secondary_depth: 0.025
+    - name: sinusoidal_variability
+      event_class: sinusoidal_variability_like
+      difficulty: medium
+      period_days: 1.75
+      duration_days: 0.20
+      depth_or_amplitude: 0.02
+    - name: no_injection
+      event_class: no_injection_control
+      difficulty: control

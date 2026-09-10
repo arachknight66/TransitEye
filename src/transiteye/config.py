@@ -85,6 +85,60 @@ class ExpansionSettings(BaseModel):
     sector_order: Literal["earliest"]
 
 
+class DemoVariantSettings(BaseModel):
+    """One predeclared synthetic variant applied uniformly to every base curve."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    name: str = Field(min_length=1)
+    event_class: Literal[
+        "planet_like",
+        "eclipsing_binary_like",
+        "sinusoidal_variability_like",
+        "no_injection_control",
+    ]
+    difficulty: Literal["easy", "medium", "weak", "control"]
+    period_days: float | None = Field(default=None, gt=0)
+    duration_days: float | None = Field(default=None, gt=0)
+    depth_or_amplitude: float | None = Field(default=None, gt=0, lt=1)
+    secondary_depth: float | None = Field(default=None, ge=0, lt=1)
+
+    @model_validator(mode="after")
+    def validate_event_parameters(self) -> DemoVariantSettings:
+        required = (self.period_days, self.duration_days, self.depth_or_amplitude)
+        if self.event_class == "no_injection_control":
+            if any(value is not None for value in required) or self.secondary_depth is not None:
+                raise ValueError("No-injection controls cannot define synthetic signal parameters.")
+        elif any(value is None for value in required):
+            raise ValueError(
+                "Injected demo variants require period, duration, and depth/amplitude."
+            )
+        if self.event_class != "eclipsing_binary_like" and self.secondary_depth is not None:
+            raise ValueError("Secondary depth is only valid for eclipsing-binary-like variants.")
+        return self
+
+
+class DemoSettings(BaseModel):
+    """Frozen policy for controlled signals embedded in real TESS substrates."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    policy_version: str = Field(min_length=1)
+    generator_version: str = Field(min_length=1)
+    artifact_schema_version: Literal["demo-artifact-lineage-v1"] = "demo-artifact-lineage-v1"
+    base_expansion_manifest_id: str = Field(min_length=1)
+    seed_component: str = Field(min_length=1)
+    variants: tuple[DemoVariantSettings, ...] = Field(min_length=1)
+    split_policy: Literal["all_development"]
+
+    @model_validator(mode="after")
+    def validate_unique_variant_names(self) -> DemoSettings:
+        names = [variant.name for variant in self.variants]
+        if len(names) != len(set(names)):
+            raise ValueError("Demo variant names must be unique.")
+        return self
+
+
 class PreprocessingSettings(BaseModel):
     """Provisional, common MVP preprocessing parameters."""
 
@@ -155,6 +209,7 @@ class ProjectConfig(BaseModel):
     catalog: CatalogSettings | None = None
     acquisition: AcquisitionSettings | None = None
     expansion: ExpansionSettings | None = None
+    demo: DemoSettings | None = None
     preprocessing: PreprocessingSettings | None = None
     bls: BlsSettings | None = None
     dataset: DatasetSettings | None = None
