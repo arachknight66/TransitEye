@@ -42,6 +42,7 @@ data/catalogs/
 data/interim/
 data/processed/
 data/candidates/
+data/datasets/
 data/features/
 data/splits/
 data/synthetic/

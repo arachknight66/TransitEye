@@ -1,0 +1,20 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+dataset:
+  # B031--B034 contract; this is not a final experimental dataset policy.
+  policy_version: candidate-event-dataset-v1
+  label_policy_version: toi-gold-v1
+  recovery_policy_version: event-recovery-v1
+  ambiguity_handling: preserve_unlabeled
+  development_split_behavior: all_development
+  split:
+    # Provisional future fractions; not applied to the two-TIC development dataset.
+    train_fraction: 0.7
+    validation_fraction: 0.15
+    test_fraction: 0.15
+    seed_component: tic_grouped_split
+    # TBD: grouped stratification policy after the real cohort is expanded.
+    grouped_stratification: none

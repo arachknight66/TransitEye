@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from transiteye.serialization import canonical_json, content_hash
 
@@ -72,6 +72,19 @@ class AcquisitionSettings(BaseModel):
     download_pilot_sectors_per_target: int = Field(gt=0)
 
 
+class ExpansionSettings(BaseModel):
+    """Frozen, label-independent real-cohort expansion selection policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+
+    product_snapshot_id: str = Field(min_length=1)
+    required_author: Literal["TESS-SPOC"]
+    required_product_suffix: Literal["_lc.fits"]
+    preferred_exposure_seconds: float = Field(gt=0)
+    sectors_per_tic: int = Field(gt=0)
+    sector_order: Literal["earliest"]
+
+
 class PreprocessingSettings(BaseModel):
     """Provisional, common MVP preprocessing parameters."""
 
@@ -98,6 +111,35 @@ class BlsSettings(BaseModel):
     phase_match_tolerance: float = Field(gt=0, lt=0.5)
 
 
+class DatasetSplitSettings(BaseModel):
+    """Future final split proportions and deterministic grouping policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    train_fraction: float = Field(ge=0, le=1)
+    validation_fraction: float = Field(ge=0, le=1)
+    test_fraction: float = Field(ge=0, le=1)
+    seed_component: str = Field(min_length=1)
+    grouped_stratification: Literal["none"] = "none"
+
+    @model_validator(mode="after")
+    def validate_fraction_sum(self) -> DatasetSplitSettings:
+        if abs(self.train_fraction + self.validation_fraction + self.test_fraction - 1) > 1e-12:
+            raise ValueError("Dataset split fractions must sum to one.")
+        return self
+
+
+class DatasetSettings(BaseModel):
+    """B031--B034 dataset semantics without feature or model configuration."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    policy_version: str = Field(min_length=1)
+    label_policy_version: str = Field(min_length=1)
+    recovery_policy_version: str = Field(min_length=1)
+    ambiguity_handling: Literal["preserve_unlabeled"]
+    development_split_behavior: Literal["all_development"]
+    split: DatasetSplitSettings
+
+
 class ProjectConfig(BaseModel):
     """Foundation-stage configuration contract.
 
@@ -112,8 +154,10 @@ class ProjectConfig(BaseModel):
     reproducibility: ReproducibilitySettings
     catalog: CatalogSettings | None = None
     acquisition: AcquisitionSettings | None = None
+    expansion: ExpansionSettings | None = None
     preprocessing: PreprocessingSettings | None = None
     bls: BlsSettings | None = None
+    dataset: DatasetSettings | None = None
 
 
 ConfigInput = ProjectConfig | Mapping[str, Any]

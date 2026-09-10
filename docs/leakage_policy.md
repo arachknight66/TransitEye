@@ -14,12 +14,19 @@
   after partitioning; augmented descendants remain with their parent object.
 - The final test partition is locked before model-selection decisions.
 
-## Required future checks
+## Dataset-boundary checks (B031--B034)
 
-- Assert no `object_id` appears in more than one split.
-- Assert no product checksum appears across logically duplicated records.
-- Record and validate the split-policy and dataset-version hashes.
-- Audit every feature list against prohibited label-derived fields.
+- One TIC is the indivisible split group. Observation groups, products, raw
+  checksums, processed products, candidates, and catalog events inherit that
+  TIC's assignment.
+- Candidate detection measurements and catalog evaluation metadata use
+  separate schemas. Catalog period, epoch, duration, disposition, and match
+  fields are forbidden from a future model-input namespace.
+- Unmatched candidates are explicitly unlabeled, never gold negative.
+- Contradictory matched gold dispositions produce an explicit ambiguous,
+  non-training state.
+- Dataset validation rejects cross-split identities, duplicate candidates or
+  events, inconsistent candidate/event lineage, and invalid label semantics.
 
 ## TBD decisions
 

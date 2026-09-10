@@ -38,9 +38,25 @@ the full 64-character SHA-256 digest.
 Canonical construction rules and field validation are implemented in
 `transiteye.identifiers` and `transiteye.schemas`.
 
+## B031--B034 statistical tables
+
+- `candidates.parquet`: one blind BLS hypothesis per row. Detection measurements
+  remain separate from the typed `positive`, `negative`, `unlabeled`, or
+  `ambiguous` catalog-derived state. Unmatched candidates are unlabeled.
+- `candidate_event_matches.parquet`: auditable candidate-to-TOI relations,
+  including unsuccessful comparisons and harmonic match type. This table owns
+  catalog ephemeris comparison fields.
+- `catalog_events.parquet`: one frozen cohort event per row, including catalog
+  ephemerides and the acquisition-to-detection recovery state. Unrecovered
+  CP/KP events remain present.
+- `artifact_lineage.parquet`: portable product, checksum, processed artifact,
+  observation-group, and BLS identities. Local paths are excluded.
+- `split_manifest.parquet`: one row per TIC. The current artifact uses the
+  `development` split only; final train/validation/test assignment is TBD until
+  the real searched cohort is sufficiently large.
+
 ## TBD additions
 
 - **TBD:** raw FITS metadata columns.
 - **TBD:** processed light-curve columns and quality-mask semantics.
-- **TBD:** candidate measurement fields.
 - **TBD:** feature definitions, units, missing-value policy, and model outputs.

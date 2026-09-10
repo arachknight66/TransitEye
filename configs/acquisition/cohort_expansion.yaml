@@ -1,0 +1,14 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+expansion:
+  # Frozen B016 product discovery snapshot; no live MAST query is performed.
+  product_snapshot_id: mast-products-cc80ce4b85ed6ab29d84
+  required_author: TESS-SPOC
+  required_product_suffix: _lc.fits
+  # 200 s provides the largest homogeneous TESS-SPOC coverage: 8 of 9 available TICs.
+  preferred_exposure_seconds: 200.0
+  sectors_per_tic: 2
+  sector_order: earliest
