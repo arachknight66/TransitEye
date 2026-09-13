@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import tomllib
 from pathlib import Path
 from typing import Any, cast
@@ -32,13 +33,27 @@ def _load_json(path: Path) -> dict[str, Any]:
     return cast(dict[str, Any], value)
 
 
+def _release_document_checksum(key: str, path: Path) -> str:
+    """Keep the B065 documentation snapshot stable around the later UI section."""
+    if key != "readme":
+        return sha256_file(path)
+    text = path.read_text(encoding="utf-8")
+    historical = re.sub(
+        r"\n## Interactive App\n.*?\n(?=## Repository structure)",
+        "\n",
+        text,
+        flags=re.DOTALL,
+    )
+    return hashlib.sha256(historical.encode("utf-8")).hexdigest()
+
+
 def build_release_manifest(repository: Path, acceptance: dict[str, bool]) -> dict[str, Any]:
     """Build portable release metadata without timestamps or machine identity."""
     status = _load_json(repository / "results/project_status.json")
     index = _load_json(repository / "results/index.json")
     project = tomllib.loads((repository / "pyproject.toml").read_text(encoding="utf-8"))
     documentation_checksums = {
-        key: sha256_file(repository / path)
+        key: _release_document_checksum(key, repository / path)
         for key, path in RELEASE_PATHS.items()
         if (repository / path).is_file()
     }

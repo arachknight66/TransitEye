@@ -24,6 +24,25 @@ This offline, read-only command checks all registered immutable files, SHA-256
 values, and available identity references. Missing or changed artifacts cause a
 useful failure.
 
+## Interactive frontend
+
+Launch the offline project interface from the repository root after restoring
+the accepted frozen `data/` artifact bundle:
+
+```bash
+uv run streamlit run app.py
+```
+
+The pages cover the overview, controlled demo, unlabeled scientific candidate
+table, candidate scorecards, frozen model evaluation, architecture, and
+reproducibility status. The **Verify Frozen Artifacts** and **Run Demo Smoke
+Test** buttons call the existing backend workflows only. They do not acquire
+data or train a model.
+
+Scientific rows are explicitly unlabeled. A demo-trained model prediction is
+an exploratory score and must not be read as a confirmed exoplanet, a detected
+planet, or a scientifically validated classification.
+
 ## 3. Inspect canonical results
 
 Open `results/index.json` first. It points to the scientific and demo datasets,

@@ -20,6 +20,7 @@ dependencies = [
   "pyarrow>=16,<25",
   "PyYAML>=6.0,<7",
   "scikit-learn>=1.5,<2",
+  "streamlit>=1.40,<2",
 ]
 
 [dependency-groups]
@@ -58,6 +59,12 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"app.py" = ["E501"]
+"pages/*.py" = ["E501"]
+"src/transiteye/ui/*.py" = ["E501"]
+"tests/test_ui.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"

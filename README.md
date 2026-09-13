@@ -121,6 +121,22 @@ uv run python scripts/reproduce_project.py --full-replay
 Acquisition is deliberately excluded from that replay. Start with the
 [usage guide](docs/usage.md) for outputs and inspection steps.
 
+## Interactive App
+
+The offline Streamlit frontend presents the frozen pipeline, controlled demo,
+unlabeled scientific candidates, scorecards, evaluation, architecture, and
+reproducibility controls. From the repository root, after the accepted frozen
+`data/` artifact bundle is available:
+
+```bash
+uv sync --all-groups --locked
+uv run streamlit run app.py
+```
+
+The app does not acquire data, train models, or modify scientific artifacts.
+Its verification and smoke-test buttons call the existing offline backend
+workflows.
+
 ## Repository structure
 
 | Path | Purpose |
