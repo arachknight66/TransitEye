@@ -1,0 +1,9 @@
+metric,demo_value,scientific_value,source
+time_domain_feature_count,25,25,feature_registry
+bls_feature_count,16,16,feature_registry
+lomb_scargle_feature_count,11,11,feature_registry
+fft_feature_count,13,13,feature_registry
+total_model_features,65,65,frozen model schema
+all_null_feature_count,0,0,feature QA
+infinite_value_count,0,0,feature QA
+missing_value_count,613,173,feature QA across all cells

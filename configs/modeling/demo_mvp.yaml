@@ -1,0 +1,32 @@
+config_version: 1
+project:
+  name: TransitEye
+reproducibility:
+  master_seed: 42
+modeling:
+  policy_version: modeling-demo-v1
+  statistical_role: development_demo
+  split:
+    train_fraction: 0.50
+    validation_fraction: 0.25
+    test_fraction: 0.25
+    seed_component: demo_model_tic_split
+  imputation: train_median
+  train_all_null_policy: drop
+  missing_indicators: false
+  threshold_policy: maximize_validation_f1
+  primary_metric: pr_auc
+  logistic_regression:
+    c: 1.0
+    max_iter: 2000
+  random_forest:
+    n_estimators: 200
+    max_depth: null
+    min_samples_leaf: 1
+  svm:
+    c: 1.0
+    gamma: scale
+  elm:
+    hidden_units: 64
+    regularization: 0.001
+    activation: tanh

@@ -194,6 +194,153 @@ class DatasetSettings(BaseModel):
     split: DatasetSplitSettings
 
 
+class LombScargleFeatureSettings(BaseModel):
+    """Deterministic frequency grid for irregularly sampled light curves."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    samples_per_peak: int = Field(ge=1)
+    minimum_cycles_per_baseline: float = Field(gt=0)
+    maximum_frequency_per_day: float = Field(gt=0)
+    independent_peak_fraction: float = Field(gt=0, lt=1)
+
+
+class FftFeatureSettings(BaseModel):
+    """Policy for the temporary, segment-local FFT representation."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    maximum_short_gap_cadences: int = Field(ge=0)
+    minimum_segment_points: int = Field(ge=8)
+    low_band_max_frequency_per_day: float = Field(gt=0)
+    mid_band_max_frequency_per_day: float = Field(gt=0)
+
+    @model_validator(mode="after")
+    def validate_bands(self) -> FftFeatureSettings:
+        if self.mid_band_max_frequency_per_day <= self.low_band_max_frequency_per_day:
+            raise ValueError("FFT mid-band boundary must exceed the low-band boundary.")
+        return self
+
+
+class FeatureSettings(BaseModel):
+    """Shared B035--B039 feature-extraction policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    policy_version: str = Field(min_length=1)
+    generator_version: str = Field(min_length=1)
+    enabled_groups: tuple[Literal["time_domain", "bls", "lomb_scargle", "fft"], ...] = Field(
+        min_length=1
+    )
+    minimum_in_transit_points: int = Field(ge=1)
+    local_baseline_duration_multiples: float = Field(gt=0)
+    bls_peak_neighborhood_fraction: float = Field(gt=0, lt=1)
+    lomb_scargle: LombScargleFeatureSettings
+    fft: FftFeatureSettings
+
+    @model_validator(mode="after")
+    def validate_groups(self) -> FeatureSettings:
+        if len(self.enabled_groups) != len(set(self.enabled_groups)):
+            raise ValueError("Feature groups must be unique.")
+        return self
+
+
+class ModelingSplitSettings(BaseModel):
+    """Development-demo TIC-group partition policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    train_fraction: float = Field(gt=0, lt=1)
+    validation_fraction: float = Field(gt=0, lt=1)
+    test_fraction: float = Field(gt=0, lt=1)
+    seed_component: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def validate_fraction_sum(self) -> ModelingSplitSettings:
+        if abs(self.train_fraction + self.validation_fraction + self.test_fraction - 1) > 1e-12:
+            raise ValueError("Modeling split fractions must sum to one.")
+        return self
+
+
+class LogisticModelSettings(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    c: float = Field(gt=0)
+    max_iter: int = Field(gt=0)
+
+
+class RandomForestModelSettings(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    n_estimators: int = Field(gt=0)
+    max_depth: int | None = Field(default=None, gt=0)
+    min_samples_leaf: int = Field(gt=0)
+
+
+class SvmModelSettings(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    c: float = Field(gt=0)
+    gamma: Literal["scale", "auto"]
+
+
+class ElmModelSettings(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+    hidden_units: int = Field(gt=0)
+    regularization: float = Field(gt=0)
+    activation: Literal["tanh"]
+
+
+class ModelingSettings(BaseModel):
+    """Frozen B040--B045 development-demo modeling policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    policy_version: str = Field(min_length=1)
+    statistical_role: Literal["development_demo"]
+    split: ModelingSplitSettings
+    imputation: Literal["train_median"]
+    train_all_null_policy: Literal["drop"]
+    missing_indicators: bool
+    threshold_policy: Literal["maximize_validation_f1"]
+    primary_metric: Literal["pr_auc"]
+    logistic_regression: LogisticModelSettings
+    random_forest: RandomForestModelSettings
+    svm: SvmModelSettings
+    elm: ElmModelSettings
+
+
+class EvaluationSettings(BaseModel):
+    """Frozen B046--B051 descriptive robustness policy."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    policy_version: str = Field(min_length=1)
+    model_version: str = Field(min_length=1)
+    development_resampling: Literal["leave_one_tic_out_fixed_threshold"]
+    fixed_threshold: float
+    bootstrap_replicates: int = Field(gt=0)
+    confidence_level: float = Field(gt=0, lt=1)
+    bootstrap_seed_component: str = Field(min_length=1)
+    injection_grid_identity: str = Field(min_length=1)
+    feature_ablation_groups: tuple[str, ...] = Field(min_length=1)
+    missing_feature_stress_groups: tuple[str, ...] = Field(min_length=1)
+    candidate_period_perturbation_fraction: float = Field(gt=0, lt=0.1)
+    robust_support_iqr_multiplier: float = Field(gt=0)
+    error_high_missingness_count: int = Field(gt=0)
+
+
+class FinalEvaluationSettings(BaseModel):
+    """B052--B057 diagnostic policies around immutable upstream artifacts."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    policy_version: str = Field(min_length=1)
+    model_version: str = Field(min_length=1)
+    robustness_evaluation_version: str = Field(min_length=1)
+    fixed_threshold: float
+    calibration_protocol: str = Field(min_length=1)
+    calibration_bins: int = Field(ge=2)
+    calibration_bootstrap_replicates: int = Field(gt=0)
+    interpretability_protocol: str = Field(min_length=1)
+    permutation_repeats: int = Field(gt=0)
+    local_top_k: int = Field(gt=0)
+    scorecard_policy: str = Field(min_length=1)
+    readiness_policy: str = Field(min_length=1)
+    robust_support_violation_limit: float = Field(ge=0, le=1)
+    minimum_scientific_tics: int = Field(gt=1)
+
+
 class ProjectConfig(BaseModel):
     """Foundation-stage configuration contract.
 
@@ -213,6 +360,10 @@ class ProjectConfig(BaseModel):
     preprocessing: PreprocessingSettings | None = None
     bls: BlsSettings | None = None
     dataset: DatasetSettings | None = None
+    features: FeatureSettings | None = None
+    modeling: ModelingSettings | None = None
+    evaluation: EvaluationSettings | None = None
+    final_evaluation: FinalEvaluationSettings | None = None
 
 
 ConfigInput = ProjectConfig | Mapping[str, Any]

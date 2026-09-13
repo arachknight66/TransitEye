@@ -1,0 +1,10 @@
+metric,value,context
+scientific_tic_count,8,unlabeled scientific path
+demo_source_tic_count,8,controlled demo path
+raw_products_used,15,frozen expansion receipts
+processed_light_curves,15,scientific source curves
+demo_candidate_count,375,controlled demo candidates
+demo_positive_candidates,70,synthetic truth
+demo_negative_candidates,60,synthetic truth
+demo_unlabeled_candidates,245,not used as gold
+scientific_unlabeled_candidates,75,no gold labels

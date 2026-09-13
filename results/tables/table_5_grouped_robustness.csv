@@ -1,0 +1,9 @@
+summary,metric,value,lower,upper,independent_tics
+pooled_loto,pr_auc,0.974007846364,0.919942975607,1,6
+pooled_loto,roc_auc,0.966956521739,0.90881612765,1,6
+pooled_loto,balanced_accuracy,0.863913043478,0.788545357893,0.946047297297,6
+pooled_loto,precision,0.862745098039,,,6
+pooled_loto,recall,0.88,,,6
+pooled_loto,f1,0.871287128713,0.76468935889,0.95745430027,6
+per_tic_range,pr_auc,,0.845616883117,1,6
+per_tic_range,f1,,0.625,1,6

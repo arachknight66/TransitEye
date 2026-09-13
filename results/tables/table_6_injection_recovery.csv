@@ -1,0 +1,5 @@
+synthetic_event_class,bls_recovered,bls_recovery_rate,classifier_correct_after_recovery,conditional_classifier_correctness,end_to_end_success_rate,total_injected_events,scope
+eclipsing_binary,11,1,11,1,1,11,controlled synthetic injection; not real TESS accuracy
+planet_easy,11,1,10,0.909090909091,0.909090909091,11,controlled synthetic injection; not real TESS accuracy
+planet_medium,9,0.818181818182,9,1,0.818181818182,11,controlled synthetic injection; not real TESS accuracy
+sinusoidal_variability,8,0.727272727273,8,1,0.727272727273,11,controlled synthetic injection; not real TESS accuracy

@@ -17,6 +17,17 @@ names, truth matches, labels, dispositions, and truth-source fields are
 label/evaluation metadata. They are prohibited from future model-input column
 selection. All variants derived from one source TIC remain one statistical group.
 
-Confirmed development decision: the MVP uses one development partition because
-only eight source TICs are available. A statistically meaningful final split and
-final scientific cohort remain TBD.
+The frozen development design uses eight source TICs: four training, two
+validation, and two locked-test TICs. Grouped leave-one-TIC-out robustness covers
+the six development TICs. A larger independently labeled scientific cohort is
+still required.
+
+## What demo mode proves
+
+Supported conclusions are that the software pipeline operates end to end,
+injection recovery can be measured, candidate features and frozen-model
+inference work, and grouped demo robustness can be evaluated.
+
+Demo mode does not establish real-population accuracy, validate a discovery, or
+produce a calibrated real-planet probability. Synthetic morphology is limited,
+and candidates sharing a source TIC are correlated.

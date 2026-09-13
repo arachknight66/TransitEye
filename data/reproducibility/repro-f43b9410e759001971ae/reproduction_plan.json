@@ -1,0 +1,1 @@
+{"command":"uv run python scripts/reproduce_project.py","full_replay":{"available":true,"flag":"--full-replay","warning":"expensive local replay; acquisition is not rerun"},"offline_modes":["--verify","--report","--demo-smoke"]}

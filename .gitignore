@@ -10,26 +10,36 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .coverage
+.coverage.*
 coverage.xml
 htmlcov/
 .tox/
 .nox/
+.cache/
 build/
 dist/
 *.egg-info/
+*.log
 
 # Notebooks and temporary files
 .ipynb_checkpoints/
 *.tmp
 *.temp
+*.part
 *.swp
+*.swo
+*.bak
 *~
+scratch/
 
 # Local editor and operating-system files
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+.env
+.env.*
+!.env.example
 
 # Local configuration only; shared configs remain tracked
 configs/local/
@@ -46,6 +56,10 @@ data/datasets/
 data/features/
 data/splits/
 data/synthetic/
+data/modeling/
+data/models/
+data/inference/
+data/evaluation/
 *.fits
 *.fit
 *.fts
