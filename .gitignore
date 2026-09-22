@@ -1,79 +1,25 @@
-# Python and virtual environments
+# Python environments and caches
 .venv/
 venv/
 __pycache__/
 *.py[cod]
 *.so
-
-# Test, type-checking, lint, and build artifacts
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-.coverage
-.coverage.*
+.coverage*
 coverage.xml
 htmlcov/
-.tox/
-.nox/
-.cache/
 build/
 dist/
 *.egg-info/
-*.log
+.transiteye-workspace/
 
-# Notebooks and temporary files
-.ipynb_checkpoints/
-*.tmp
-*.temp
-*.part
-*.swp
-*.swo
-*.bak
-*~
-scratch/
-
-# Local editor and operating-system files
+# Local environment and editor files
+.env
+.env.*
+!.env.example
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
-.env
-.env.*
-!.env.example
-
-# Local configuration only; shared configs remain tracked
-configs/local/
-*.local.yaml
-*.local.yml
-
-# Immutable or generated scientific data
-data/raw/
-data/catalogs/
-data/interim/
-data/processed/
-data/candidates/
-data/datasets/
-data/features/
-data/splits/
-data/synthetic/
-data/modeling/
-data/models/
-data/inference/
-data/evaluation/
-*.fits
-*.fit
-*.fts
-
-# Generated experiments and artifacts
-runs/*
-!runs/.gitkeep
-reports/figures/
-reports/tables/
-reports/final/
-models/
-artifacts/
-*.joblib
-*.skops
-*.pt
-*.pth
-*.npz

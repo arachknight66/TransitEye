@@ -1,0 +1,10 @@
+version = "1"
+
+[workspace]
+# Large downloaded products and generated artifacts remain outside the repository.
+root = ".transiteye-workspace"
+
+[acquisition]
+max_attempts = 3
+retry_delay_seconds = 1.0
+download_workers = 2

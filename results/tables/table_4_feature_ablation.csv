@@ -1,5 +1,0 @@
-feature_set,split,model,threshold,pr_auc,roc_auc,balanced_accuracy,precision,recall,f1,context
-Time + BLS,validation,random_forest,0.45,0.965778826497,0.971014492754,0.95652173913,0.913043478261,1,0.954545454545,development-demo validation
-Time + BLS,test,random_forest,0.45,1,1,0.964285714286,0.952380952381,1,0.975609756098,test contains 2 held-out TICs; development-demo only
-Time + BLS + Lomb-Scargle + FFT,validation,random_forest,0.325,0.970862341038,0.966873706004,0.930641821946,0.95,0.904761904762,0.926829268293,development-demo validation
-Time + BLS + Lomb-Scargle + FFT,test,random_forest,0.325,1,1,1,1,1,1,test contains 2 held-out TICs; development-demo only

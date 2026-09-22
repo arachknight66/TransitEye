@@ -1,408 +1,103 @@
-"""Typed, deterministic project configuration."""
+"""Application configuration loaded from TOML without optional dependencies."""
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+import tomllib
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Literal
-
-import yaml
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
-
-from transiteye.serialization import canonical_json, content_hash
+from typing import Any
 
 
-class ConfigurationError(ValueError):
-    """Raised when a configuration file cannot be parsed or validated."""
+@dataclass(frozen=True, slots=True)
+class WorkspaceConfig:
+    """Locations for non-versioned data and generated artifacts."""
+
+    root: Path
+    cache_directory: Path
+    results_directory: Path
 
 
-class ProjectSettings(BaseModel):
-    """Non-scientific project identity settings."""
+@dataclass(frozen=True, slots=True)
+class AcquisitionConfig:
+    """Network and retry limits for archive product acquisition."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
+    max_attempts: int = 3
+    retry_delay_seconds: float = 1.0
+    download_workers: int = 2
 
-    name: str = Field(min_length=1)
-
-
-class ReproducibilitySettings(BaseModel):
-    """Minimal reproducibility settings shared by future stages."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-
-    master_seed: int = Field(ge=0, le=(2**32) - 1)
-
-
-class PilotCohortSettings(BaseModel):
-    """Development-only target counts and deterministic sampling settings."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-
-    positive_target_count: int = Field(gt=0)
-    negative_target_count: int = Field(gt=0)
-    seed_component: str = Field(min_length=1)
+    def __post_init__(self) -> None:
+        if self.max_attempts < 1:
+            raise ValueError("max_attempts must be at least one.")
+        if self.retry_delay_seconds < 0:
+            raise ValueError("retry_delay_seconds cannot be negative.")
+        if self.download_workers < 1:
+            raise ValueError("download_workers must be at least one.")
 
 
-class CatalogSettings(BaseModel):
-    """Settings required to retrieve and select a frozen TOI catalog snapshot."""
+@dataclass(frozen=True, slots=True)
+class AppConfig:
+    """Top-level configuration for all Phase 1 services."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-
-    source: Literal["nasa_exoplanet_archive"]
-    table: Literal["toi"]
-    endpoint: str = Field(min_length=1)
-    requested_fields: tuple[str, ...] = Field(min_length=1)
-    disposition_policy_version: str = Field(min_length=1)
-    pilot: PilotCohortSettings
+    version: str
+    workspace: WorkspaceConfig
+    acquisition: AcquisitionConfig
 
 
-class AcquisitionSettings(BaseModel):
-    """Narrow MAST search and product-selection settings for the acquisition stage."""
+def default_config() -> AppConfig:
+    """Return local defaults that keep large artifacts outside the repository."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-
-    source: Literal["mast"]
-    mission: Literal["TESS"]
-    product_kind: Literal["lightcurve"]
-    preferred_author: str = Field(min_length=1)
-    preferred_exposure_seconds: float | None = Field(default=None, gt=0)
-    sector_policy: Literal["all_available"]
-    duplicate_resolution: Literal["latest_release"]
-    allow_fallback: bool = False
-    download_pilot_target_limit: int = Field(gt=0, le=3)
-    download_pilot_sectors_per_target: int = Field(gt=0)
-
-
-class ExpansionSettings(BaseModel):
-    """Frozen, label-independent real-cohort expansion selection policy."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-
-    product_snapshot_id: str = Field(min_length=1)
-    required_author: Literal["TESS-SPOC"]
-    required_product_suffix: Literal["_lc.fits"]
-    preferred_exposure_seconds: float = Field(gt=0)
-    sectors_per_tic: int = Field(gt=0)
-    sector_order: Literal["earliest"]
-
-
-class DemoVariantSettings(BaseModel):
-    """One predeclared synthetic variant applied uniformly to every base curve."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-
-    name: str = Field(min_length=1)
-    event_class: Literal[
-        "planet_like",
-        "eclipsing_binary_like",
-        "sinusoidal_variability_like",
-        "no_injection_control",
-    ]
-    difficulty: Literal["easy", "medium", "weak", "control"]
-    period_days: float | None = Field(default=None, gt=0)
-    duration_days: float | None = Field(default=None, gt=0)
-    depth_or_amplitude: float | None = Field(default=None, gt=0, lt=1)
-    secondary_depth: float | None = Field(default=None, ge=0, lt=1)
-
-    @model_validator(mode="after")
-    def validate_event_parameters(self) -> DemoVariantSettings:
-        required = (self.period_days, self.duration_days, self.depth_or_amplitude)
-        if self.event_class == "no_injection_control":
-            if any(value is not None for value in required) or self.secondary_depth is not None:
-                raise ValueError("No-injection controls cannot define synthetic signal parameters.")
-        elif any(value is None for value in required):
-            raise ValueError(
-                "Injected demo variants require period, duration, and depth/amplitude."
-            )
-        if self.event_class != "eclipsing_binary_like" and self.secondary_depth is not None:
-            raise ValueError("Secondary depth is only valid for eclipsing-binary-like variants.")
-        return self
-
-
-class DemoSettings(BaseModel):
-    """Frozen policy for controlled signals embedded in real TESS substrates."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-
-    policy_version: str = Field(min_length=1)
-    generator_version: str = Field(min_length=1)
-    artifact_schema_version: Literal["demo-artifact-lineage-v1"] = "demo-artifact-lineage-v1"
-    base_expansion_manifest_id: str = Field(min_length=1)
-    seed_component: str = Field(min_length=1)
-    variants: tuple[DemoVariantSettings, ...] = Field(min_length=1)
-    split_policy: Literal["all_development"]
-
-    @model_validator(mode="after")
-    def validate_unique_variant_names(self) -> DemoSettings:
-        names = [variant.name for variant in self.variants]
-        if len(names) != len(set(names)):
-            raise ValueError("Demo variant names must be unique.")
-        return self
-
-
-class PreprocessingSettings(BaseModel):
-    """Provisional, common MVP preprocessing parameters."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    flux_stream: Literal["PDCSAP_FLUX"]
-    gap_days: float = Field(gt=0)
-    trend_window_cadences: int = Field(ge=5)
-    positive_spike_mad: float = Field(gt=0)
-
-
-class BlsSettings(BaseModel):
-    """Shared, blind MVP Box Least Squares search policy."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    min_period_days: float = Field(gt=0)
-    max_period_days: float = Field(gt=0)
-    min_transits: int = Field(ge=2)
-    durations_days: tuple[float, ...] = Field(min_length=1)
-    frequency_factor: float = Field(gt=0)
-    top_k: int = Field(gt=0)
-    local_peak_fraction: float = Field(gt=0, lt=1)
-    harmonic_tolerance: float = Field(gt=0, lt=1)
-    period_match_tolerance: float = Field(gt=0, lt=1)
-    phase_match_tolerance: float = Field(gt=0, lt=0.5)
-
-
-class DatasetSplitSettings(BaseModel):
-    """Future final split proportions and deterministic grouping policy."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    train_fraction: float = Field(ge=0, le=1)
-    validation_fraction: float = Field(ge=0, le=1)
-    test_fraction: float = Field(ge=0, le=1)
-    seed_component: str = Field(min_length=1)
-    grouped_stratification: Literal["none"] = "none"
-
-    @model_validator(mode="after")
-    def validate_fraction_sum(self) -> DatasetSplitSettings:
-        if abs(self.train_fraction + self.validation_fraction + self.test_fraction - 1) > 1e-12:
-            raise ValueError("Dataset split fractions must sum to one.")
-        return self
-
-
-class DatasetSettings(BaseModel):
-    """B031--B034 dataset semantics without feature or model configuration."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    policy_version: str = Field(min_length=1)
-    label_policy_version: str = Field(min_length=1)
-    recovery_policy_version: str = Field(min_length=1)
-    ambiguity_handling: Literal["preserve_unlabeled"]
-    development_split_behavior: Literal["all_development"]
-    split: DatasetSplitSettings
-
-
-class LombScargleFeatureSettings(BaseModel):
-    """Deterministic frequency grid for irregularly sampled light curves."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    samples_per_peak: int = Field(ge=1)
-    minimum_cycles_per_baseline: float = Field(gt=0)
-    maximum_frequency_per_day: float = Field(gt=0)
-    independent_peak_fraction: float = Field(gt=0, lt=1)
-
-
-class FftFeatureSettings(BaseModel):
-    """Policy for the temporary, segment-local FFT representation."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    maximum_short_gap_cadences: int = Field(ge=0)
-    minimum_segment_points: int = Field(ge=8)
-    low_band_max_frequency_per_day: float = Field(gt=0)
-    mid_band_max_frequency_per_day: float = Field(gt=0)
-
-    @model_validator(mode="after")
-    def validate_bands(self) -> FftFeatureSettings:
-        if self.mid_band_max_frequency_per_day <= self.low_band_max_frequency_per_day:
-            raise ValueError("FFT mid-band boundary must exceed the low-band boundary.")
-        return self
-
-
-class FeatureSettings(BaseModel):
-    """Shared B035--B039 feature-extraction policy."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    policy_version: str = Field(min_length=1)
-    generator_version: str = Field(min_length=1)
-    enabled_groups: tuple[Literal["time_domain", "bls", "lomb_scargle", "fft"], ...] = Field(
-        min_length=1
+    root = Path.cwd() / ".transiteye-workspace"
+    return AppConfig(
+        version="1",
+        workspace=WorkspaceConfig(
+            root=root,
+            cache_directory=root / "cache",
+            results_directory=root / "results",
+        ),
+        acquisition=AcquisitionConfig(),
     )
-    minimum_in_transit_points: int = Field(ge=1)
-    local_baseline_duration_multiples: float = Field(gt=0)
-    bls_peak_neighborhood_fraction: float = Field(gt=0, lt=1)
-    lomb_scargle: LombScargleFeatureSettings
-    fft: FftFeatureSettings
-
-    @model_validator(mode="after")
-    def validate_groups(self) -> FeatureSettings:
-        if len(self.enabled_groups) != len(set(self.enabled_groups)):
-            raise ValueError("Feature groups must be unique.")
-        return self
 
 
-class ModelingSplitSettings(BaseModel):
-    """Development-demo TIC-group partition policy."""
+def load_config(path: Path | None = None) -> AppConfig:
+    """Load a TOML configuration file, using explicit defaults for absent fields."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    train_fraction: float = Field(gt=0, lt=1)
-    validation_fraction: float = Field(gt=0, lt=1)
-    test_fraction: float = Field(gt=0, lt=1)
-    seed_component: str = Field(min_length=1)
-
-    @model_validator(mode="after")
-    def validate_fraction_sum(self) -> ModelingSplitSettings:
-        if abs(self.train_fraction + self.validation_fraction + self.test_fraction - 1) > 1e-12:
-            raise ValueError("Modeling split fractions must sum to one.")
-        return self
-
-
-class LogisticModelSettings(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    c: float = Field(gt=0)
-    max_iter: int = Field(gt=0)
-
-
-class RandomForestModelSettings(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    n_estimators: int = Field(gt=0)
-    max_depth: int | None = Field(default=None, gt=0)
-    min_samples_leaf: int = Field(gt=0)
-
-
-class SvmModelSettings(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    c: float = Field(gt=0)
-    gamma: Literal["scale", "auto"]
-
-
-class ElmModelSettings(BaseModel):
-    model_config = ConfigDict(extra="forbid", frozen=True)
-    hidden_units: int = Field(gt=0)
-    regularization: float = Field(gt=0)
-    activation: Literal["tanh"]
+    config = default_config()
+    if path is None:
+        return config
+    with path.open("rb") as file_handle:
+        document: dict[str, Any] = tomllib.load(file_handle)
+    workspace_document = document.get("workspace", {})
+    root = Path(workspace_document.get("root", config.workspace.root)).expanduser()
+    cache_directory = Path(workspace_document.get("cache_directory", root / "cache")).expanduser()
+    results_directory = Path(
+        workspace_document.get("results_directory", root / "results")
+    ).expanduser()
+    acquisition_document = document.get("acquisition", {})
+    return AppConfig(
+        version=str(document.get("version", config.version)),
+        workspace=WorkspaceConfig(root, cache_directory, results_directory),
+        acquisition=AcquisitionConfig(
+            max_attempts=int(
+                acquisition_document.get("max_attempts", config.acquisition.max_attempts)
+            ),
+            retry_delay_seconds=float(
+                acquisition_document.get(
+                    "retry_delay_seconds", config.acquisition.retry_delay_seconds
+                )
+            ),
+            download_workers=int(
+                acquisition_document.get("download_workers", config.acquisition.download_workers)
+            ),
+        ),
+    )
 
 
-class ModelingSettings(BaseModel):
-    """Frozen B040--B045 development-demo modeling policy."""
+def ensure_workspace(config: AppConfig) -> None:
+    """Create the externally configured workspace directories when a service starts."""
 
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    policy_version: str = Field(min_length=1)
-    statistical_role: Literal["development_demo"]
-    split: ModelingSplitSettings
-    imputation: Literal["train_median"]
-    train_all_null_policy: Literal["drop"]
-    missing_indicators: bool
-    threshold_policy: Literal["maximize_validation_f1"]
-    primary_metric: Literal["pr_auc"]
-    logistic_regression: LogisticModelSettings
-    random_forest: RandomForestModelSettings
-    svm: SvmModelSettings
-    elm: ElmModelSettings
-
-
-class EvaluationSettings(BaseModel):
-    """Frozen B046--B051 descriptive robustness policy."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    policy_version: str = Field(min_length=1)
-    model_version: str = Field(min_length=1)
-    development_resampling: Literal["leave_one_tic_out_fixed_threshold"]
-    fixed_threshold: float
-    bootstrap_replicates: int = Field(gt=0)
-    confidence_level: float = Field(gt=0, lt=1)
-    bootstrap_seed_component: str = Field(min_length=1)
-    injection_grid_identity: str = Field(min_length=1)
-    feature_ablation_groups: tuple[str, ...] = Field(min_length=1)
-    missing_feature_stress_groups: tuple[str, ...] = Field(min_length=1)
-    candidate_period_perturbation_fraction: float = Field(gt=0, lt=0.1)
-    robust_support_iqr_multiplier: float = Field(gt=0)
-    error_high_missingness_count: int = Field(gt=0)
-
-
-class FinalEvaluationSettings(BaseModel):
-    """B052--B057 diagnostic policies around immutable upstream artifacts."""
-
-    model_config = ConfigDict(extra="forbid", frozen=True, str_strip_whitespace=True)
-    policy_version: str = Field(min_length=1)
-    model_version: str = Field(min_length=1)
-    robustness_evaluation_version: str = Field(min_length=1)
-    fixed_threshold: float
-    calibration_protocol: str = Field(min_length=1)
-    calibration_bins: int = Field(ge=2)
-    calibration_bootstrap_replicates: int = Field(gt=0)
-    interpretability_protocol: str = Field(min_length=1)
-    permutation_repeats: int = Field(gt=0)
-    local_top_k: int = Field(gt=0)
-    scorecard_policy: str = Field(min_length=1)
-    readiness_policy: str = Field(min_length=1)
-    robust_support_violation_limit: float = Field(ge=0, le=1)
-    minimum_scientific_tics: int = Field(gt=1)
-
-
-class ProjectConfig(BaseModel):
-    """Foundation-stage configuration contract.
-
-    Scientific parameters are intentionally absent until their corresponding
-    implementation stages have approved values.
-    """
-
-    model_config = ConfigDict(extra="forbid", frozen=True)
-
-    config_version: Literal[1]
-    project: ProjectSettings
-    reproducibility: ReproducibilitySettings
-    catalog: CatalogSettings | None = None
-    acquisition: AcquisitionSettings | None = None
-    expansion: ExpansionSettings | None = None
-    demo: DemoSettings | None = None
-    preprocessing: PreprocessingSettings | None = None
-    bls: BlsSettings | None = None
-    dataset: DatasetSettings | None = None
-    features: FeatureSettings | None = None
-    modeling: ModelingSettings | None = None
-    evaluation: EvaluationSettings | None = None
-    final_evaluation: FinalEvaluationSettings | None = None
-
-
-ConfigInput = ProjectConfig | Mapping[str, Any]
-
-
-def _validate_config(value: ConfigInput) -> ProjectConfig:
-    if isinstance(value, ProjectConfig):
-        return value
-    try:
-        return ProjectConfig.model_validate(value)
-    except ValidationError as exc:
-        raise ConfigurationError("Configuration does not match the project schema.") from exc
-
-
-def load_config(path: str | Path) -> ProjectConfig:
-    """Load and validate one YAML configuration file."""
-    config_path = Path(path)
-    try:
-        with config_path.open("r", encoding="utf-8") as handle:
-            raw = yaml.safe_load(handle)
-    except (OSError, yaml.YAMLError) as exc:
-        raise ConfigurationError(f"Could not load configuration: {config_path}") from exc
-
-    if not isinstance(raw, Mapping):
-        raise ConfigurationError("Configuration root must be a YAML mapping.")
-    return _validate_config(raw)
-
-
-def resolve_config(config: ConfigInput) -> dict[str, Any]:
-    """Return a JSON-compatible, deterministic representation of a config."""
-    validated = _validate_config(config)
-    return validated.model_dump(mode="json", exclude_none=True)
-
-
-def stable_config_json(config: ConfigInput) -> str:
-    """Return canonical JSON suitable for a provenance record."""
-    return canonical_json(resolve_config(config))
-
-
-def config_hash(config: ConfigInput) -> str:
-    """Return the content hash of the resolved scientific configuration."""
-    return content_hash(resolve_config(config))
+    for directory in (
+        config.workspace.root,
+        config.workspace.cache_directory,
+        config.workspace.results_directory,
+    ):
+        directory.mkdir(parents=True, exist_ok=True)

@@ -1,5 +1,6 @@
-"""BLS-candidate datasets, catalog recovery accounting, and grouped splitting."""
+"""Curated labels and leakage-safe dataset partitions."""
 
-from transiteye.datasets.schemas import CandidateGoldLabel, DatasetRole, RecoveryState
+from transiteye.datasets.labels import LabelRecord, LabelSource, MorphologyLabel
+from transiteye.datasets.splits import DatasetSplit, SplitManifest
 
-__all__ = ["CandidateGoldLabel", "DatasetRole", "RecoveryState"]
+__all__ = ["DatasetSplit", "LabelRecord", "LabelSource", "MorphologyLabel", "SplitManifest"]

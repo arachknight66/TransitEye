@@ -1,9 +1,0 @@
-criterion,status,evidence
-independently_labeled_scientific_candidates_exist,FAIL,labeled candidates=0
-both_positive_and_negative_real_classes_exist,FAIL,no real binary labels
-labels_span_multiple_tic_groups,FAIL,labels span 0 TIC groups
-no_catastrophic_demo_to_scientific_support_shift,FAIL,robust-support violation fraction=0.893333; limit=0.250000
-bls_recovers_meaningful_fraction_of_real_catalog_events,FAIL,no independently labeled real event recovery cohort
-grouped_scientific_evaluation_is_possible,FAIL,real labels absent
-no_training_evaluation_leakage,PASS,scientific rows excluded from training and truth fields excluded from model features
-sufficient_independent_tic_count,FAIL,scientific TIC count=8; required=10
