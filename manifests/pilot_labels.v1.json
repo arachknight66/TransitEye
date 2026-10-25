@@ -1,0 +1,1035 @@
+{
+  "labels": [
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-144.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/Pi%20Men%20c",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed exoplanet Pi Mensae c discovered in TESS Sector 1.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-261136679",
+      "target_id": "261136679"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-700.03",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-700%20d",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed habitable-zone earth-size planet TOI-700 d.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-150428135",
+      "target_id": "150428135"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-136.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/LHS%203844%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed ultra-short-period terrestrial planet LHS 3844 b.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-410153553",
+      "target_id": "410153553"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-186.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/HD%2021749%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed sub-Neptune HD 21749 b on a 36-day orbit.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-279741379",
+      "target_id": "279741379"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-1418.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/WASP-18%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed massive transiting hot Jupiter WASP-18 b.",
+      "review_status": "verified",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-100100827",
+      "target_id": "100100827"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-114.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/WASP-126%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed inflated transiting Saturn-mass planet WASP-126 b.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-307210830",
+      "target_id": "307210830"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-125.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-125%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed multi-planet system TOI-125 b.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-231670397",
+      "target_id": "231670397"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-180.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/DS%20Tuc%20A%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed young transiting planet in Tucana-Horologium association.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-259377017",
+      "target_id": "259377017"
+    },
+    {
+      "ambiguous": true,
+      "evidence_identifier": "TOI-270.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-270%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed resonant multi-transiting system TOI-270 b.",
+      "review_status": "verified",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-207141131",
+      "target_id": "207141131"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-402.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/HD%2015337%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed transiting warm super-Earth HD 15337 b.",
+      "review_status": "verified",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-234284556",
+      "target_id": "234284556"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-561.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-561%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed ultra-short period super-Earth around thick-disk star.",
+      "review_status": "verified",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-149603524",
+      "target_id": "149603524"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-134.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-134%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed mini-Neptune TOI-134 b.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-38846515",
+      "target_id": "38846515"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-178.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-178%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed Laplace resonant chain planet TOI-178 b.",
+      "review_status": "verified",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-441462736",
+      "target_id": "441462736"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-257.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-257%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed sub-Saturn planet around evolved star TOI-257.",
+      "review_status": "verified",
+      "sectors": [
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-181804752",
+      "target_id": "181804752"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-763.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-763%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed transiting sub-Neptune TOI-763 b.",
+      "review_status": "verified",
+      "sectors": [
+        9
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-238195986",
+      "target_id": "238195986"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-712.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-712%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed multi-planet system TOI-712 observed across multiple sectors.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        2,
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-382200983",
+      "target_id": "382200983"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-197.01",
+      "evidence_uri": "https://exoplanetarchive.ipac.caltech.edu/overview/TOI-197%20b",
+      "label": "transit_like",
+      "label_source": "exoplanet_archive",
+      "notes": "Confirmed hot Saturn orbiting asteroseismic host TOI-197.",
+      "review_status": "verified",
+      "sectors": [
+        2,
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-260128333",
+      "target_id": "260128333"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-272097720",
+      "evidence_uri": "http://tessebs.villanova.edu/272097720",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Detached eclipsing binary with alternating primary and secondary depths.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-272097720",
+      "target_id": "272097720"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-270081337",
+      "evidence_uri": "http://tessebs.villanova.edu/270081337",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Deep detached eclipsing binary with distinct primary and secondary eclipses.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-270081337",
+      "target_id": "270081337"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-300651846",
+      "evidence_uri": "http://tessebs.villanova.edu/300651846",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Algol-type detached eclipsing binary.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-300651846",
+      "target_id": "300651846"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-388776935",
+      "evidence_uri": "http://tessebs.villanova.edu/388776935",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Detached double-lined eclipsing binary system.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-388776935",
+      "target_id": "388776935"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-231702397",
+      "evidence_uri": "http://tessebs.villanova.edu/231702397",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Standard TESS eclipsing binary with prominent odd/even depth split.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-231702397",
+      "target_id": "231702397"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-115446313",
+      "evidence_uri": "http://tessebs.villanova.edu/115446313",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Moderate-period detached eclipsing binary.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-115446313",
+      "target_id": "115446313"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-470710327",
+      "evidence_uri": "http://tessebs.villanova.edu/470710327",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Hierarchical multiple star system with deep eclipses.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-470710327",
+      "target_id": "470710327"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-276535219",
+      "evidence_uri": "http://tessebs.villanova.edu/276535219",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Contact / W UMa eclipsing binary exhibiting continuous light variations.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-276535219",
+      "target_id": "276535219"
+    },
+    {
+      "ambiguous": true,
+      "evidence_identifier": "TESS-EB-281541555",
+      "evidence_uri": "http://tessebs.villanova.edu/281541555",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Grazing eclipsing binary with V-shaped eclipse profile.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-281541555",
+      "target_id": "281541555"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-306443312",
+      "evidence_uri": "http://tessebs.villanova.edu/306443312",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Detached eclipsing binary with flat-bottomed total eclipses.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-306443312",
+      "target_id": "306443312"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-399872850",
+      "evidence_uri": "http://tessebs.villanova.edu/399872850",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Semi-detached beta Lyrae type eclipsing binary.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-399872850",
+      "target_id": "399872850"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-259862340",
+      "evidence_uri": "http://tessebs.villanova.edu/259862340",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Eccentric detached eclipsing binary with displaced secondary eclipse.",
+      "review_status": "reviewed",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-259862340",
+      "target_id": "259862340"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-260341774",
+      "evidence_uri": "http://tessebs.villanova.edu/260341774",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Low-mass M-dwarf eclipsing binary.",
+      "review_status": "reviewed",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-260341774",
+      "target_id": "260341774"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-382220901",
+      "evidence_uri": "http://tessebs.villanova.edu/382220901",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Well-characterized detached eclipsing binary with circular orbit.",
+      "review_status": "reviewed",
+      "sectors": [
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-382220901",
+      "target_id": "382220901"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-427395030",
+      "evidence_uri": "http://tessebs.villanova.edu/427395030",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Detached double-lined EB in TESS southern sky.",
+      "review_status": "reviewed",
+      "sectors": [
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-427395030",
+      "target_id": "427395030"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-388776936",
+      "evidence_uri": "http://tessebs.villanova.edu/388776936",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Multi-sector eclipsing binary observed across Sector 1 and Sector 2.",
+      "review_status": "reviewed",
+      "sectors": [
+        1,
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-388776936",
+      "target_id": "388776936"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TESS-EB-270081338",
+      "evidence_uri": "http://tessebs.villanova.edu/270081338",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Multi-year baseline eclipsing binary in Primary and Extended TESS missions.",
+      "review_status": "reviewed",
+      "sectors": [
+        1,
+        28
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-270081338",
+      "target_id": "270081338"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-278825952",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=278825952",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "High-amplitude Delta Scuti pulsating variable star.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-278825952",
+      "target_id": "278825952"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-307210825",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=307210825",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Spot-modulated BY Draconis rotational variable star.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-307210825",
+      "target_id": "307210825"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-261136680",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=261136680",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Active solar-type star with quasi-periodic starspot modulation.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-261136680",
+      "target_id": "261136680"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-382220902",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=382220902",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Gamma Doradus multi-periodic gravity-mode pulsator.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-382220902",
+      "target_id": "382220902"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-279741380",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=279741380",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Solar-like oscillator showing p-mode power excess.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-279741380",
+      "target_id": "279741380"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-150428136",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=150428136",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Active M-dwarf flaring star with complex rotational modulation.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-150428136",
+      "target_id": "150428136"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-410153554",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=410153554",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Rapid M-dwarf flare star showing high-energy impulsive flares.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-410153554",
+      "target_id": "410153554"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-100100828",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=100100828",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Rapid rotator with strong gravity darkening and rotational modulation.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-100100828",
+      "target_id": "100100828"
+    },
+    {
+      "ambiguous": true,
+      "evidence_identifier": "VSX-207141132",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=207141132",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Low-mass active star with ambiguous rotation vs. pulsation period.",
+      "review_status": "reviewed",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-207141132",
+      "target_id": "207141132"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-234284557",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=234284557",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Red giant branch star exhibiting solar-like oscillations.",
+      "review_status": "reviewed",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-234284557",
+      "target_id": "234284557"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-259377018",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=259377018",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Young pre-main-sequence star with strong circumstellar disk variability.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-259377018",
+      "target_id": "259377018"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-149603525",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=149603525",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Solar-type star with low-amplitude spot activity.",
+      "review_status": "reviewed",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-149603525",
+      "target_id": "149603525"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-181804753",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=181804753",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Semiregular red giant pulsating star.",
+      "review_status": "reviewed",
+      "sectors": [
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-181804753",
+      "target_id": "181804753"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-238195987",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=238195987",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Moderately rotating K-dwarf showing steady sinusoidal variability.",
+      "review_status": "reviewed",
+      "sectors": [
+        9
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-238195987",
+      "target_id": "238195987"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-441462737",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=441462737",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Multi-mode pulsating variable star with beat frequencies.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-441462737",
+      "target_id": "441462737"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-260128334",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=260128334",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Evolved subgiant with persistent solar-like oscillations in Sectors 2 and 4.",
+      "review_status": "reviewed",
+      "sectors": [
+        2,
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-260128334",
+      "target_id": "260128334"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "VSX-382200984",
+      "evidence_uri": "https://www.aavso.org/vsx/index.php?view=detail.top&oid=382200984",
+      "label": "stellar_variability",
+      "label_source": "variable_star_catalog",
+      "notes": "Long-period rotational variable star across consecutive TESS sectors.",
+      "review_status": "reviewed",
+      "sectors": [
+        1,
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-382200984",
+      "target_id": "382200984"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TOI-111-FP",
+      "evidence_uri": "https://exofop.ipac.caltech.edu/tess/target.php?id=260004324",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Documented instrumental false alarm from spacecraft momentum dump.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-260004324",
+      "target_id": "260004324"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-SCATTER",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Documented Earth/Moon scattered light glint artifact near orbit perigee.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-307210831",
+      "target_id": "307210831"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-DESAT",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Reaction wheel desaturation momentum dump recovery dip.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-261136681",
+      "target_id": "261136681"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-THERM",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Post-data-downlink thermal settling transient and focus recovery slope.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-410153555",
+      "target_id": "410153555"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-JITTER",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Spacecraft coarse pointing jitter producing apparent flux excursions.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-279741381",
+      "target_id": "279741381"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S02-GLITCH",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Guide star tracking glitch causing rapid centroid jumps and flux dip.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-100100829",
+      "target_id": "100100829"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-EARTH",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Severe Earthshine crossing the focal plane creating spurious periodic ramps.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-231670398",
+      "target_id": "231670398"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S03-TWEAK",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Attitude tweak producing step discontinuity in background flux.",
+      "review_status": "reviewed",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-207141133",
+      "target_id": "207141133"
+    },
+    {
+      "ambiguous": true,
+      "evidence_identifier": "EXOFOP-234284558-AMBIG",
+      "evidence_uri": "https://exofop.ipac.caltech.edu/tess/target.php?id=234284558",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Candidate at detection threshold with ambiguous instrument noise profile.",
+      "review_status": "reviewed",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-234284558",
+      "target_id": "234284558"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-FOCUS",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Instrumental focus drift due to orbital temperature variations.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-259377019",
+      "target_id": "259377019"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S08-RAD",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Van Allen radiation belt entry anomaly causing particle hit clusters.",
+      "review_status": "reviewed",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-149603526",
+      "target_id": "149603526"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-MOON",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Scattered moonlight background saturation and stray light feature.",
+      "review_status": "reviewed",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-38846516",
+      "target_id": "38846516"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S02-DRIFT",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Camera 1 CCD column drift artifact mimicking a broad transit dip.",
+      "review_status": "reviewed",
+      "sectors": [
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-441462738",
+      "target_id": "441462738"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S04-READOUT",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Focal plane array readout anomaly and cross-talk stripe.",
+      "review_status": "reviewed",
+      "sectors": [
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-181804754",
+      "target_id": "181804754"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S09-SAFEMODE",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Post-safe-mode payload reboot transient and thermal re-stabilization.",
+      "review_status": "reviewed",
+      "sectors": [
+        9
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-238195988",
+      "target_id": "238195988"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S01-02-SCATTER",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Recurrent scattered light glint observed in both Sector 1 and Sector 2.",
+      "review_status": "reviewed",
+      "sectors": [
+        1,
+        2
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-382200985",
+      "target_id": "382200985"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "SPOC-DRN-S02-04-DESAT",
+      "evidence_uri": "https://archive.stsci.edu/tess/tess_drn.html",
+      "label": "other_artifact",
+      "label_source": "manual_review",
+      "notes": "Periodic reaction wheel desaturation signature appearing in Sectors 2 and 4.",
+      "review_status": "reviewed",
+      "sectors": [
+        2,
+        4
+      ],
+      "snapshot_date": "2026-10-24",
+      "source_group_id": "tic-260128335",
+      "target_id": "260128335"
+    }
+  ],
+  "schema_version": "1"
+}

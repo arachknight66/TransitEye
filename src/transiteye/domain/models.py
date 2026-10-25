@@ -160,7 +160,9 @@ class AnalysisResult:
     provenance: Provenance
     candidates: tuple[Candidate, ...]
     classifications: Mapping[str, Classification] = field(default_factory=dict)
-    parameter_intervals: Mapping[str, Mapping[str, Interval]] = field(default_factory=dict)
+    parameter_intervals: Mapping[str, Mapping[str, Interval | Mapping[str, Interval]]] = field(
+        default_factory=dict
+    )
     missing_reasons: Mapping[str, MissingReason] = field(default_factory=dict)
     configuration_version: str = "unconfigured"
     schema_version: str = "1"

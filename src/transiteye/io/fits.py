@@ -42,14 +42,14 @@ def _time_reference(primary: fits.Header, extension: fits.Header) -> str | None:
     return str(float(integer or 0.0) + float(fraction or 0.0))
 
 
-def read_tess_light_curve(path: Path, flux_preference: str = "PDCSAP_FLUX") -> LightCurve:
+def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX") -> LightCurve:
     """Read one delivered TESS light curve without discarding any cadence.
 
     The caller owns subsequent quality masking and preprocessing. The reader keeps NaNs, quality
     flags, and optional centroid series so later stages can report exactly what they excluded.
     """
 
-    source = path.expanduser().resolve()
+    source = Path(path).expanduser().resolve()
     if not source.is_file():
         raise FitsValidationError(f"FITS file does not exist: {source}")
     try:
@@ -105,6 +105,8 @@ def read_tess_light_curve(path: Path, flux_preference: str = "PDCSAP_FLUX") -> L
                 metadata={
                     "filename": source.name,
                     "time_unit": _string(extension.get("TIMEUNIT")) or "d",
+                    "crowdsap": _string(extension.get("CROWDSAP", primary.get("CROWDSAP"))),
+                    "flfrcsap": _string(extension.get("FLFRCSAP", primary.get("FLFRCSAP"))),
                 },
             )
     except OSError as error:

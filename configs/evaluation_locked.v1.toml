@@ -1,0 +1,33 @@
+# TransitEye Frozen Locked Evaluation Protocol v1.0
+# Frozen prior to opening the locked test set.
+
+[protocol]
+version = "v1.0"
+date_frozen = "2026-10-24"
+target_split = "test"
+splits_manifest = "manifests/pilot_splits.v1.json"
+labels_manifest = "manifests/pilot_labels.v1.json"
+ephemeris_period_tolerance_rel = 0.01
+ephemeris_epoch_window_factor = 1.25
+harmonic_evaluation_enabled = true
+harmonic_multipliers = [0.5, 1.0, 2.0]
+
+[classification]
+tau_confidence = 0.55
+tau_margin = 0.15
+class_names = ["transit_like", "eclipse_like", "stellar_variability", "other_artifact"]
+
+[bootstrap]
+n_replicates = 1000
+random_seed = 20261024
+confidence_interval_alpha = 0.05
+grouping_key = "source_group_id"
+
+[ablations]
+enabled_variants = [
+    "full_system",
+    "real_data_only",
+    "pass1_detrending_only",
+    "drop_variability_features",
+    "drop_source_features"
+]

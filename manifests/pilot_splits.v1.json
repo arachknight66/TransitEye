@@ -1,0 +1,278 @@
+{
+  "assignments": [
+    {
+      "source_group_id": "tic-261136679",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-150428135",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-410153553",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-279741379",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-100100827",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-307210830",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-231670397",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-259377017",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-207141131",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-234284556",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-149603524",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-38846515",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-441462736",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-181804752",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-238195986",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-382200983",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-260128333",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-272097720",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-270081337",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-300651846",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-388776935",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-231702397",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-115446313",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-470710327",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-276535219",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-281541555",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-306443312",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-399872850",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-259862340",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-260341774",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-382220901",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-427395030",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-388776936",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-270081338",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-278825952",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-307210825",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-261136680",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-382220902",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-279741380",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-150428136",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-410153554",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-100100828",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-207141132",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-234284557",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-259377018",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-149603525",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-181804753",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-238195987",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-441462737",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-260128334",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-382200984",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-260004324",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-307210831",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-261136681",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-410153555",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-279741381",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-100100829",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-231670398",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-207141133",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-234284558",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-259377019",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-149603526",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-38846516",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-441462738",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-181804754",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-238195988",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-382200985",
+      "split": "sector_shift"
+    },
+    {
+      "source_group_id": "tic-260128335",
+      "split": "sector_shift"
+    }
+  ],
+  "manifest_id": "da4436cdc67cf892",
+  "schema_version": "1"
+}
