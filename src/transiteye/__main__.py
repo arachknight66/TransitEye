@@ -81,7 +81,10 @@ def _analyze_fits(args: argparse.Namespace) -> int:
             for c in res.candidates
         ],
     }
-    print(json.dumps(summary, indent=2, sort_keys=True))
+    if args.progress_jsonl:
+        print(json.dumps(summary, sort_keys=True))
+    else:
+        print(json.dumps(summary, indent=2, sort_keys=True))
     return 0
 
 
@@ -150,7 +153,10 @@ def _run_batch(args: argparse.Namespace) -> int:
         "completed_targets": final_job.completed_targets,
         "failed_targets": final_job.failed_targets,
     }
-    print(json.dumps(summary, indent=2, sort_keys=True))
+    if args.progress_jsonl:
+        print(json.dumps(summary, sort_keys=True))
+    else:
+        print(json.dumps(summary, indent=2, sort_keys=True))
     return 0 if final_job.status == JobStatus.COMPLETED else 1
 
 

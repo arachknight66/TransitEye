@@ -10,6 +10,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pytest
 from astropy.io import fits
+from transiteye_desktop.bridge import BackendProcessBridge
 from transiteye_desktop.bundle_loader import LoadedBundle, load_result_bundle
 from transiteye_desktop.downsample import lttb_downsample, min_max_downsample
 from transiteye_desktop.main_window import TransitEyeMainWindow
@@ -300,3 +301,40 @@ def test_end_to_end_backend_bundle_loads_in_desktop_ui(qtbot, tmp_path: Path) ->
     assert window.candidate_table.table.rowCount() == 1
     assert window._current_bundle.candidates[0].trapezoid_model_curve is not None
     assert "68%" in window.vetting_card.lbl_period_ci.text()
+
+
+def test_backend_bridge_multiline_json_parsing(qtbot: pytest.QtBot) -> None:
+    from PyQt6.QtCore import QProcess
+
+    bridge = BackendProcessBridge()
+    completed_bundles: list[tuple[str, dict]] = []
+    bridge.analysis_completed.connect(lambda p, s: completed_bundles.append((p, s)))
+
+    # Simulate multi-line indented JSON summary
+    multiline_summary = json.dumps(
+        {"bundle_path": "/tmp/test_bundle", "status": "complete", "candidate_count": 1},
+        indent=2,
+    )
+    bridge._full_stdout = multiline_summary
+    bridge._stdout_buffer = multiline_summary
+
+    bridge._on_process_finished(0, QProcess.ExitStatus.NormalExit)
+
+    assert len(completed_bundles) == 1
+    assert completed_bundles[0][0] == "/tmp/test_bundle"
+    assert completed_bundles[0][1]["status"] == "complete"
+
+
+def test_backend_bridge_exit_code_zero_error_message(qtbot: pytest.QtBot) -> None:
+    from PyQt6.QtCore import QProcess
+
+    bridge = BackendProcessBridge()
+    failed_msgs: list[str] = []
+    bridge.analysis_failed.connect(lambda msg: failed_msgs.append(msg))
+
+    bridge._on_process_finished(0, QProcess.ExitStatus.NormalExit)
+
+    assert len(failed_msgs) == 1
+    assert "non-zero code 0" not in failed_msgs[0]
+    assert "code 0" in failed_msgs[0]
+

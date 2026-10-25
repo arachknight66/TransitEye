@@ -35,6 +35,7 @@ class BackendProcessBridge(QObject):
 
         self._stdout_buffer = ""
         self._stderr_buffer = ""
+        self._full_stdout = ""
         self._last_result_bundle: str | None = None
         self._last_summary: dict[str, Any] | None = None
 
@@ -58,6 +59,7 @@ class BackendProcessBridge(QObject):
 
         self._stdout_buffer = ""
         self._stderr_buffer = ""
+        self._full_stdout = ""
         self._last_result_bundle = None
         self._last_summary = None
 
@@ -97,6 +99,7 @@ class BackendProcessBridge(QObject):
 
         self._stdout_buffer = ""
         self._stderr_buffer = ""
+        self._full_stdout = ""
         self._last_result_bundle = None
         self._last_summary = None
 
@@ -148,9 +151,29 @@ class BackendProcessBridge(QObject):
         if not self._process.waitForFinished(1500):
             self._process.kill()
 
+    def _handle_message(self, msg: dict[str, Any]) -> None:
+        """Dispatch a parsed JSON message from the backend process."""
+        if "stage" in msg:
+            if "fraction" in msg:
+                frac = float(msg.get("fraction", 0.0))
+            elif "percent" in msg:
+                frac = float(msg.get("percent", 0.0)) / 100.0
+            else:
+                frac = 0.0
+            stage = str(msg.get("stage", ""))
+            self.progress_changed.emit(stage, frac)
+        elif "task_id" in msg or ("job_id" in msg and "target_id" in msg):
+            self.batch_progress.emit(msg)
+        elif "bundle_path" in msg:
+            self._last_result_bundle = str(msg["bundle_path"])
+            self._last_summary = msg
+        elif "job_id" in msg and ("status" in msg or "total_targets" in msg):
+            self._last_summary = msg
+
     def _on_stdout_ready(self) -> None:
         data = self._process.readAllStandardOutput().data().decode("utf-8", errors="replace")
         self._stdout_buffer += data
+        self._full_stdout += data
 
         while "\n" in self._stdout_buffer:
             line, self._stdout_buffer = self._stdout_buffer.split("\n", 1)
@@ -164,29 +187,41 @@ class BackendProcessBridge(QObject):
                 continue
 
             if isinstance(msg, dict):
-                # Check for progress messages
-                if "stage" in msg:
-                    if "fraction" in msg:
-                        frac = float(msg.get("fraction", 0.0))
-                    elif "percent" in msg:
-                        frac = float(msg.get("percent", 0.0)) / 100.0
-                    else:
-                        frac = 0.0
-                    stage = str(msg.get("stage", ""))
-                    self.progress_changed.emit(stage, frac)
-                elif "task_id" in msg or ("job_id" in msg and "target_id" in msg):
-                    self.batch_progress.emit(msg)
-                elif "bundle_path" in msg:
-                    self._last_result_bundle = str(msg["bundle_path"])
-                    self._last_summary = msg
-                elif "job_id" in msg and "status" in msg:
-                    self._last_summary = msg
+                self._handle_message(msg)
 
     def _on_stderr_ready(self) -> None:
         data = self._process.readAllStandardError().data().decode("utf-8", errors="replace")
         self._stderr_buffer += data
 
     def _on_process_finished(self, exit_code: int, exit_status: QProcess.ExitStatus) -> None:
+        # Drain any residual stdout or stderr
+        self._on_stdout_ready()
+        self._on_stderr_ready()
+
+        # If summary was not captured line-by-line, attempt fallback parsing
+        if not self._last_result_bundle and not self._last_summary:
+            buf = self._stdout_buffer.strip()
+            if buf:
+                try:
+                    msg = json.loads(buf)
+                    if isinstance(msg, dict):
+                        self._handle_message(msg)
+                except json.JSONDecodeError:
+                    pass
+
+        # If still missing, scan full accumulated stdout for the trailing JSON dictionary
+        if not self._last_result_bundle and not self._last_summary:
+            full = self._full_stdout.strip()
+            start_brace = full.rfind("{")
+            end_brace = full.rfind("}")
+            if start_brace != -1 and end_brace > start_brace:
+                try:
+                    msg = json.loads(full[start_brace : end_brace + 1])
+                    if isinstance(msg, dict):
+                        self._handle_message(msg)
+                except json.JSONDecodeError:
+                    pass
+
         self.process_state_changed.emit(False)
         if exit_code == 0 and self._last_result_bundle:
             self.progress_changed.emit("Analysis completed", 1.0)
@@ -195,6 +230,15 @@ class BackendProcessBridge(QObject):
             self.progress_changed.emit("Batch completed", 1.0)
             self.analysis_completed.emit("", self._last_summary)
         else:
-            err_msg = self._stderr_buffer.strip() or f"Process exited with non-zero code {exit_code}"
+            if exit_code == 0:
+                err_msg = (
+                    self._stderr_buffer.strip()
+                    or "Process finished with exit code 0, but no result bundle or summary was found in output."
+                )
+            else:
+                err_msg = (
+                    self._stderr_buffer.strip()
+                    or f"Process failed with exit code {exit_code}"
+                )
             self.progress_changed.emit("Process failed", 0.0)
             self.analysis_failed.emit(err_msg)
