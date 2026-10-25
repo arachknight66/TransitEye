@@ -32,7 +32,7 @@
 \maketitle
 
 \begin{abstract}
-The Transiting Exoplanet Survey Satellite (TESS) has gathered wide-field time-series photometry for millions of stars, yet automated candidate identification remains severely impeded by instrumental systematics, stellar activity, and astrophysical false positives such as eclipsing binaries and background blends. We present \textbf{TransitEye}, a reproducible, open-source scientific system featuring a headless backend and a responsive PyQt6 desktop interface. TransitEye incorporates two-tier duration-aware biweight detrending with CUDA acceleration, Box Least-Squares (BLS) search with harmonic tracking, limb-darkened transit modeling with moving-block bootstrap uncertainties, 25 audited leak-free features, and a calibrated Random Forest classifier with formal abstention. Decoupled two-tier spatial vetting assesses astrometric centroid shifts and Target Pixel File (TPF) difference images. On a locked, single-shot evaluation partition, TransitEye achieves an accuracy of \TransitEyeAccuracy, a macro-$F_1$ score of \TransitEyeMacroFOne, an Expected Calibration Error of \TransitEyeECE, and a Brier score of \TransitEyeBrier, with an ephemeris recovery rate of \TransitEyeRecoveryFraction. All code, frozen manifests, and schemas are publicly available.
+The Transiting Exoplanet Survey Satellite (TESS) has gathered wide-field time-series photometry for millions of stars, yet automated candidate identification remains severely impeded by instrumental systematics, stellar activity, and astrophysical false positives such as eclipsing binaries and background blends. We present \textbf{TransitEye}, a reproducible, open-source scientific system featuring a headless backend and a responsive PyQt6 desktop interface. TransitEye incorporates two-tier duration-aware biweight detrending with CUDA acceleration, Box Least-Squares (BLS) search with harmonic tracking, limb-darkened transit modeling with moving-block bootstrap uncertainties, 25 audited leak-free features, and a calibrated HistGradientBoosting classifier with formal abstention. Decoupled two-tier spatial vetting assesses astrometric centroid shifts and Target Pixel File (TPF) difference images. On a locked, single-shot evaluation partition, TransitEye achieves an accuracy of \TransitEyeAccuracy, a macro-$F_1$ score of \TransitEyeMacroFOne, an Expected Calibration Error of \TransitEyeECE, and a Brier score of \TransitEyeBrier, with an ephemeris recovery rate of \TransitEyeRecoveryFraction. All code, frozen manifests, and schemas are publicly available.
 \end{abstract}
 
 \section{Introduction}
@@ -88,16 +88,16 @@ Features are audited via static AST analysis to ensure zero inclusion of catalog
 \section{Classification and Spatial Vetting}
 
 \subsection{Calibrated Morphology Classification}
-The classifier uses a Random Forest ensemble trained under Grouped Stratified K-Fold cross-validation across distinct target stars. Probabilities are calibrated on a dedicated held-out \texttt{calibration} split using Platt sigmoid scaling:
+The morphology classifier uses a Histogram-based Gradient Boosted Decision Tree (\texttt{HistGradientBoostingClassifier}, selected via Grouped Stratified K-Fold CV over Random Forest and Logistic Regression) trained across distinct target stars. Probabilities are calibrated on a dedicated held-out \texttt{calibration} split using Platt sigmoid scaling:
 \begin{equation}
     P(y = c \mid \vec{x}) = \frac{1}{1 + \exp(A \cdot f_c(\vec{x}) + B)}
 \end{equation}
-An explicit abstention policy operates on the decision partition: if top confidence $\tau_{\text{conf}} < 0.55$ or margin $\tau_{\text{margin}} < 0.15$, the model emits $\text{abstained} = \text{True}$.
+An explicit abstention policy operates on the decision partition: if top confidence $\tau_{\text{conf}} < 0.40$ or margin $\tau_{\text{margin}} < 0.10$, the model emits $\text{abstained} = \text{True}$.
 
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.88\columnwidth]{generated/calibration_curve.png}
-    \caption{Reliability diagram of calibrated Random Forest probabilities evaluated on the held-out test cohort.}
+    \caption{Reliability diagram of calibrated classifier probabilities evaluated on the held-out test cohort.}
     \label{fig:calibration}
 \end{figure}
 
