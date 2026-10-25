@@ -206,6 +206,26 @@ class TransitEyeMainWindow(QMainWindow):
         # Candidate table selection
         self.candidate_table.candidate_selected.connect(self._on_candidate_selected)
 
+        # Interactive periodogram peak picking
+        self.periodogram_widget.period_selected.connect(self._on_period_picked)
+
+    def _on_period_picked(self, period: float) -> None:
+        """Handle user clicking an alternative period peak on the periodogram."""
+        if not self._current_bundle or not self._current_bundle.candidates:
+            return
+        if self._selected_candidate_index >= len(self._current_bundle.candidates):
+            return
+        from dataclasses import replace
+
+        cand = self._current_bundle.candidates[self._selected_candidate_index]
+        custom_cand = replace(cand, period_days=period)
+        self.folded_widget.set_candidate(
+            custom_cand,
+            self._current_bundle.times,
+            self._current_bundle.detrended_flux,
+        )
+        self.lbl_status.setText(f"Folded on custom period: {period:.5f} days")
+
     def _on_open_fits(self) -> None:
         path, _ = QFileDialog.getOpenFileName(
             self,

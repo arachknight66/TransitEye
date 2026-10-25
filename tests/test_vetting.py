@@ -119,6 +119,8 @@ def test_tier1_target_consistent() -> None:
     assert evidence.tier == 1
     assert evidence.crowdsap == 0.95
     assert evidence.centroid_shift_sigma < 3.0
+    assert evidence.centroid_shift_arcsec is not None
+    assert np.isclose(evidence.centroid_shift_arcsec, evidence.centroid_shift_pixels * 21.0)
 
 
 def test_tier1_blend_suspected_due_to_centroid_shift() -> None:
@@ -129,6 +131,8 @@ def test_tier1_blend_suspected_due_to_centroid_shift() -> None:
     assert evidence.assessment == SourceAssessment.BLEND_SUSPECTED
     assert evidence.centroid_shift_pixels > 0.5
     assert evidence.centroid_shift_sigma >= 3.5
+    assert evidence.centroid_shift_arcsec is not None
+    assert np.isclose(evidence.centroid_shift_arcsec, evidence.centroid_shift_pixels * 21.0)
 
 
 def test_tier1_unresolved_in_crowded_field_without_pixels() -> None:
@@ -183,6 +187,11 @@ def test_tier2_target_consistent_with_tpf() -> None:
     assert evidence.assessment == SourceAssessment.TARGET_CONSISTENT
     assert evidence.difference_image_offset_pixels is not None
     assert evidence.difference_image_offset_pixels < 0.5
+    assert evidence.difference_image_offset_arcsec is not None
+    assert np.isclose(
+        evidence.difference_image_offset_arcsec,
+        evidence.difference_image_offset_pixels * 21.0,
+    )
 
 
 def test_tier2_blend_suspected_with_offset_tpf() -> None:
@@ -224,3 +233,8 @@ def test_tier2_blend_suspected_with_offset_tpf() -> None:
     assert evidence.assessment == SourceAssessment.BLEND_SUSPECTED
     assert evidence.difference_image_offset_pixels is not None
     assert evidence.difference_image_offset_pixels > 1.0
+    assert evidence.difference_image_offset_arcsec is not None
+    assert np.isclose(
+        evidence.difference_image_offset_arcsec,
+        evidence.difference_image_offset_pixels * 21.0,
+    )

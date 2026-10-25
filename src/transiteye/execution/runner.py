@@ -236,11 +236,13 @@ class BatchRunner:
                 )
                 futures[fut] = task
 
-            # Collect completed futures as they finish
+            target_timeout = float(cfg_data.get("target_timeout_seconds", 180.0))
+
+            # Collect completed futures as they finish with per-target timeout
             for fut in as_completed(futures):
                 task = futures[fut]
                 try:
-                    res_data = fut.result()
+                    res_data = fut.result(timeout=target_timeout)
                     bundle_path = res_data["bundle_path"]
                     cand_count = res_data["candidate_count"]
                     inp_sha = res_data["input_sha256"]

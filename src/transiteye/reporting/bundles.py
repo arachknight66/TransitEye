@@ -214,6 +214,14 @@ def write_result_bundle(
             _vet_val(c.candidate.candidate_id, "difference_image_offset_pixels")
             for c in refined_candidates
         ],
+        "difference_image_offset_arcsec": [
+            _vet_val(c.candidate.candidate_id, "difference_image_offset_arcsec")
+            for c in refined_candidates
+        ],
+        "centroid_shift_arcsec": [
+            _vet_val(c.candidate.candidate_id, "centroid_shift_arcsec")
+            for c in refined_candidates
+        ],
         "aperture_depth_growth_ratio": [
             _vet_val(c.candidate.candidate_id, "aperture_depth_growth_ratio")
             for c in refined_candidates

@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from astropy.io import fits
 
-from transiteye.io.fits import FitsValidationError, read_tess_light_curve
+from transiteye.io.fits import FitsValidationError, read_tess_light_curve, stitch_light_curves
 
 
 def _write_tess_fixture(path: Path) -> None:
@@ -67,3 +67,79 @@ def test_reader_rejects_missing_time_column(tmp_path: Path) -> None:
     fits.HDUList([fits.PrimaryHDU(), table]).writeto(path)
     with pytest.raises(FitsValidationError, match="TIME"):
         read_tess_light_curve(path)
+
+
+def test_stitch_light_curves_validation() -> None:
+    # Empty sequence
+    with pytest.raises(ValueError, match="Cannot stitch an empty sequence"):
+        stitch_light_curves([])
+
+
+def test_stitch_light_curves_single(tmp_path: Path) -> None:
+    path = tmp_path / "single_lc.fits"
+    _write_tess_fixture(path)
+    lc = read_tess_light_curve(path)
+    stitched = stitch_light_curves([lc])
+    assert stitched is lc
+
+
+def test_stitch_light_curves_multiple(tmp_path: Path) -> None:
+    path1 = tmp_path / "s1.fits"
+    path2 = tmp_path / "s2.fits"
+    _write_tess_fixture(path1)
+
+    # Write a second fixture with sector 43 and time offset
+    columns = [
+        fits.Column(name="TIME", format="D", array=np.array([4.0, 5.0])),
+        fits.Column(name="PDCSAP_FLUX", format="D", unit="electron / s", array=np.array([97.0, 96.0])),
+        fits.Column(name="PDCSAP_FLUX_ERR", format="D", array=np.array([1.0, 1.0])),
+        fits.Column(name="SAP_FLUX", format="D", array=np.array([98.0, 97.0])),
+        fits.Column(name="QUALITY", format="K", array=np.array([0, 0])),
+        fits.Column(name="CADENCENO", format="K", array=np.array([13, 14])),
+        fits.Column(name="MOM_CENTR1", format="D", array=np.array([1.4, 1.5])),
+        fits.Column(name="MOM_CENTR2", format="D", array=np.array([2.4, 2.5])),
+    ]
+    table = fits.BinTableHDU.from_columns(columns)
+    table.header["TIMESYS"] = "TDB"
+    table.header["BJDREFI"] = 2457000
+    primary = fits.PrimaryHDU()
+    primary.header["TICID"] = 123456
+    primary.header["SECTOR"] = 43
+    primary.header["MISSION"] = "TESS"
+    primary.header["CREATOR"] = "fixture"
+    fits.HDUList([primary, table]).writeto(path2)
+
+    lc1 = read_tess_light_curve(path1)
+    lc2 = read_tess_light_curve(path2)
+
+    # Pass in reverse order to verify chronological sorting
+    stitched = stitch_light_curves([lc2, lc1])
+    assert stitched.provenance.product_type == "stitched_tess_light_curve"
+    assert stitched.provenance.metadata["stitched_sectors"] == [42, 43]
+    assert len(stitched.time_days) == 5
+    # Check times are monotonic (excluding any NaN)
+    valid_t = stitched.time_days[~np.isnan(stitched.time_days)]
+    assert np.all(np.diff(valid_t) > 0)
+
+
+def test_stitch_light_curves_mismatched_target(tmp_path: Path) -> None:
+    path1 = tmp_path / "t1.fits"
+    path2 = tmp_path / "t2.fits"
+    _write_tess_fixture(path1)
+
+    columns = [
+        fits.Column(name="TIME", format="D", array=np.array([4.0])),
+        fits.Column(name="PDCSAP_FLUX", format="D", unit="electron / s", array=np.array([97.0])),
+    ]
+    table = fits.BinTableHDU.from_columns(columns)
+    table.header["TIMESYS"] = "TDB"
+    primary = fits.PrimaryHDU()
+    primary.header["TICID"] = 999999  # different target ID!
+    fits.HDUList([primary, table]).writeto(path2)
+
+    lc1 = read_tess_light_curve(path1)
+    lc2 = read_tess_light_curve(path2)
+
+    with pytest.raises(ValueError, match="Cannot stitch light curves from different targets"):
+        stitch_light_curves([lc1, lc2])
+

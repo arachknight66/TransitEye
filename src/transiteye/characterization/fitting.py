@@ -174,6 +174,32 @@ def fit_trapezoid(
     return params, model_curve, chi2_nu, bic
 
 
+def estimate_limb_darkening_coefficients(
+    teff: float | None = None,
+    logg: float | None = None,
+) -> tuple[float, float]:
+    """Estimate quadratic limb-darkening coefficients (u1, u2) for the TESS bandpass.
+
+    Approximated from Claret (2018) PHOENIX/ATLAS tables across stellar effective temperature:
+    - Cool M/K dwarfs (Teff < 4000 K): strong limb darkening (u1 ~ 0.48, u2 ~ 0.28)
+    - Intermediate K/G stars (4000 <= Teff < 6000 K): solar-like (u1 ~ 0.32, u2 ~ 0.26)
+    - Hot F/A stars (Teff >= 6000 K): weaker limb darkening (u1 ~ 0.22, u2 ~ 0.24)
+    Default fallback when Teff is unspecified: (0.30, 0.22).
+    """
+    if teff is None or np.isnan(teff) or teff <= 0:
+        return 0.30, 0.22
+
+    if teff < 3800.0:
+        return 0.48, 0.28
+    if teff < 4500.0:
+        return 0.40, 0.27
+    if teff < 6000.0:
+        return 0.32, 0.26
+    if teff < 7500.0:
+        return 0.25, 0.24
+    return 0.18, 0.22
+
+
 def fit_batman_refinement(
     time_days: NDArray[np.float64],
     flux: NDArray[np.float64],
@@ -182,6 +208,7 @@ def fit_batman_refinement(
     init_period: float,
     init_duration_days: float,
     init_depth: float,
+    u_coeffs: tuple[float, float] = (0.30, 0.22),
 ) -> tuple[dict[str, float], NDArray[np.float64], float] | None:
     """Refine candidate parameters using batman quadratic limb-darkened transit model."""
     weights = 1.0 / flux_err if flux_err is not None else np.ones_like(flux)
@@ -200,6 +227,8 @@ def fit_batman_refinement(
     bounds_lower = [init_epoch - 0.1 * init_period, 0.9 * init_period, 0.001, 1.5, 60.0]
     bounds_upper = [init_epoch + 0.1 * init_period, 1.1 * init_period, 0.5, 200.0, 90.0]
 
+    u_list = [float(u_coeffs[0]), float(u_coeffs[1])]
+
     def residual(p: list[float]) -> np.ndarray:
         params = batman.TransitParams()
         params.t0 = p[0]
@@ -209,7 +238,7 @@ def fit_batman_refinement(
         params.inc = p[4]
         params.ecc = 0.0
         params.w = 90.0
-        params.u = [0.3, 0.2]
+        params.u = u_list
         params.limb_dark = "quadratic"
 
         model = batman.TransitModel(params, time_days)
@@ -234,7 +263,7 @@ def fit_batman_refinement(
         params.inc = p_opt[4]
         params.ecc = 0.0
         params.w = 90.0
-        params.u = [0.3, 0.2]
+        params.u = u_list
         params.limb_dark = "quadratic"
         model_obj = batman.TransitModel(params, time_days)
         model_curve = model_obj.light_curve(params)
@@ -284,6 +313,8 @@ def refine_candidate(
     flux_err: NDArray[np.float64] | None,
     crowdsap: float | None = None,
     batman_snr_threshold: float = 7.0,
+    teff: float | None = None,
+    logg: float | None = None,
 ) -> RefinedCandidate:
     """Refine detected candidate with trapezoid fitting and optional batman refinement."""
     trap_params, trap_curve, chi2_nu, trap_bic = fit_trapezoid(
@@ -301,6 +332,7 @@ def refine_candidate(
     batman_delta_bic = None
     batman_curve = None
     if (candidate.detection_snr or 0.0) >= batman_snr_threshold and trap_params["ingress_fraction"] < 0.8:
+        u_coeffs = estimate_limb_darkening_coefficients(teff, logg)
         batman_res = fit_batman_refinement(
             time_days,
             flux_detrended,
@@ -309,6 +341,7 @@ def refine_candidate(
             init_period=trap_params["period_days"],
             init_duration_days=trap_params["duration_hours"] / 24.0,
             init_depth=trap_params["depth_ppm"] / 1e6,
+            u_coeffs=u_coeffs,
         )
         if batman_res is not None:
             _, batman_curve, batman_bic = batman_res

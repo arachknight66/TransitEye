@@ -149,6 +149,11 @@ def analyze_light_curve(
     # 5. Candidate refinement, Red-noise SNR, Block-bootstrap, and Empirical Significance
     crowdsap_str = light_curve.metadata.get("crowdsap")
     crowdsap = float(crowdsap_str) if crowdsap_str and crowdsap_str != "None" else None
+    teff_val = light_curve.metadata.get("teff")
+    try:
+        teff = float(teff_val) if teff_val is not None and teff_val != "None" else None
+    except (ValueError, TypeError):
+        teff = None
 
     refined_list: list[RefinedCandidate] = []
     updated_candidates: list[Candidate] = []
@@ -174,6 +179,7 @@ def analyze_light_curve(
             dual_final.prepared.flux_error_normalized,
             crowdsap=crowdsap,
             batman_snr_threshold=1e9 if is_fast_screened else 7.0,
+            teff=teff,
         )
         refined_list.append(refined)
 

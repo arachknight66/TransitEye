@@ -6,6 +6,7 @@ import numpy as np
 
 from transiteye.characterization.fitting import (
     compute_phase_coverage,
+    estimate_limb_darkening_coefficients,
     evaluate_trapezoid,
     fit_batman_refinement,
     fit_trapezoid,
@@ -114,3 +115,26 @@ def test_refine_candidate_dilution_correction() -> None:
     )
     assert refined.batman_delta_bic is not None
     assert refined.phase_coverage > 0.5
+
+
+def test_estimate_limb_darkening_coefficients() -> None:
+    # Test cool M dwarf
+    u_cool = estimate_limb_darkening_coefficients(teff=3200.0, logg=4.8)
+    assert np.isclose(u_cool[0], 0.48, atol=0.01)
+    assert np.isclose(u_cool[1], 0.28, atol=0.01)
+
+    # Test solar analog (5770 K -> 0.32, 0.26)
+    u_sol = estimate_limb_darkening_coefficients(teff=5770.0, logg=4.44)
+    assert np.isclose(u_sol[0], 0.32, atol=0.01)
+    assert np.isclose(u_sol[1], 0.26, atol=0.01)
+
+    # Test hot star (9000 K -> 0.18, 0.22)
+    u_hot = estimate_limb_darkening_coefficients(teff=9000.0, logg=4.0)
+    assert np.isclose(u_hot[0], 0.18, atol=0.01)
+    assert np.isclose(u_hot[1], 0.22, atol=0.01)
+
+    # Test missing / None fallback (0.30, 0.22)
+    u_none = estimate_limb_darkening_coefficients(teff=None, logg=None)
+    assert np.isclose(u_none[0], 0.30, atol=0.01)
+    assert np.isclose(u_none[1], 0.22, atol=0.01)
+

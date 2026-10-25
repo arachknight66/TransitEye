@@ -14,6 +14,8 @@ from transiteye.features.extractors import fold_phase
 from transiteye.io.tpf import TargetPixelData
 from transiteye.preprocessing.detrend import DualLightCurve
 
+TESS_PIXEL_SCALE_ARCSEC: float = 21.0
+
 
 @dataclass(frozen=True, slots=True)
 class VettingEvidence:
@@ -30,6 +32,8 @@ class VettingEvidence:
     aperture_depth_growth_ratio: float | None
     summary_reason: str
     details: dict[str, Any]
+    centroid_shift_arcsec: float = 0.0
+    difference_image_offset_arcsec: float | None = None
 
 
 def run_tier1_source_vetting(
@@ -103,13 +107,15 @@ def run_tier1_source_vetting(
 
             shift_sigma = float(dist_px / denom)
 
+    dist_arcsec = float(dist_px * TESS_PIXEL_SCALE_ARCSEC)
+
     # Decision policy
     # Statistically significant centroid shift indicates off-target source
     if shift_sigma >= 3.5 and dist_px >= 0.2:
         assessment = SourceAssessment.BLEND_SUSPECTED
         reason = (
             f"Statistically significant centroid shift during transit: "
-            f"{dist_px:.3f} px ({shift_sigma:.1f} sigma)."
+            f"{dist_px:.3f} px ({dist_arcsec:.1f}\", {shift_sigma:.1f} sigma)."
         )
     elif crowdsap < 0.85:
         # Crowded field with no pixel evidence to resolve
@@ -121,7 +127,7 @@ def run_tier1_source_vetting(
     else:
         assessment = SourceAssessment.TARGET_CONSISTENT
         reason = (
-            f"Centroid is stable within {dist_px:.3f} px ({shift_sigma:.1f} sigma) "
+            f"Centroid is stable within {dist_px:.3f} px ({dist_arcsec:.1f}\", {shift_sigma:.1f} sigma) "
             f"in an uncrowded field (CROWDSAP={crowdsap:.2f})."
         )
 
@@ -137,6 +143,8 @@ def run_tier1_source_vetting(
         aperture_depth_growth_ratio=None,
         summary_reason=reason,
         details={"flux_depth_delivered": d_deliv if "d_deliv" in locals() else 0.0},
+        centroid_shift_arcsec=dist_arcsec,
+        difference_image_offset_arcsec=None,
     )
 
 
@@ -175,6 +183,8 @@ def run_tier2_source_vetting(
             aperture_depth_growth_ratio=None,
             summary_reason=f"TPF available but in-transit frames insufficient ({np.sum(in_transit_mask)} < 3); fell back to Tier 1.",
             details={},
+            centroid_shift_arcsec=tier1.centroid_shift_arcsec,
+            difference_image_offset_arcsec=None,
         )
 
     # In-transit and out-of-transit mean images
@@ -234,29 +244,31 @@ def run_tier2_source_vetting(
             if d_core > 1e-5:
                 growth_ratio = float(d_large / d_core)
 
+    diff_offset_arcsec = float(offset_dist_px * TESS_PIXEL_SCALE_ARCSEC)
+
     # Tier 2 Decision Policy
     if offset_dist_px >= 0.5 and offset_sigma >= 3.0:
         assessment = SourceAssessment.BLEND_SUSPECTED
         reason = (
             f"Difference image centroid is displaced from target by {offset_dist_px:.2f} px "
-            f"({offset_sigma:.1f} sigma), confirming an off-target blend."
+            f"({diff_offset_arcsec:.1f}\", {offset_sigma:.1f} sigma), confirming an off-target blend."
         )
     elif growth_ratio >= 1.4 and offset_dist_px >= 0.3:
         assessment = SourceAssessment.BLEND_SUSPECTED
         reason = (
             f"Transit depth grows with larger aperture (growth ratio={growth_ratio:.2f}) "
-            f"and difference centroid offset={offset_dist_px:.2f} px, indicating companion blend."
+            f"and difference centroid offset={offset_dist_px:.2f} px ({diff_offset_arcsec:.1f}\"), indicating companion blend."
         )
     elif offset_dist_px < 0.5 and offset_sigma < 3.0:
         assessment = SourceAssessment.TARGET_CONSISTENT
         reason = (
             f"Difference image centroid coincides with target star within {offset_dist_px:.2f} px "
-            f"({offset_sigma:.1f} sigma), confirming on-target origin."
+            f"({diff_offset_arcsec:.1f}\", {offset_sigma:.1f} sigma), confirming on-target origin."
         )
     else:
         assessment = SourceAssessment.UNRESOLVED
         reason = (
-            f"Pixel difference offset {offset_dist_px:.2f} px is ambiguous; "
+            f"Pixel difference offset {offset_dist_px:.2f} px ({diff_offset_arcsec:.1f}\") is ambiguous; "
             f"crowdsap={tier1.crowdsap:.2f}."
         )
 
@@ -278,6 +290,8 @@ def run_tier2_source_vetting(
             "tpf_stamp": oot_img,
             "tpf_diff": diff_img,
         },
+        centroid_shift_arcsec=tier1.centroid_shift_arcsec,
+        difference_image_offset_arcsec=diff_offset_arcsec,
     )
 
 

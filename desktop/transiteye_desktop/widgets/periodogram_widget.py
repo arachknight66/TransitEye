@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import pyqtgraph as pg
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
 from transiteye_desktop.bundle_loader import LoadedBundle
@@ -10,6 +13,8 @@ from transiteye_desktop.bundle_loader import LoadedBundle
 
 class PeriodogramWidget(QWidget):
     """Plots BLS power spectra and Lomb-Scargle variability with detection peaks and harmonic aliases."""
+
+    period_selected = pyqtSignal(float)
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
@@ -68,6 +73,26 @@ class PeriodogramWidget(QWidget):
         self.p_ls.addItem(self.ls_peak_line)
 
         self._hide_marker_lines()
+
+        # Connect click interactions
+        self.glw.scene().sigMouseClicked.connect(self._on_scene_clicked)
+
+    def _on_scene_clicked(self, event: Any) -> None:
+        """Handle user clicking on the periodogram to select candidate period."""
+        if event.button() != Qt.MouseButton.LeftButton:
+            return
+        pos = event.scenePos()
+        if self.p_bls.sceneBoundingRect().contains(pos):
+            view_pt = self.p_bls.vb.mapSceneToView(pos)
+            period = float(10.0 ** view_pt.x())
+            if period > 0:
+                self.set_peak_period(period)
+                self.period_selected.emit(period)
+        elif self.p_ls.sceneBoundingRect().contains(pos):
+            view_pt = self.p_ls.vb.mapSceneToView(pos)
+            period = float(10.0 ** view_pt.x())
+            if period > 0:
+                self.period_selected.emit(period)
 
     def _hide_marker_lines(self) -> None:
         self.peak_line.setVisible(False)

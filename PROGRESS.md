@@ -10,7 +10,7 @@
 ## Project snapshot
 
 **Current phase:** Phase 5 — Locked evaluation, scientific report, and release  
-**Current implementation:** Phases 1, 2, 3, 4, and 5 COMPLETE (79/79 tests passing, clean release script verified, 3-page scientific PDF report compiled, 100-target benchmark verified)  
+**Current implementation:** Phases 1, 2, 3, 4, and 5 COMPLETE (84/84 tests passing, clean release script verified, 3-page scientific PDF report compiled, 100-target benchmark verified)  
 **Last updated:** 2026-10-25  
 **Status:** All five phases completed, verified, and gated.
 
@@ -151,3 +151,4 @@
 | 2026-10-25 | Stage 4: CUDA buffer expansion, fast-screen tiering, executed 100-target sector benchmark (100/100 completed) | 100-target benchmark & cache replay (386 tgts/s) | Passed |
 | 2026-10-25 | Stage 5: Dual BLS/LS subplots, fitted fold curves, dilution depth & CI cards, .teye.json sessions & exports | 79/79 pytest tests pass | Passed |
 | 2026-10-25 | Stage 6: Built sdist/wheel via `uv build`, generated `RELEASE_MANIFEST.sha256`, clean-room release acceptance | `./scripts/verify_clean_release.sh` passes 100% | Passed |
+| 2026-10-25 | Added Claret (2018) limb-darkening interpolation, multi-sector stitching, arcsec vetting offsets, worker timeout, desktop interactive peak picking & overlays, CI/CD, and runnable examples | `./scripts/verify_clean_release.sh` passes 84/84 tests | Passed |

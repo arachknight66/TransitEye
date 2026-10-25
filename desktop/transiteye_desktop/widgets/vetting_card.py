@@ -95,6 +95,20 @@ class VettingCard(QFrame):
         self.img_diff = pg.ImageItem()
         self.p_diff.addItem(self.img_diff)
 
+        # Target crosshairs and centroid markers
+        self.tpf_target_cross = pg.ScatterPlotItem(
+            size=14, pen=pg.mkPen((0, 255, 100), width=2), symbol="+"
+        )
+        self.diff_target_cross = pg.ScatterPlotItem(
+            size=14, pen=pg.mkPen((0, 255, 100), width=2), symbol="+"
+        )
+        self.diff_centroid_marker = pg.ScatterPlotItem(
+            size=12, pen=pg.mkPen((255, 60, 60), width=2), brush=pg.mkBrush(255, 60, 60, 100), symbol="o"
+        )
+        self.p_tpf.addItem(self.tpf_target_cross)
+        self.p_diff.addItem(self.diff_target_cross)
+        self.p_diff.addItem(self.diff_centroid_marker)
+
         self.img_layout.addWidget(self.tpf_glw)
         layout.addLayout(self.img_layout)
         self.tpf_glw.setVisible(False)
@@ -146,8 +160,12 @@ class VettingCard(QFrame):
 
         # Extract features
         shift_sig = candidate.raw_data.get("centroid_shift_sigma", None)
+        shift_arc = candidate.raw_data.get("centroid_shift_arcsec", None)
         if shift_sig is not None and not np.isnan(float(shift_sig)):
-            self.lbl_shift.setText(f"{float(shift_sig):.2f} σ")
+            if shift_arc is not None and not np.isnan(float(shift_arc)):
+                self.lbl_shift.setText(f"{float(shift_sig):.1f} σ ({float(shift_arc):.1f}\")")
+            else:
+                self.lbl_shift.setText(f"{float(shift_sig):.2f} σ")
         else:
             self.lbl_shift.setText("--")
 
@@ -182,12 +200,38 @@ class VettingCard(QFrame):
         if stamp is not None and stamp.ndim == 2:
             self.tpf_glw.setVisible(True)
             self.img_tpf.setImage(stamp)
+            rows, cols = stamp.shape
+            t_col, t_row = cols / 2.0, rows / 2.0
+            self.tpf_target_cross.setData([t_col], [t_row])
+            self.diff_target_cross.setData([t_col], [t_row])
+
             if diff is not None and diff.ndim == 2:
                 self.img_diff.setImage(diff)
+                diff_offset_px = candidate.raw_data.get("difference_image_offset_pixels")
+                if (
+                    diff_offset_px is not None
+                    and not np.isnan(float(diff_offset_px))
+                    and float(diff_offset_px) > 0
+                ):
+                    pos_d = np.maximum(0.0, diff)
+                    tot_d = float(np.sum(pos_d))
+                    if tot_d > 1e-6:
+                        y_grid, x_grid = np.mgrid[0:rows, 0:cols]
+                        c_x = float(np.sum(x_grid * pos_d) / tot_d)
+                        c_y = float(np.sum(y_grid * pos_d) / tot_d)
+                        self.diff_centroid_marker.setData([c_x], [c_y])
+                    else:
+                        self.diff_centroid_marker.clear()
+                else:
+                    self.diff_centroid_marker.clear()
             else:
                 self.img_diff.clear()
+                self.diff_centroid_marker.clear()
         else:
             self.tpf_glw.setVisible(False)
+            self.tpf_target_cross.clear()
+            self.diff_target_cross.clear()
+            self.diff_centroid_marker.clear()
 
     def clear(self) -> None:
         """Reset vetting card to blank state."""
@@ -202,3 +246,6 @@ class VettingCard(QFrame):
         self.tpf_glw.setVisible(False)
         self.img_tpf.clear()
         self.img_diff.clear()
+        self.tpf_target_cross.clear()
+        self.diff_target_cross.clear()
+        self.diff_centroid_marker.clear()

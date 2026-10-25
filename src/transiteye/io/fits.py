@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
@@ -107,7 +108,99 @@ def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX"
                     "time_unit": _string(extension.get("TIMEUNIT")) or "d",
                     "crowdsap": _string(extension.get("CROWDSAP", primary.get("CROWDSAP"))),
                     "flfrcsap": _string(extension.get("FLFRCSAP", primary.get("FLFRCSAP"))),
+                    "teff": _string(primary.get("TEFF", extension.get("TEFF"))),
+                    "logg": _string(primary.get("LOGG", extension.get("LOGG"))),
                 },
             )
     except OSError as error:
         raise FitsValidationError(f"Could not open FITS file {source}: {error}") from error
+
+
+def stitch_light_curves(light_curves: Sequence[LightCurve]) -> LightCurve:
+    """Stitch multiple sector light curves for the same target into a single time-ordered series.
+
+    Preserves quality flags, centroids, and provenance across sectors, sorting cadences
+    chronologically and validating matching target identifiers.
+    """
+    if not light_curves:
+        raise ValueError("Cannot stitch an empty sequence of light curves.")
+    if len(light_curves) == 1:
+        return light_curves[0]
+
+    # Validate target_id consistency
+    target_ids = {lc.provenance.target_id for lc in light_curves if lc.provenance.target_id}
+    if len(target_ids) > 1:
+        raise ValueError(f"Cannot stitch light curves from different targets: {sorted(target_ids)}")
+
+    # Sort light curves chronologically by first cadence time
+    sorted_lcs = sorted(light_curves, key=lambda lc: lc.time_days[0] if len(lc.time_days) else 0.0)
+
+    # Combine arrays
+    all_time = np.concatenate([lc.time_days for lc in sorted_lcs])
+    all_flux = np.concatenate([lc.flux for lc in sorted_lcs])
+
+    # Handle optional arrays
+    has_err = all(lc.flux_error is not None for lc in sorted_lcs)
+    all_err = np.concatenate([lc.flux_error for lc in sorted_lcs]) if has_err else None
+
+    has_qual = all(lc.quality is not None for lc in sorted_lcs)
+    all_qual = np.concatenate([lc.quality for lc in sorted_lcs]) if has_qual else None
+
+    has_cad = all(lc.cadence_number is not None for lc in sorted_lcs)
+    all_cad = np.concatenate([lc.cadence_number for lc in sorted_lcs]) if has_cad else None
+
+    has_c1 = all(lc.centroid_column is not None for lc in sorted_lcs)
+    all_c1 = np.concatenate([lc.centroid_column for lc in sorted_lcs]) if has_c1 else None
+
+    has_c2 = all(lc.centroid_row is not None for lc in sorted_lcs)
+    all_c2 = np.concatenate([lc.centroid_row for lc in sorted_lcs]) if has_c2 else None
+
+    # Ensure strictly sorted by time
+    order = np.argsort(all_time)
+    all_time = all_time[order]
+    all_flux = all_flux[order]
+    if all_err is not None:
+        all_err = all_err[order]
+    if all_qual is not None:
+        all_qual = all_qual[order]
+    if all_cad is not None:
+        all_cad = all_cad[order]
+    if all_c1 is not None:
+        all_c1 = all_c1[order]
+    if all_c2 is not None:
+        all_c2 = all_c2[order]
+
+    sectors = [lc.provenance.sector for lc in sorted_lcs if lc.provenance.sector is not None]
+    primary_prov = sorted_lcs[0].provenance
+    combined_prov = Provenance(
+        source_uri=primary_prov.source_uri,
+        source_path=primary_prov.source_path,
+        checksum_sha256=primary_prov.checksum_sha256,
+        product_type="stitched_tess_light_curve",
+        target_id=primary_prov.target_id,
+        sector=sectors[0] if len(sectors) == 1 else None,
+        time_system=primary_prov.time_system,
+        time_reference=primary_prov.time_reference,
+        metadata={
+            **primary_prov.metadata,
+            "stitched_sectors": sectors,
+            "sector_count": len(sorted_lcs),
+        },
+    )
+
+    return LightCurve(
+        time_days=all_time,
+        flux=all_flux,
+        flux_error=all_err,
+        quality=all_qual,
+        cadence_number=all_cad,
+        centroid_column=all_c1,
+        centroid_row=all_c2,
+        flux_kind=sorted_lcs[0].flux_kind,
+        flux_unit=sorted_lcs[0].flux_unit,
+        provenance=combined_prov,
+        metadata={
+            **sorted_lcs[0].metadata,
+            "stitched_sectors": sectors,
+        },
+    )
