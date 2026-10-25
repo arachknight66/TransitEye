@@ -1,0 +1,32 @@
+# TransitEye Open-Source Licensing and Third-Party Notice
+
+## Dual-Component Licensing Summary
+
+1. **Scientific Backend (`src/transiteye/`) — MIT License**
+   - All headless scientific code, domain models, FITS/MAST ingestion, robust detrending, BLS/Lomb-Scargle detection, trapezoid/batman characterization, feature extraction, morphology classification, spatial source vetting, and CLI tooling are licensed under the **MIT License** (see `LICENSE`).
+   - The scientific backend imports zero GUI dependencies and may be used, modified, and redistributed under MIT terms.
+
+2. **Desktop Workstation (`desktop/transiteye_desktop/`) — GPLv3-Compatible Open-Source Distribution**
+   - The interactive desktop interface depends on **PyQt6** (Riverbank Computing Limited, licensed under the **GNU General Public License v3.0**).
+   - When distributing or executing the combined desktop application (`transiteye-desktop`), the desktop interface is provided under GPLv3-compatible open-source terms.
+
+---
+
+## Third-Party Runtime and Scientific Dependencies
+
+| Package | License | Purpose |
+|---|---|---|
+| `numpy` | BSD-3-Clause | Numerical array operations |
+| `scipy` | BSD-3-Clause | Optimization and statistical functions |
+| `astropy` | BSD-3-Clause | FITS I/O, time standards, BLS & Lomb-Scargle periodograms |
+| `astroquery` | BSD-3-Clause | MAST archive discovery and product retrieval |
+| `lightkurve` | MIT | Astronomical light-curve utilities |
+| `wotan` | MIT | Robust time-series detrending algorithms |
+| `batman-package` | MIT | Mandel & Agol limb-darkened transit light-curve modeling |
+| `scikit-learn` | BSD-3-Clause | Grouped cross-validation, classifiers, and Platt calibration |
+| `pyarrow` | Apache-2.0 | Columnar Parquet serialization |
+| `joblib` | BSD-3-Clause | Model bundle persistence |
+| `matplotlib` | PSF / Matplotlib License | Headless publication figure and vetting sheet generation |
+| `cupy-cuda13x` | MIT | Optional CUDA GPU acceleration for detrending and periodograms |
+| `pyqtgraph` | MIT | Fast interactive scientific plotting widgets |
+| `PyQt6` | GPL-3.0-only | Desktop GUI framework (`desktop/` package only) |
