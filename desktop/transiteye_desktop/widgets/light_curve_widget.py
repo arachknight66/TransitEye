@@ -70,7 +70,7 @@ class LightCurvePlotWidget(QWidget):
 
         # Show invalid quality cadences as red dots
         bad_mask = ~bundle.quality_mask
-        if np.any(bad_mask):
+        if len(bad_mask) == len(t) and np.any(bad_mask):
             self.masked_scatter.setData(t[bad_mask], bundle.raw_flux[bad_mask])
         else:
             self.masked_scatter.clear()

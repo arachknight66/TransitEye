@@ -113,9 +113,20 @@ def load_result_bundle(bundle_dir: Path | str) -> LoadedBundle:
             else (npz["flux_err"] if "flux_err" in npz else np.zeros_like(times))
         )
         if "exclusion_flags" in npz:
-            quality_mask = np.asarray(npz["exclusion_flags"]) == 0
+            raw_excl = np.asarray(npz["exclusion_flags"])
+            if len(raw_excl) == len(times):
+                quality_mask = raw_excl == 0
+            elif "raw_cadence_mask" in npz and len(npz["raw_cadence_mask"]) == len(raw_excl):
+                cad_mask = np.asarray(npz["raw_cadence_mask"], dtype=bool)
+                quality_mask = raw_excl[cad_mask] == 0
+            else:
+                quality_mask = np.ones(len(times), dtype=bool)
         elif "quality_mask" in npz:
-            quality_mask = np.asarray(npz["quality_mask"], dtype=bool)
+            qm = np.asarray(npz["quality_mask"], dtype=bool)
+            if len(qm) == len(times):
+                quality_mask = qm
+            else:
+                quality_mask = np.ones(len(times), dtype=bool)
         else:
             quality_mask = np.ones(len(times), dtype=bool)
 

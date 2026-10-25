@@ -1,5 +1,5 @@
-303566bc99bff19547e8bb065b6a3828b2ca738e68aa0efd82296d55427088a6  dist/transiteye-0.1.0.tar.gz
-5c366c1abf99637cd01ffab70b5a49a16136c324c059b9eec3079b795d4d0b12  dist/transiteye-0.1.0-py3-none-any.whl
+37c8ba64f4c1593536c73dd13bc57a32fb79e3c8a1d20725d009107d91462326  dist/transiteye-0.1.0.tar.gz
+824e4d42d19e98f74e014077e746701e4ff5ad2d1bfd8e969a330ae508d3b580  dist/transiteye-0.1.0-py3-none-any.whl
 e80eac659701af2e026b13fad50c8d41bf5d97e3976fbeb1ba2ad26d6b3a1345  manifests/pilot_labels.v1.json
 77f59ba226cf594149d297745e97a53c8f4e2da7d32827ff1f359116a0304825  manifests/pilot_splits.v1.json
 f188d40215ad7e109437906ed4681ad7e69ad8f6cf747fa43585f2ae0dd40aa2  manifests/pilot_products.v1.json
