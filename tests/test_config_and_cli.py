@@ -83,3 +83,37 @@ def test_cli_audits_a_valid_cohort(tmp_path: Path, capsys: object) -> None:
     assert main(["audit-cohort", "--labels", str(labels_path), "--splits", str(splits_path)]) == 0
     captured = capsys.readouterr()  # type: ignore[attr-defined]
     assert '"train": 1' in captured.out
+
+
+def test_cli_analyze_fits_command(tmp_path: Path, capsys: object) -> None:
+    import numpy as np
+    from astropy.io import fits
+
+    fits_path = tmp_path / "target.fits"
+    t = np.linspace(1.0, 15.0, 1000)
+    f = np.ones_like(t)
+    # Inject dip
+    f[500:520] = 0.99
+    cols = [
+        fits.Column(name="TIME", format="D", array=t),
+        fits.Column(name="PDCSAP_FLUX", format="D", array=f),
+        fits.Column(name="PDCSAP_FLUX_ERR", format="D", array=np.full_like(t, 0.001)),
+        fits.Column(name="QUALITY", format="K", array=np.zeros(len(t), dtype=np.int64)),
+        fits.Column(name="CADENCENO", format="K", array=np.arange(len(t), dtype=np.int64)),
+        fits.Column(name="MOM_CENTR1", format="D", array=np.zeros(len(t))),
+        fits.Column(name="MOM_CENTR2", format="D", array=np.zeros(len(t))),
+    ]
+    table = fits.BinTableHDU.from_columns(cols)
+    primary = fits.PrimaryHDU()
+    primary.header["TICID"] = 777666
+    fits.HDUList([primary, table]).writeto(fits_path)
+
+    out_dir = tmp_path / "bundle"
+    exit_code = main(["analyze-fits", str(fits_path), "--output-dir", str(out_dir), "--progress-jsonl"])
+    assert exit_code == 0
+    captured = capsys.readouterr()  # type: ignore[attr-defined]
+    assert '"bundle_path":' in captured.out
+    assert (out_dir / "result.json").is_file()
+    assert (out_dir / "arrays.npz").is_file()
+    assert (out_dir / "candidates.parquet").is_file()
+
