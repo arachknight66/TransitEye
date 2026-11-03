@@ -152,6 +152,76 @@ class Classification:
 
 
 @dataclass(frozen=True, slots=True)
+class AnalysisSettings:
+    """Effective analysis options and fixed assumptions recorded with each run."""
+
+    max_candidates: int
+    snr_threshold: float
+    screen_snr_threshold: float
+    device: str
+    baseline_window_days: float = 0.75
+    bootstrap_replicates: int = 200
+    quality_mask: int = 0x0BEE
+    gap_threshold_hours: float = 6.0
+    reject_positive_outliers_sigma: float | None = 5.0
+    bls_min_period_days: float = 0.3
+    bls_max_period_days: float | None = None
+    bls_min_duration_hours: float = 0.5
+    bls_max_duration_hours: float = 12.0
+    bls_num_durations: int = 15
+    bls_frequency_factor: float = 5.0
+    seed_strategy: str = field(default="sha256(target_id,candidate_id)", init=False)
+    trapezoid_exposure_days: float | None = None
+    exposure_status: str = field(default="fixed_assumption_unverified", init=False)
+
+    def __post_init__(self) -> None:
+        if self.trapezoid_exposure_days is None:
+            object.__setattr__(self, "trapezoid_exposure_days", 2.0 / 1440.0)
+        else:
+            if not np.isfinite(self.trapezoid_exposure_days) or self.trapezoid_exposure_days <= 0:
+                raise ValueError("trapezoid_exposure_days must be finite and positive.")
+            object.__setattr__(self, "exposure_status", "user_supplied")
+        if self.max_candidates < 1:
+            raise ValueError("max_candidates must be positive.")
+        if not np.isfinite(self.snr_threshold) or self.snr_threshold < 0:
+            raise ValueError("snr_threshold must be finite and nonnegative.")
+        if not np.isfinite(self.screen_snr_threshold) or self.screen_snr_threshold < 0:
+            raise ValueError("screen_snr_threshold must be finite and nonnegative.")
+        if self.device not in ("auto", "cpu", "cuda"):
+            raise ValueError("device must be auto, cpu, or cuda.")
+        if not np.isfinite(self.baseline_window_days) or self.baseline_window_days <= 0:
+            raise ValueError("baseline_window_days must be finite and positive.")
+        if self.bootstrap_replicates < 1:
+            raise ValueError("bootstrap_replicates must be positive.")
+        if self.quality_mask < 0:
+            raise ValueError("quality_mask must be nonnegative.")
+        if not np.isfinite(self.gap_threshold_hours) or self.gap_threshold_hours <= 0:
+            raise ValueError("gap_threshold_hours must be finite and positive.")
+        if self.reject_positive_outliers_sigma is not None and (
+            not np.isfinite(self.reject_positive_outliers_sigma)
+            or self.reject_positive_outliers_sigma <= 0
+        ):
+            raise ValueError("reject_positive_outliers_sigma must be finite and positive, or None.")
+        if not np.isfinite(self.bls_min_period_days) or self.bls_min_period_days <= 0:
+            raise ValueError("bls_min_period_days must be finite and positive.")
+        if self.bls_max_period_days is not None and (
+            not np.isfinite(self.bls_max_period_days)
+            or self.bls_max_period_days <= self.bls_min_period_days
+        ):
+            raise ValueError("bls_max_period_days must exceed bls_min_period_days.")
+        if (
+            not np.isfinite(self.bls_min_duration_hours)
+            or not np.isfinite(self.bls_max_duration_hours)
+            or self.bls_min_duration_hours <= 0
+            or self.bls_max_duration_hours < self.bls_min_duration_hours
+            or self.bls_min_duration_hours >= self.bls_min_period_days * 24
+        ):
+            raise ValueError("BLS durations must be positive, ordered, and shorter than the minimum period.")
+        if self.bls_num_durations < 1 or not np.isfinite(self.bls_frequency_factor) or self.bls_frequency_factor <= 0:
+            raise ValueError("BLS grid size and frequency factor must be positive.")
+
+
+@dataclass(frozen=True, slots=True)
 class AnalysisResult:
     """The complete versioned result contract returned by backend services."""
 
@@ -167,11 +237,23 @@ class AnalysisResult:
     configuration_version: str = "unconfigured"
     schema_version: str = "1"
     error_message: str | None = None
+    analysis_settings: AnalysisSettings | None = None
+    code_version: str | None = None
+    code_sha256: str | None = None
+    resolved_device: str | None = None
+    model_id: str | None = None
+    model_sha256: str | None = None
+    candidate_errors: Mapping[str, str] = field(default_factory=dict)
+    candidate_seeds: Mapping[str, int] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         candidate_ids = {candidate.candidate_id for candidate in self.candidates}
         if not set(self.classifications).issubset(candidate_ids):
             raise ValueError("Classifications must reference returned candidates.")
+        if not set(self.candidate_errors).issubset(candidate_ids):
+            raise ValueError("Candidate errors must reference returned candidates.")
+        if not set(self.candidate_seeds).issubset(candidate_ids):
+            raise ValueError("Candidate seeds must reference returned candidates.")
         if self.status is AnalysisStatus.FAILED and not self.error_message:
             raise ValueError("Failed analyses require an error_message.")
 

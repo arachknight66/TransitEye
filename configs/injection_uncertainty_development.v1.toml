@@ -1,0 +1,25 @@
+# Frozen development-only synthetic white-noise study, separate from real-data evaluation.
+schema_version = "1"
+seed = 865049
+baseline_days = 12.0
+cadence_minutes = 10.0
+exposure_minutes = 10.0
+noise_ppm = 500.0
+periods_days = [2.0, 3.5]
+depths_ppm = [500.0, 2000.0]
+duration_hours = 2.5
+ingress_fraction = 0.2
+replicates = 15
+null_trials = 20
+injection_integration_points = 101
+match_period_fraction = 0.02
+match_epoch_hours = 0.5
+
+[analysis]
+max_candidates = 1
+snr_threshold = 6.0
+screen_snr_threshold = 5.0
+device = "cpu"
+bootstrap_replicates = 100
+bls_min_period_days = 0.5
+bls_max_period_days = 5.0

@@ -15,6 +15,16 @@ from transiteye.features.registry import validate_feature_vector
 from transiteye.preprocessing.detrend import DualLightCurve
 
 
+def stellar_temperature(light_curve: LightCurve) -> float | None:
+    """Read optional effective temperature consistently for training and inference."""
+    value = light_curve.metadata.get("teff")
+    try:
+        parsed = float(value) if value is not None and value != "None" else None
+    except (ValueError, TypeError):
+        return None
+    return parsed if parsed is not None and np.isfinite(parsed) and parsed > 0 else None
+
+
 def fold_phase(
     time_days: NDArray[np.float64],
     epoch_days: float,

@@ -67,7 +67,9 @@ class CandidateTableWidget(QWidget):
             )
             items = [
                 QTableWidgetItem(f"#{row + 1}"),
-                QTableWidgetItem(c.candidate_id),
+                QTableWidgetItem(
+                    f"{c.candidate_id} (fit failed)" if "fit_failed" in c.flags else c.candidate_id
+                ),
                 QTableWidgetItem(f"{c.period_days:.4f}"),
                 QTableWidgetItem(f"{c.epoch_days:.4f}"),
                 QTableWidgetItem(f"{c.depth_ppm:.1f}"),
@@ -75,11 +77,17 @@ class CandidateTableWidget(QWidget):
                 QTableWidgetItem(f"{c.duration_hours:.2f}"),
                 QTableWidgetItem(str(c.observed_event_count)),
                 QTableWidgetItem(f"{c.detection_snr:.1f}"),
-                QTableWidgetItem(f"{c.search_significance:.3f}"),
                 QTableWidgetItem(
+                    f"{c.search_significance:.3f}" if c.search_significance is not None else "--"
+                ),
+                QTableWidgetItem(
+                    "unavailable" if not c.probabilities else
                     c.predicted_class if not c.abstained else f"{c.predicted_class} (abstain)"
                 ),
-                QTableWidgetItem(f"{c.calibrated_confidence * 100.0:.1f}%"),
+                QTableWidgetItem(
+                    f"{c.calibrated_confidence * 100.0:.1f}%"
+                    if c.calibrated_confidence is not None else "--"
+                ),
                 QTableWidgetItem(c.source_assessment),
             ]
 
@@ -110,6 +118,7 @@ class CandidateTableWidget(QWidget):
 
         if len(candidates) > 0:
             self.table.selectRow(0)
+            self.table.horizontalScrollBar().setValue(0)
 
     def _on_selection_changed(self) -> None:
         rows = self.table.selectionModel().selectedRows()

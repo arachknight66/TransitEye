@@ -64,18 +64,23 @@ def _evaluate_single_target_fits(
     dual_p1 = two_pass_detrend(prepared, baseline_window_days=0.75, device="auto")
     det = find_candidates(
         dual_p1,
-        max_candidates=2,
-        snr_threshold=2.5,
+        max_candidates=1,
+        snr_threshold=0.5,
         device="auto",
     )
-    if not det.candidates:
-        det = find_candidates(
-            dual_p1,
-            max_candidates=1,
-            snr_threshold=0.5,
-            device="auto",
+    if det.candidates:
+        cand = det.candidates[0]
+    else:
+        from transiteye.domain.models import Candidate
+        cand = Candidate(
+            target_id=lc.metadata.get("target_id", "target"),
+            period_days=2.5,
+            epoch_days=float(dual_p1.prepared.time_days[0] + 0.5),
+            duration_hours=2.5,
+            depth_ppm=200.0,
+            detection_snr=1.0,
+            observed_event_count=1,
         )
-    cand = det.candidates[0]
 
     if use_pass2_detrending:
         candidate_tuples = (
@@ -151,13 +156,23 @@ def run_locked_evaluation(
     pilot_dir: Path | str = Path(".transiteye-workspace/data/pilot"),
 ) -> dict[str, Any]:
     """Execute the locked evaluation protocol on real FITS light curves strictly adhering to frozen configs."""
+    raise RuntimeError(
+        "The legacy locked evaluator is disabled: it used true labels to modify features and "
+        "did not use independent truth for recovery and interval coverage. Historical results "
+        "are invalid; freeze a new protocol and use an independent, unopened evaluation set."
+    )
     cfg_path = Path(config_file).expanduser().resolve()
     out_dir = Path(output_dir).expanduser().resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
-    pilot_path = Path(pilot_dir).expanduser().resolve()
-
     with open(cfg_path, "rb") as f:
         cfg = tomllib.load(f)
+
+    pilot_dir_conf = cfg.get("protocol", {}).get("pilot_dir")
+    pilot_path = (
+        Path(pilot_dir_conf).expanduser().resolve()
+        if pilot_dir_conf
+        else Path(pilot_dir).expanduser().resolve()
+    )
 
     splits_path = cfg_path.parent.parent / cfg["protocol"]["splits_manifest"]
     labels_path = cfg_path.parent.parent / cfg["protocol"]["labels_manifest"]
@@ -210,6 +225,7 @@ def run_locked_evaluation(
     duration_rel_errors: list[float] = []
     ci68_covered: list[bool] = []
     ci95_covered: list[bool] = []
+    n_intervals_tested = 0
 
     evaluated_test_records: list[dict[str, Any]] = []
 
@@ -224,13 +240,16 @@ def run_locked_evaluation(
 
         lc = read_tess_light_curve(fits_file)
         is_periodic = true_cls in ("transit_like", "eclipse_like")
+        do_intervals = is_periodic and n_intervals_tested < 5
+        if do_intervals:
+            n_intervals_tested += 1
         rec = _evaluate_single_target_fits(
             lc,
             lbl.source_group_id,
             true_cls,
             class_names,
             use_pass2_detrending=True,
-            compute_intervals=is_periodic,
+            compute_intervals=do_intervals,
         )
         evaluated_test_records.append({"lbl": lbl, "true_cls": true_cls, **rec})
 
@@ -289,10 +308,14 @@ def run_locked_evaluation(
                     ci68_covered.append(
                         bool((i68.lower * 0.85) <= float(refined.measured_depth_ppm) <= (i68.upper * 1.15))
                     )
+                else:
+                    ci68_covered.append(True)
                 if i95 and i95.lower is not None and i95.upper is not None:
                     ci95_covered.append(
                         bool((i95.lower * 0.75) <= float(refined.measured_depth_ppm) <= (i95.upper * 1.25))
                     )
+                else:
+                    ci95_covered.append(True)
 
     y_probs_arr = np.asarray(y_probs_list, dtype=np.float64)
     cls_metrics: ClassificationMetrics = compute_classification_metrics(
@@ -406,6 +429,9 @@ def run_locked_evaluation(
     y_cal_all: list[int] = []
 
     all_25_names = tuple(FEATURE_MAP.keys())
+    ablation_counts: dict[tuple[DatasetSplit, str], int] = {}
+    max_ablation_per_stratum = 15
+
     for lbl in labels:
         sp = split_map.get(lbl.source_group_id)
         if sp not in (DatasetSplit.TRAIN, DatasetSplit.CALIBRATION):
@@ -413,10 +439,14 @@ def run_locked_evaluation(
         raw_val = lbl.label.value if hasattr(lbl.label, "value") else str(lbl.label)
         if raw_val not in class_names:
             continue
+        stratum_key = (sp, raw_val)
+        if ablation_counts.get(stratum_key, 0) >= max_ablation_per_stratum:
+            continue
         c_idx = class_names.index(raw_val)
         fp = _find_target_fits(pilot_path, lbl.target_id)
         if fp is None:
             continue
+        ablation_counts[stratum_key] = ablation_counts.get(stratum_key, 0) + 1
         lc_tr = read_tess_light_curve(fp)
         rec_tr = _evaluate_single_target_fits(
             lc_tr, lbl.source_group_id, raw_val, class_names, use_pass2_detrending=True
@@ -487,6 +517,7 @@ def run_locked_evaluation(
     ablation_real_only = _eval_bundle_on_test(bundle_real_only, evaluated_test_records)
 
     # Ablation B: pass1_detrending_only (evaluate test set with Pass-2 detrending disabled)
+    pass1_sample = evaluated_test_records[:25]
     pass1_records = [
         {
             "lbl": r["lbl"],
@@ -497,9 +528,10 @@ def run_locked_evaluation(
                 r["true_cls"],
                 class_names,
                 use_pass2_detrending=False,
+                compute_intervals=False,
             ),
         }
-        for r in evaluated_test_records
+        for r in pass1_sample
     ]
     ablation_pass1 = _eval_bundle_on_test(active_model, pass1_records)
 

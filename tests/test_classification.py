@@ -126,6 +126,7 @@ def test_model_bundle_serialization_roundtrip(
     loaded = ModelBundle.load(save_dir)
     assert loaded.metadata.model_id == bundle.metadata.model_id
     assert loaded.metadata.estimator_name == bundle.metadata.estimator_name
+    assert loaded.artifact_sha256 is not None and len(loaded.artifact_sha256) == 64
 
     # Predictions before and after loading must be identical
     sample_features = {
@@ -140,6 +141,74 @@ def test_model_bundle_serialization_roundtrip(
         assert pred_orig.probabilities[cls] == pytest.approx(
             pred_loaded.probabilities[cls], abs=1e-6
         )
+
+    # An altered calibrator must be rejected before joblib deserializes it.
+    cal_path = save_dir / "calibrator.joblib"
+    cal_path.write_bytes(cal_path.read_bytes() + b"tampered")
+    with pytest.raises(ValueError, match="calibrator checksum"):
+        ModelBundle.load(save_dir, require_verified_calibrator=True)
+
+
+def test_legacy_label_conditioned_transform_is_disabled() -> None:
+    from transiteye.classification.train import _augment_feature_vector_with_physical_priors
+
+    for label in range(4):
+        with pytest.raises(RuntimeError, match="Label-conditioned"):
+            _augment_feature_vector_with_physical_priors(
+                np.zeros(len(MORPHOLOGY_FEATURE_NAMES)), label, MORPHOLOGY_FEATURE_NAMES, 42
+            )
+
+
+def test_missing_classifier_does_not_train_synthetic_fallback(tmp_path: Path) -> None:
+    from transiteye.classification.train import get_default_morphology_model
+
+    with pytest.raises(RuntimeError, match="Implicit classifier selection"):
+        get_default_morphology_model(tmp_path)
+    assert not list(tmp_path.iterdir())
+
+
+def test_pilot_training_features_are_independent_of_labels(monkeypatch, tmp_path: Path) -> None:
+    from types import SimpleNamespace
+
+    from transiteye.classification import train
+    from transiteye.datasets.splits import DatasetSplit
+
+    labels = [
+        SimpleNamespace(source_group_id="star_a", target_id="a", label="transit_like"),
+        SimpleNamespace(source_group_id="star_b", target_id="b", label="eclipse_like"),
+        SimpleNamespace(source_group_id="star_c", target_id="c", label="stellar_variability"),
+    ]
+    splits = SimpleNamespace(
+        manifest_id="development",
+        assignments=[
+            SimpleNamespace(source_group_id="star_a", split=DatasetSplit.TRAIN),
+            SimpleNamespace(source_group_id="star_b", split=DatasetSplit.CALIBRATION),
+            SimpleNamespace(source_group_id="star_c", split=DatasetSplit.SELECTION),
+        ],
+    )
+    captured = []
+    monkeypatch.setattr(train, "read_labels", lambda path: labels)
+    monkeypatch.setattr(train, "read_split_manifest", lambda path: splits)
+    monkeypatch.setattr(train, "_find_target_fits", lambda path, target: tmp_path / target)
+    monkeypatch.setattr(train, "read_tess_light_curve", lambda path: path)
+    monkeypatch.setattr(
+        train, "_extract_lc_feature_vector",
+        lambda lc, feature_names: np.arange(len(feature_names), dtype=float),
+    )
+
+    def capture(**kwargs):
+        captured.append(kwargs)
+        return object(), {}
+
+    monkeypatch.setattr(train, "train_and_select_classifier", capture)
+    train.train_from_pilot_cohort(output_dir=None)
+    labels[0].label = "other_artifact"
+    labels[1].label = "transit_like"
+    train.train_from_pilot_cohort(output_dir=None)
+    for key in ("x_train", "x_cal", "x_sel"):
+        np.testing.assert_array_equal(captured[0][key], captured[1][key])
+    assert captured[0]["x_cal"].shape[0] == 1
+    assert captured[0]["synthetic_sample_count"] == 0
 
 
 def test_abstention_and_ood_guardrails(synthetic_training_cohort) -> None:

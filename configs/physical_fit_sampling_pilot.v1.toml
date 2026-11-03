@@ -1,0 +1,16 @@
+# Frozen development-only paired fitting experiment, not a final evaluation protocol.
+schema_version = "1"
+period_days = 3.0
+semi_major_axis_stellar_radii = 10.0
+radius_ratios = [0.03, 0.1]
+impact_parameters = [0.3, 0.75]
+exposure_minutes = [2.0, 30.0]
+limb_darkening = [0.3, 0.22]
+noise_ppm = 100.0
+seed = 730192
+transit_window_days = 0.16
+truth_points = 1001
+truth_check_points = 501
+truth_tolerance_ppm = 0.1
+simpson_points = 51
+max_nfev = 200

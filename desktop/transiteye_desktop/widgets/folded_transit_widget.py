@@ -7,6 +7,7 @@ import pyqtgraph as pg
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
 from transiteye_desktop.bundle_loader import LoadedCandidate
+from transiteye_desktop.widgets.safe_graphics import SafeInfiniteLine
 
 
 class FoldedTransitWidget(QWidget):
@@ -56,7 +57,7 @@ class FoldedTransitWidget(QWidget):
         self.res_scatter = pg.ScatterPlotItem(
             size=4, pen=None, brush=pg.mkBrush(160, 160, 160, 90)
         )
-        self.res_zero = pg.InfiniteLine(
+        self.res_zero = SafeInfiniteLine(
             pos=0.0,
             angle=0,
             pen=pg.mkPen(color=(120, 120, 120), style=pg.QtCore.Qt.PenStyle.DashLine),
@@ -121,6 +122,7 @@ class FoldedTransitWidget(QWidget):
         # Render backend-fitted trapezoid and optional batman curves
         trap_arr = candidate.trapezoid_model_curve
         bat_arr = candidate.batman_model_curve
+        primary_model_at_data = None
 
         if trap_arr is not None and len(trap_arr) == len(times):
             w_trap = trap_arr[mask][sort_idx]
@@ -128,7 +130,6 @@ class FoldedTransitWidget(QWidget):
             primary_model_at_data = w_trap
         else:
             self.model_curve.clear()
-            primary_model_at_data = np.ones_like(w_flux)
 
         if bat_arr is not None and len(bat_arr) == len(times):
             w_bat = bat_arr[mask][sort_idx]
@@ -137,8 +138,12 @@ class FoldedTransitWidget(QWidget):
         else:
             self.batman_curve.clear()
 
-        res = w_flux - primary_model_at_data
-        self.res_scatter.setData(w_phase, res)
+        if primary_model_at_data is None:
+            self.res_scatter.clear()
+            self.p_res.setTitle("Fit residuals unavailable")
+        else:
+            self.res_scatter.setData(w_phase, w_flux - primary_model_at_data)
+            self.p_res.setTitle("Transit Fit Residuals (O - C)")
 
         self.p_fold.setXRange(-window_h, window_h, padding=0.05)
         self.p_res.setXRange(-window_h, window_h, padding=0.05)
@@ -150,3 +155,4 @@ class FoldedTransitWidget(QWidget):
         self.model_curve.clear()
         self.batman_curve.clear()
         self.res_scatter.clear()
+        self.p_res.setTitle("Fit residuals unavailable")

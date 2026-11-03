@@ -1,0 +1,48 @@
+{
+  "attempted_targets_in_tranche": 251,
+  "catalog_file_sha256": "97e81f6c01716a431379ab6bd37d1182b611a485107110e0eba830f817ba7a8f",
+  "catalog_rows": 4584,
+  "catalog_unique_targets": 4578,
+  "failure_sample": [
+    {
+      "reason": "no_spoc_lc_fits_product",
+      "target_id": "1102093577"
+    },
+    {
+      "reason": "no_spoc_lc_fits_product",
+      "target_id": "1883519478"
+    },
+    {
+      "reason": "no_spoc_lc_fits_product",
+      "target_id": "661540044"
+    },
+    {
+      "reason": "no_spoc_lc_fits_product",
+      "target_id": "664915372"
+    },
+    {
+      "reason": "no_spoc_lc_fits_product",
+      "target_id": "1981621672"
+    }
+  ],
+  "failures": 5,
+  "labels_with_product": 246,
+  "not_queried_after_service_stall": 249,
+  "notes": "Of the 4,442 non-overlapping catalog targets with sector metadata, a 500-target bright-source tranche was selected. Processing stopped after the MAST service stalled during the sixth 50-target batch. Five tranche targets had no matching SPOC product; 246 catalog-linked products were validated and frozen. The remainder of the selected tranche and the wider catalog were not queried.",
+  "overlap_excluded": 135,
+  "overlap_excluded_targets": 135,
+  "product_manifest_id": "f8c2b29c9a0b0582",
+  "products_acquired": 246,
+  "search_tranche": 500,
+  "source_catalog": "TESS-EBs v1.0, MAST HLSP",
+  "split_counts": {
+    "calibration": 20,
+    "sector_shift": 0,
+    "selection": 22,
+    "test": 27,
+    "train": 177
+  },
+  "split_manifest_id": "29402c8c2b85b771",
+  "tranche_selection": "brightest by TESS magnitude among new unique targets, then TIC and signal ID",
+  "updated_at": "2026-10-31T13:06:17.851844+00:00"
+}

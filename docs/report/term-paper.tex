@@ -1,0 +1,213 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,longtable,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{microtype}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!55!black}
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\newcommand{\project}{\textsc{TransitEye}}
+\newcommand{\class}[1]{\texttt{\detokenize{#1}}}
+\begin{document}
+\tableofcontents
+\newpage
+\begin{abstract}
+The Transiting Exoplanet Survey Satellite (TESS) records stellar brightness over time. Small, repeated drops in brightness can indicate a transit, but stellar activity, instrumental effects, and eclipsing binaries can produce similar patterns. This paper presents \project, a software system for detecting and reviewing such signals in TESS light curves. A Python backend handles data preparation, period searches, candidate fitting, and classification; a separate PyQt desktop application presents the results for inspection. The design uses versioned result bundles, source-grouped data partitions, and resumable batch processing to support reproducible analysis. Box Least Squares locates periodic dips, while complementary variability analysis, uncertainty estimates, and spatial checks help reviewers assess each candidate. The discussion connects these algorithms to the software decisions needed to run, inspect, and reproduce an analysis. A transit-like signal is treated as a candidate, not as confirmation of a planet.
+\end{abstract}
+\newpage
+\section{Introduction}
+Exoplanets are planets orbiting stars other than the Sun. One of the most productive methods for finding them is transit photometry: when an orbiting object passes in front of its host star, a small fraction of the stellar light is blocked. Repeated dips in observed brightness can therefore provide evidence of an orbiting body. TESS conducts a wide-field survey optimized for finding transiting planets around relatively bright nearby stars \cite{ricker}.
+
+A dip in brightness is only the beginning of the analysis. Two stars eclipsing one another can produce a similar light curve, and light from a neighbouring star can enter the same aperture. Instrumental effects and stellar activity add further ambiguity. The challenge for software is therefore not only to find a periodic pattern, but also to retain enough evidence for a reviewer to decide whether that pattern deserves further study.
+
+\project{} addresses this problem as an end-to-end research and review system. It processes TESS light curves with a scientific backend and exposes the results through a desktop workstation. The system supports reproducible individual analysis and resumable batch processing, while maintaining a distinction between signal morphology and the location of the source producing the signal.
+
+\subsection{Scope and objectives}
+This paper describes the intended completed system and explains how its components work together. The emphasis is on the computing decisions behind the analysis: how data move between modules, how jobs are recovered after interruption, and how a result can be traced back to its inputs. The report does not claim measured accuracy for the current pipeline; that requires an independent evaluation of the final code and model.
+
+The project has four principal objectives: preserve the information needed to reproduce an analysis; identify and characterize periodic dips; assist reviewers with morphology and source-location evidence; and make both individual and batch analyses accessible through a desktop application. These objectives connect numerical time-series methods with software architecture, machine learning, and data management.
+
+\section{Background and Related Methods}
+\subsection{Transit photometry}
+A light curve is a sequence of flux measurements $F(t_i)$, typically accompanied by timestamps, uncertainties, and data-quality flags. In a simplified case, the fractional depth of a small dark object crossing a uniformly bright stellar disk is approximately
+\begin{equation}
+\delta \simeq \left(\frac{R_p}{R_\star}\right)^2,
+\end{equation}
+where $R_p$ and $R_\star$ denote the radii of the transiting body and the star. This approximation neglects limb darkening, dilution, grazing geometry, and other effects. Period $P$ describes the interval between events, epoch $T_0$ fixes a reference event, and duration $D$ describes its time span. These parameters characterize a signal; they do not establish its astrophysical identity.
+
+\subsection{Period searches and noise}
+Box Least Squares (BLS) searches for periodic, approximately box-shaped decreases in brightness by fitting trial periods, phases, and durations \cite{kovacs}. Lomb--Scargle analysis is useful for detecting approximately sinusoidal periodic variability under uneven sampling \cite{lomb,scargle}. The two techniques answer different questions: a peak in either periodogram is evidence requiring interpretation, not a physical classification by itself.
+
+Astronomical time series contain both approximately independent noise and time-correlated, or red, noise. A common red-noise-aware approximation for detection signal-to-noise ratio is \cite{pont}
+\begin{equation}
+\mathrm{SNR}_{\mathrm{red}}=\frac{\delta}{\sqrt{\sigma_w^2/n_{\mathrm{in}}+\sigma_r^2/N_{\mathrm{tr}}}},
+\end{equation}
+where $\sigma_w$ and $\sigma_r$ characterize white and correlated noise, $n_{\mathrm{in}}$ is the number of in-event samples, and $N_{\mathrm{tr}}$ is the number of observed events. This is a model-dependent diagnostic. It is not equivalent to a search-wide false-alarm probability or a calibrated probability that a candidate belongs to a class.
+
+\section{System Requirements and Architecture}
+\subsection{Functional and scientific requirements}
+The system must accept supported TESS FITS light curves, retain their quality and provenance information, perform detection and fitting, and present candidate-level measurements with their limitations. It must also support batch execution, failure reporting, export, and later review. Scientific requirements include source-grouped evaluation, explicit handling of missing evidence, separate evaluation of real labels and injections, and preservation of the distinction between detection strength, statistical significance, and classification confidence.
+
+\subsection{Layered design}
+The architecture is organized around the following layers:
+\begin{enumerate}
+\item \textbf{Input and provenance:} FITS ingestion, metadata, masks, units, time conventions, checksums, and source manifests.
+\item \textbf{Scientific processing:} quality filtering, normalization, detrending, periodic searches, candidate fitting, and diagnostic feature extraction.
+\item \textbf{Interpretation:} morphology classification, confidence and abstention, and independent source assessment.
+\item \textbf{Execution and persistence:} typed service interfaces, versioned result bundles, batch scheduling, job state, and artifact integrity checks.
+\item \textbf{Presentation:} a separate PyQt6 and PyQtGraph desktop application with visualization, review, session, and export controls.
+\end{enumerate}
+Scientific code resides in \class{src/transiteye/} and does not require the desktop toolkit. The interface launches backend work as a separate process and consumes serialized outputs rather than sharing live scientific objects. The same backend services support command-line and desktop workflows. Presentation-specific downsampling does not replace the full numerical arrays used by the scientific analysis.
+
+\subsection{Technology stack and storage}
+The software targets Python 3.11 with dependency management through \class{uv}. Astropy supports astronomy-oriented data handling and period analysis; NumPy and SciPy provide numerical methods; Wotan supports robust detrending; and \class{batman} supplies optional physical transit models \cite{kreidberg}. Scikit-learn provides candidate classifiers and calibration tools. A CPU path is available, with optional CUDA acceleration through CuPy where supported. SQLite stores resumable job state, Parquet stores tabular candidate artifacts, and compressed NumPy files store arrays. Large observational and generated datasets belong in a configurable workspace outside version control; small manifests and configuration can remain versioned.
+
+\subsection{Data structures and execution flow}
+An observation is represented by aligned arrays of timestamps, fluxes, uncertainties, and quality flags, accompanied by metadata and masks. Candidate records hold the search and fit measurements, status, flags, and provenance needed for later review. Typed records make the boundary between processing stages explicit and give each stage a consistent way to represent missing data or failure.
+
+An analysis validates the input, prepares the light curve, searches for candidates, and attempts a fit for each one. It then extracts features, applies the selected classifier where appropriate, assesses available source evidence, and writes the results. Candidate-level errors are retained so that one failed fit does not discard other candidates from the same target.
+
+\subsection{A result as a reproducible software artifact}
+A completed analysis is stored as a versioned bundle rather than as a screenshot or an in-memory object. The bundle contains \class{result.json} for status, candidate measurements, configuration, and provenance; \class{arrays.npz} for numerical arrays; and \class{candidates.parquet} for tabular candidate data. Newer bundles also include \class{integrity.json}, which records checksums of those files. The checksum detects accidental changes to a file; by itself it does not establish who created the file or whether it is trustworthy.
+
+This division serves different consumers. The desktop can load metadata and plot arrays, while a batch analysis can read candidate tables without reconstructing GUI state. The recorded settings, input checksum, code fingerprint, model identity, random seeds, and actual compute device also provide a basis for comparing two runs. If a scientist changes the period range or model, the resulting artifact records that change instead of presenting the two runs as interchangeable.
+
+\subsection{Computational cost}
+Runtime depends on the number of cadences, the trial period and duration grids, the number of candidates retained, and the number of bootstrap refits. A finer grid samples the search space more closely but requires more computation; the exact cost also depends on the implementation. Batch processing limits the number of concurrent workers to control memory and CPU use. The requested and actual compute devices are recorded, and CPU and accelerator results require numerical comparison. Any performance benchmark must state the workload, hardware, cache state, and number of failed targets.
+
+\section{Data Acquisition and Preprocessing}
+\subsection{Input integrity and quality filtering}
+The primary inputs are light-curve products from TESS pipelines such as SPOC and TESS-SPOC. FITS products contain observation times, fluxes, and quality information, together with relevant metadata. The system preserves the original input and records which flux column was selected, the time representation, data masks, quality criteria, and input checksum. A quality mask can be expressed as
+\begin{equation}
+M_i=\mathbf{1}\!\left[(Q_i\mathbin{\&}B)=0\right]\mathbf{1}[t_i,F_i\text{ finite}],
+\end{equation}
+where $Q_i$ is the cadence quality word and $B$ is the selected bitmask. The precise set of excluded flags is a recorded configuration choice, not an assumption that every nonzero flag has identical scientific importance. Data gaps are identified so that subsequent operations do not treat widely separated samples as continuously observed.
+
+\subsection{Normalization and separate representations}
+A common robust normalization is $f_i=F_i/\operatorname{median}(F)$ over appropriate valid samples. The analysis retains a minimally processed representation alongside a detrended representation. This separation matters because detrending can suppress or reshape real events: the minimally processed curve supports inspection of the original signal environment, whereas the detrended curve supports periodic search and fitting. Neither the original measurements nor the masks should be silently overwritten.
+
+\subsection{Robust detrending}
+Slow stellar and instrumental variations can dominate the depth of a transit. A robust moving biweight trend estimator reduces the influence of outliers; its standard weight function takes the form
+\begin{equation}
+w(u)=\begin{cases}(1-u^2)^2,&|u|<1,\\0,&|u|\ge 1.\end{cases}
+\end{equation}
+Here $u$ is a scaled deviation from a local reference. Window length must be chosen in relation to the event duration and time sampling. A preliminary search can identify likely events, which are then masked during a second trend estimate to reduce event attenuation. Such protection is not a guarantee: sensitivity to window length, gaps, and stellar activity should be tested using injections and independent examples.
+
+\section{Detection and Candidate Characterization}
+\subsection{Searching for periodic events}
+The BLS search evaluates a configured range of trial periods and durations, recording candidate peaks and associated parameters. Search ranges determine which signals can be recovered. A sector with a limited baseline may contain only one or two events of a long-period source, so the period can remain ambiguous. Harmonics and aliases, including $P/2$ and $2P$, are recorded for review. A complementary Lomb--Scargle periodogram provides evidence about periodic variability and possible relationships with the dip-search period.
+
+For a trial period $P$ and reference epoch $T_0$, the phase of sample $i$ can be written as
+\begin{equation}
+\phi_i=\left[\frac{t_i-T_0}{P}+\frac12\right]\bmod 1-\frac12.
+\end{equation}
+A phase-folded plot aligns repeated events and makes their shared morphology easier to inspect. It can also conceal event-to-event changes; individual events and time-domain data remain important.
+
+\subsection{Reading an ambiguous periodogram}
+Consider a light curve containing two similar dips within its observed baseline. A search may place a peak at the separation between the dips, but the true repeating pattern could be longer if alternate events were missed or if primary and secondary eclipses differ. A reviewer should therefore examine the folded curve at the proposed period and at plausible aliases such as twice that period, alongside the individual events and data gaps. This is an illustrative case, not a measured result. It shows why the periodogram peak, event count, quality flags, and alias information are more useful together than a single number.
+
+The period and duration grids also define the boundary of the search: a signal outside the configured range cannot be recovered at its true parameters by that search. The BLS implementation constructs trial durations and periods, enforces the requested period bounds, and rejects inputs with too few cadences or a non-positive baseline. These checks are part of the algorithm's contract, not evidence that every allowed period can be recovered reliably.
+
+\subsection{Profile fitting and finite exposure}
+A trapezoid provides a simple empirical description of depth, total duration, and ingress/egress shape. More detailed physical models can incorporate limb darkening and transit geometry \cite{mandel,kreidberg}. An observed cadence represents an integral over an exposure, not a mathematically instantaneous sample. For model flux $m$ and exposure $\Delta t$, the predicted measurement is
+\begin{equation}
+\bar m(t_i)=\frac{1}{\Delta t}\int_{t_i-\Delta t/2}^{t_i+\Delta t/2}m(t)\,dt.
+\end{equation}
+This distinction becomes important when the exposure is a substantial fraction of ingress duration. An explicitly supplied per-cadence exposure should be recorded; sampling intervals or total exposure headers must not automatically be treated as validated per-cadence integration times. An assumed exposure is labeled as such. Numerical integration of optional physical models requires convergence checks.
+
+\subsection{Uncertainty, aliases, and failure}
+Moving-block bootstrap resampling draws contiguous residual or data blocks to preserve some short-range temporal correlation. Repeated fits yield an empirical distribution for reported parameters. Its intervals depend on the resampling design, number of replicates, model assumptions, and stationarity; nominal coverage must be tested independently. Candidate-level failures are retained with reasons rather than silently removed. A failed fit may leave only unrefined search estimates, and insufficient cadences or an inadequate baseline should be reported explicitly.
+
+\section{Machine Learning and Source Vetting}
+\subsection{Feature design and class interpretation}
+Candidate features summarize morphology and diagnostic evidence, including event shape, event-to-event consistency, odd--even depth differences, possible secondary dips, variability, and noise properties. Spatial measurements can support a separate source assessment. Identifiers, known ephemerides, catalog labels, and dataset split metadata must not be used as predictive features. Possible output categories include \class{transit_like}, \class{eclipse_like}, \class{stellar_variability}, and \class{other_artifact}; the active model and its supported classes must be recorded. A morphology class describes resemblance in the data, not a confirmed physical source.
+
+\subsection{From a light curve to a feature vector}
+The feature registry organizes candidate measurements into morphology, consistency, eclipse, variability, noise and quality, and source-evidence families. The standard morphology model excludes the three source-evidence features from its input. Examples of classifier inputs include the duration-to-period ratio, the significance of odd--even depth differences, the number of observed events, the strongest Lomb--Scargle power, and the fraction of in-event samples near a data gap. These measurements answer different questions: a duration ratio describes shape and timing, while odd--even differences can reveal that alternating eclipses have been folded at the wrong period.
+
+The distinction between an unavailable measurement and a measured value matters. The feature registry defines defaults and valid ranges for its numerical inputs; a model's behavior therefore depends on its feature definitions and missing-value handling as well as its trained parameters. Separately, missing source-vetting evidence must remain visible as missing. In particular, a depth ratio between SAP and PDCSAP cannot be inferred from a single delivered flux product.
+
+\subsection{Classifier algorithms}
+TransitEye's training code compares three supervised learning algorithms using scikit-learn. Each receives a vector of numerical features extracted from a detected candidate; the target is a morphology label, such as transit-like or eclipse-like. The algorithms differ in how they represent relationships between those features and the label.
+
+\textbf{Random Forest.} A Random Forest combines many decision trees. Each tree is trained on a bootstrap sample of the training examples and considers a random subset of features at each split. The forest combines the trees' outputs to produce a class prediction. This approach can capture nonlinear interactions, such as the relationship between event depth and duration, without requiring a fixed equation for the decision boundary. The number and depth of trees control the trade-off between computational cost and model complexity. A Random Forest was selected during development of the real-catalog v3 research candidate; this selection is not evidence of independent test performance.
+
+\textbf{Histogram-based gradient boosting.} This method builds an ensemble sequentially: each new tree is fitted to reduce errors in the current model. Continuous feature values are grouped into bins, which can make tree construction more efficient. It can model nonlinear relationships, but its learning rate, tree depth, and number of iterations affect generalization. A historical real-catalog v1 model used this classifier; its results do not validate the later feature pipeline.
+
+\textbf{Logistic regression.} Logistic regression provides a simpler baseline. For class $c$, a linear score $z_c=\boldsymbol{w}_c^{\mathsf T}\boldsymbol{x}+b_c$ is converted to a probability through the multiclass softmax function:
+\begin{equation}
+p_c=\frac{e^{z_c}}{\sum_{j=1}^{K}e^{z_j}}.
+\end{equation}
+The training pipeline standardizes its input features before fitting this model. Comparing a linear baseline with tree ensembles helps determine whether the added complexity is useful on the development data, rather than assuming that a more elaborate model is always better.
+
+The selected classifier depends on the training dataset and model artifact; it is not fixed solely by the application. The training workflow compares candidates using source-grouped cross-validation, with macro-$F_1$ and transit-like recall among the selection criteria. The real-catalog v3 research model has not undergone an independent locked evaluation, and its catalog-derived labels have limitations.
+
+\subsection{Training, calibration, and abstention}
+All observations, sectors, augmentations, candidates, and derivatives of a single astrophysical source must remain in one partition. Training selects model parameters; a separate calibration partition fits a probability calibration mapping; a selection partition determines operating policy; and a locked test partition is reserved for the final frozen evaluation. Grouped cross-validation supports model selection without placing the same source in both training and validation folds. Catalog membership or a catalog disposition can be an imperfect proxy label; a target without a catalog match is unlabeled, not automatically negative.
+
+For class probabilities $p_{ic}$ and one-hot labels $y_{ic}$, the multiclass Brier score is
+\begin{equation}
+\mathrm{BS}=\frac1N\sum_{i=1}^{N}\sum_{c=1}^{K}(p_{ic}-y_{ic})^2.
+\end{equation}
+Calibration is assessed on data independent of calibration fitting and is meaningful only relative to the evaluated population and labels. A classifier may abstain if confidence is too low, the leading classes are too close, required inputs are unavailable, or inputs lie outside an acceptable feature range. Abstention rate and the performance of accepted predictions should both be reported.
+
+\subsection{The inference pipeline}
+Feature extraction converts each eligible candidate into an ordered numerical vector. Its feature definitions and ordering must match those expected by the saved model. During development, preprocessing, model selection, and calibration use their designated source-grouped partitions. The selected model, feature definitions, calibration method, and thresholds are recorded together. A sigmoid calibration method can adjust model scores using a separate calibration set; the adjusted values still need evaluation on independent data. A later model can therefore be used without changing the meaning of an earlier saved result.
+
+\subsection{Spatial source assessment}
+A signal may look transit-like yet originate from a neighboring star. Centroid measurements compare positions during and outside events, while target-pixel files can support difference images and aperture-based checks. Such measurements assess localization separately from morphology. Missing centroid, crowding, or pixel evidence must not be replaced with reassuring values: the source remains unresolved when available evidence is insufficient. Independent follow-up may be needed to establish the origin of the event and its physical nature.
+
+\section{Desktop Workstation and Batch Execution}
+The desktop workstation brings the light curve, periodogram, folded candidate, fit, and diagnostic flags into one view. A reviewer can change search settings, inspect aliases, save a session, and export a vetting sheet. Computation runs in a separate process, leaving the interface free to respond while an analysis is running. Selecting a different period for a folded preview does not imply that the candidate has been refitted.
+
+\subsection{Job state, caching, and recovery}
+For a batch, a coordinator stores task state in SQLite and dispatches work to a bounded set of processes. This design lets the application process targets independently instead of keeping an entire sector in memory. Records distinguish pending, running, completed, and failed tasks; a failed target can be retried without losing the record of the earlier attempt. Completed work can be reused when the input, settings, code, model, and relevant runtime choices match and the saved bundle passes integrity checks. Display downsampling reduces the amount of data drawn on screen, while the backend retains the analysis arrays.
+
+\subsection{Software verification}
+Unit tests cover individual transformations and failure cases, such as invalid inputs and quality masks. Integration tests exercise service calls, serialization, and job recovery. GUI tests check how results and failures are presented, and architecture checks help keep PyQt out of the scientific backend. Repeated runs with fixed settings and seeds can be compared for reproducibility. These tests establish software behavior under the tested conditions; scientific accuracy needs a separate evaluation.
+
+\section{Evaluation Framework}
+\subsection{Frozen independent evaluation}
+Before the locked test set is opened, researchers should freeze cohort selection, label policy, source-grouped partitions, search settings, model artifacts, thresholds, metrics, and procedures for counting failures. The test must represent the intended deployment population as far as practical. Previously inspected test sources cannot be repurposed as an independent test for a model tuned using their results. Confidence intervals should account for clustering by astrophysical source where multiple records exist per source.
+
+\subsection{Classification, detection, and calibration metrics}
+For each class, precision and recall are defined by
+\begin{equation}
+\mathrm{precision}=\frac{TP}{TP+FP},\quad
+\mathrm{recall}=\frac{TP}{TP+FN},\quad
+F_1=\frac{2\,\mathrm{precision}\,\mathrm{recall}}{\mathrm{precision}+\mathrm{recall}}.
+\end{equation}
+Macro-$F_1$ averages class-specific $F_1$ values and gives equal weight to classes, while a confusion matrix exposes class-specific errors. Candidate-conditional classification metrics must be distinguished from end-to-end metrics that include missed detections, fit failures, and abstentions. Report sample sizes, denominators, intervals, and the provenance and limitations of labels. Calibration can be examined with reliability diagrams, Brier score, and expected calibration error; binning choices and small samples affect interpretation.
+
+\subsection{Injection recovery and parameter accuracy}
+Synthetic events with known periods, depths, durations, and epochs can be injected into suitable light curves and processed through the same search. Recovery is the fraction satisfying a predeclared matching rule, including a policy for aliases and epoch agreement. Recovery should be stratified by relevant depth, period, duration, noise, and coverage. Parameter bias and interval coverage require independent known injected truth. Injection results measure recovery under the injection distribution; they do not replace evaluation on independently labeled real data or demonstrate real-world false-positive rates.
+
+\subsection{Scientific performance status}
+No numerical results are asserted in this paper. In particular, the repository documents that an earlier evaluation used label-conditioned features and non-independent truth, invalidating its reported scientific performance claims. Later catalog-derived results have label-proxy and feature-path limitations and cannot establish the accuracy of an updated pipeline. A credible completed evaluation should publish its frozen manifest, all target outcomes, independent ground truth, uncertainty intervals, and code and model identities.
+
+\section{Reproducibility, Limitations, and Responsible Use}
+Each analysis should record the configuration, input checksum, software and model identities, schema version, random seeds, selected compute device, masks, and relevant assumptions. Versioned bundles enable a result to be inspected without retaining a running process. Deterministic seeds improve repeatability, although hardware and library differences can still affect floating-point results.
+
+The system remains limited by observation baseline, cadence, data gaps, instrumental artifacts, correlated noise, imperfect labels, and shifts between training and deployment populations. Strong transit-timing variation may reduce sensitivity to a strictly periodic search. A physical transit model may fit several astrophysical scenarios, and dilution can bias apparent depth. A score or calibrated class probability depends on its validation population and cannot by itself establish planetary status. Source-localization evidence may be missing or ambiguous. The interface should make these limitations visible to the reviewer.
+
+\section{Conclusion}
+\project{} brings a transit-search pipeline and review workstation together in one system. Its design separates numerical analysis from the interface, records the information needed to reproduce a run, and keeps candidate morphology distinct from source location. These choices make the software useful for examining difficult signals and for investigating why a run succeeded or failed.
+
+The remaining scientific question is how well a particular version performs on independent data. That assessment requires frozen source-grouped test sets, realistic injection experiments, and complete accounting of failed or ambiguous cases. Even a strong transit-like candidate requires further investigation before a planet can be confirmed.
+
+\begin{thebibliography}{99}
+\bibitem{ricker} G. R. Ricker et al., ``Transiting Exoplanet Survey Satellite (TESS),'' \emph{Journal of Astronomical Telescopes, Instruments, and Systems}, vol. 1, no. 1, 014003, 2015. doi: \href{https://doi.org/10.1117/1.JATIS.1.1.014003}{10.1117/1.JATIS.1.1.014003}.
+\bibitem{kovacs} G. Kov\'acs, S. Zucker, and T. Mazeh, ``A box-fitting algorithm in the search for periodic transits,'' \emph{Astronomy \& Astrophysics}, vol. 391, pp. 369--377, 2002. doi: \href{https://doi.org/10.1051/0004-6361:20020802}{10.1051/0004-6361:20020802}.
+\bibitem{lomb} N. R. Lomb, ``Least-squares frequency analysis of unequally spaced data,'' \emph{Astrophysics and Space Science}, vol. 39, pp. 447--462, 1976. doi: \href{https://doi.org/10.1007/BF00648343}{10.1007/BF00648343}.
+\bibitem{scargle} J. D. Scargle, ``Studies in astronomical time series analysis. II. Statistical aspects of spectral analysis of unevenly spaced data,'' \emph{Astrophysical Journal}, vol. 263, pp. 835--853, 1982. doi: \href{https://doi.org/10.1086/160554}{10.1086/160554}.
+\bibitem{pont} F. Pont, S. Zucker, and D. Queloz, ``The effect of red noise on planetary transit detection,'' \emph{Monthly Notices of the Royal Astronomical Society}, vol. 373, pp. 231--242, 2006. doi: \href{https://doi.org/10.1111/j.1365-2966.2006.11012.x}{10.1111/j.1365-2966.2006.11012.x}.
+\bibitem{mandel} K. Mandel and E. Agol, ``Analytic light curves for planetary transit searches,'' \emph{Astrophysical Journal Letters}, vol. 580, pp. L171--L175, 2002. doi: \href{https://doi.org/10.1086/345520}{10.1086/345520}.
+\bibitem{kreidberg} L. Kreidberg, ``batman: BAsic Transit Model cAlculatioN in Python,'' \emph{Publications of the Astronomical Society of the Pacific}, vol. 127, pp. 1161--1165, 2015. doi: \href{https://doi.org/10.1086/683602}{10.1086/683602}.
+\end{thebibliography}
+\end{document}

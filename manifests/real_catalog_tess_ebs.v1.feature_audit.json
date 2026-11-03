@@ -1,0 +1,1117 @@
+{
+  "catalog": "MAST TESS-EBs v1.0",
+  "catalog_split_manifest_id": "29402c8c2b85b771",
+  "catalog_test_split_opened": false,
+  "created_at": "2026-10-31T12:17:15.561344+00:00",
+  "failed_by_reason": {
+    "train:no_candidate_or_invalid_features": 2
+  },
+  "feature_audited_development_sources": 219,
+  "labels": 246,
+  "limitations": "TESS-EB catalog labels identify eclipsing-binary systems, while the detector features describe the strongest automatically found candidate in a single light curve. The split is single-source grouped. This cohort contains only eclipse_like labels and cannot train the four-class classifier by itself.",
+  "product_files": 246,
+  "results": [
+    {
+      "split": "train",
+      "target_id": "465088681",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "338104678",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "346783960",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "270526513",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "242991317",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "165991532",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "39074957",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "407594410",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "286031430",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "299096773",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "320855910",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "73884611",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "25858367",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "358232450",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "141332108",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "102643159",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "279509403",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "265435357",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "283819432",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "182776916",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "254003502",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "285339013",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "303843296",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "339568213",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "160268882",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "338465029",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "400445441",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "264540478",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "357040925",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "427394772",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "299135660",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "427312571",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "93911780",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "91246422",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "87260967",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "26533207",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "294261093",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "65628544",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "264592553",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "455509774",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "53085065",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "309146836",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "458199516",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "457427613",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "323968843",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "140288359",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "11491822",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "409319605",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "260131665",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "279640088",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "207511576",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "393819751",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "436103335",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "379783522",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "424719589",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "181862539",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "426588729",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "469924870",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "258314976",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "397361078",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "470358759",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "341029467",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "50897998",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "365198355",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "139825840",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "62702862",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "229804573",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "70442570",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "435715608",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "149861542",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "453012065",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "93997745",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "275259749",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "322650462",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "103566595",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "282270717",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "169815759",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "236973844",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "168384614",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "129538133",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "396903513",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "409455615",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "11799874",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "126586580",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "323292655",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "11799872",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "306410072",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "148158540",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "181463644",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "60658382",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "63315565",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "66563761",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "394508465",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "22937402",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "120258315",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "123042728",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "91638523",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "123153249",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "30562668",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "301956407",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "394728064",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "59091000",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "150284425",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "214299836",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "243475355",
+      "usable": true
+    },
+    {
+      "reason": "no_candidate_or_invalid_features",
+      "split": "train",
+      "target_id": "302771290",
+      "usable": false
+    },
+    {
+      "split": "train",
+      "target_id": "59739922",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "169168102",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "50758245",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "147026702",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "140066660",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "32268776",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "340110295",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "53292822",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "177631209",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "441422527",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "270622446",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "146039664",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "410418820",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "2236015",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "449650980",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "37435039",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "259901124",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "38125059",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "370960295",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "391051349",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "457173024",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "268944966",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "353129911",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "121945407",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "365089053",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "428102518",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "44222598",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "290476605",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "339566276",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "357358259",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "188512866",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "296449358",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "24733359",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "135443051",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "348517784",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "388843945",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "159636127",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "49418981",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "418295363",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "18028547",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "173710176",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "341258182",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "231048083",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "190390679",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "275658545",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "26432264",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "294327312",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "270371961",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "141148940",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "125958765",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "55404385",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "84342725",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "371066950",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "24400247",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "14948284",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "393639812",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "8669966",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "27112021",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "377506471",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "5205367",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "125267683",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "278413303",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "191769621",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "442918617",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "234933888",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "291145873",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "128886984",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "366557556",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "49547177",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "348759511",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "341550561",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "12790306",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "126336928",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "150388753",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "468792279",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "403153647",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "420645952",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "164674435",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "219346326",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "470966839",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "450104319",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "62573638",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "219707463",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "348759510",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "48084398",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "11286209",
+      "usable": true
+    },
+    {
+      "reason": "no_candidate_or_invalid_features",
+      "split": "train",
+      "target_id": "406758816",
+      "usable": false
+    },
+    {
+      "split": "train",
+      "target_id": "26489741",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "3311888",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "353863850",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "13351941",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "266769522",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "31134762",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "141148944",
+      "usable": true
+    },
+    {
+      "split": "calibration",
+      "target_id": "139468902",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "453059861",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "256352113",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "74528791",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "417175621",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "64608449",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "448913059",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "445921773",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "359677968",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "92774987",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "274509791",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "409523757",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "231826813",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "424508303",
+      "usable": true
+    },
+    {
+      "split": "selection",
+      "target_id": "241017747",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "319936228",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "143117999",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "308085294",
+      "usable": true
+    },
+    {
+      "split": "train",
+      "target_id": "120016",
+      "usable": true
+    }
+  ],
+  "usable_by_split": {
+    "calibration": 20,
+    "selection": 22,
+    "train": 175
+  }
+}

@@ -30,6 +30,9 @@ class BatchPanel(QWidget):
 
     start_batch_requested = pyqtSignal(str, str, int)  # source_path, device, workers
     cancel_batch_requested = pyqtSignal()
+    control_requested = pyqtSignal(str, str)
+    resume_requested = pyqtSignal(str, int)
+    inspect_requested = pyqtSignal(str, int)
     open_bundle_requested = pyqtSignal(str)  # bundle_path
 
     HEADERS = ["Target ID", "Status", "Candidates", "Bundle Path", "Error Details"]
@@ -75,6 +78,29 @@ class BatchPanel(QWidget):
         cfg_layout.addWidget(self.btn_cancel)
 
         layout.addWidget(grp_cfg)
+        self.lbl_search_options = QLabel("New batch jobs use the search-period range from Target Inspector.")
+        self.lbl_search_options.setWordWrap(True)
+        layout.addWidget(self.lbl_search_options)
+
+        job_controls = QHBoxLayout()
+        self.txt_job_id = QLineEdit()
+        self.txt_job_id.setPlaceholderText("Saved batch job ID")
+        job_controls.addWidget(self.txt_job_id)
+        for action in ("pause", "cancel", "retry"):
+            button = QPushButton(action.capitalize())
+            button.clicked.connect(lambda _checked=False, name=action: self.control_requested.emit(name, self.txt_job_id.text().strip()))
+            job_controls.addWidget(button)
+        self.btn_resume = QPushButton("Resume")
+        self.btn_resume.clicked.connect(lambda: self.resume_requested.emit(self.txt_job_id.text().strip(), self.spin_workers.value()))
+        job_controls.addWidget(self.btn_resume)
+        self.btn_inspect = QPushButton("Load job")
+        self.btn_inspect.clicked.connect(self._load_job)
+        job_controls.addWidget(self.btn_inspect)
+        self.btn_more = QPushButton("Load more")
+        self.btn_more.setEnabled(False)
+        self.btn_more.clicked.connect(lambda: self.inspect_requested.emit(self.txt_job_id.text().strip(), self._loaded_offset))
+        job_controls.addWidget(self.btn_more)
+        layout.addLayout(job_controls)
 
         # Progress bar & Metrics
         prog_layout = QHBoxLayout()
@@ -102,6 +128,30 @@ class BatchPanel(QWidget):
 
         self._start_time: float | None = None
         self._target_rows: dict[str, int] = {}
+        self._loaded_offset = 0
+
+    def _load_job(self) -> None:
+        job_id = self.txt_job_id.text().strip()
+        if job_id:
+            self.table.setRowCount(0)
+            self._target_rows.clear()
+            self._loaded_offset = 0
+            self.btn_more.setEnabled(False)
+            self.inspect_requested.emit(job_id, 0)
+
+    def on_batch_snapshot(self, data: dict[str, Any]) -> None:
+        """Restore a page of persisted targets, including errors and bundle paths."""
+        if data.get("job_id") != self.txt_job_id.text().strip():
+            return
+        tasks = data.get("tasks", [])
+        for task in tasks:
+            self.on_batch_progress({**task, "total_targets": data["total_targets"],
+                                    "completed_targets": data["completed_targets"],
+                                    "failed_targets": data["failed_targets"]})
+        self._loaded_offset = int(data.get("task_offset", 0)) + len(tasks)
+        self.btn_more.setEnabled(self._loaded_offset < int(data["total_targets"]))
+        if not tasks:
+            self.lbl_stats.setText(f"Job {data.get('status', 'unknown')}: no targets in this page")
 
     def _browse_source(self) -> None:
         path, _ = QFileDialog.getOpenFileName(
@@ -150,21 +200,20 @@ class BatchPanel(QWidget):
         self.table.setItem(row, 4, QTableWidgetItem(err))
 
         # Update stats
-        total = self.table.rowCount()
-        completed = sum(1 for r in range(total) if self.table.item(r, 1).text() in ("completed", "cached"))
+        total = int(data.get("total_targets", 0))
+        completed = int(data.get("completed_targets", 0))
+        failed = int(data.get("failed_targets", 0))
         if total > 0:
-            pct = int(round((completed / total) * 100))
-            self.prog_bar.setValue(pct)
+            self.prog_bar.setValue(round(100 * (completed + failed) / total))
 
         elapsed = time.perf_counter() - (self._start_time or time.perf_counter())
         tps = (completed / elapsed) if elapsed > 0 else 0.0
-        self.lbl_stats.setText(f"{completed} completed | {tps:.2f} targets/sec")
+        self.lbl_stats.setText(f"{completed} completed | {failed} failed | {total} total | {tps:.2f} targets/sec")
 
     def on_batch_finished(self) -> None:
         """Batch process completed or terminated."""
         self.btn_start.setEnabled(True)
         self.btn_cancel.setEnabled(False)
-        self.lbl_stats.setText(f"Batch finished. ({self.table.rowCount()} targets)")
 
     def _on_item_double_clicked(self, item: QTableWidgetItem) -> None:
         row = item.row()

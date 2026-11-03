@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 import pyqtgraph as pg
@@ -9,6 +10,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
 from transiteye_desktop.bundle_loader import LoadedBundle
+from transiteye_desktop.widgets.safe_graphics import SafeInfiniteLine
 
 
 class PeriodogramWidget(QWidget):
@@ -34,25 +36,25 @@ class PeriodogramWidget(QWidget):
         self.p_bls.setLogMode(x=True, y=False)
 
         self.power_curve = self.p_bls.plot(pen=pg.mkPen(color=(100, 200, 255), width=1.5))
-        self.peak_line = pg.InfiniteLine(
+        self.peak_line = SafeInfiniteLine(
             pos=0,
             angle=90,
             pen=pg.mkPen(color=(255, 60, 60), width=2, style=pg.QtCore.Qt.PenStyle.DashLine),
         )
-        self.subharmonic_line = pg.InfiniteLine(
+        self.subharmonic_line = SafeInfiniteLine(
             pos=0,
             angle=90,
             pen=pg.mkPen(color=(255, 180, 60), width=1.5, style=pg.QtCore.Qt.PenStyle.DotLine),
         )
-        self.harmonic_line = pg.InfiniteLine(
+        self.harmonic_line = SafeInfiniteLine(
             pos=0,
             angle=90,
             pen=pg.mkPen(color=(255, 180, 60), width=1.5, style=pg.QtCore.Qt.PenStyle.DotLine),
         )
 
-        self.p_bls.addItem(self.peak_line)
-        self.p_bls.addItem(self.subharmonic_line)
-        self.p_bls.addItem(self.harmonic_line)
+        self.p_bls.addItem(self.peak_line, ignoreBounds=True)
+        self.p_bls.addItem(self.subharmonic_line, ignoreBounds=True)
+        self.p_bls.addItem(self.harmonic_line, ignoreBounds=True)
 
         # Row 1: Lomb-Scargle Variability Periodogram
         self.glw.nextRow()
@@ -65,12 +67,12 @@ class PeriodogramWidget(QWidget):
         self.p_ls.setLogMode(x=True, y=False)
 
         self.ls_curve = self.p_ls.plot(pen=pg.mkPen(color=(120, 230, 140), width=1.5))
-        self.ls_peak_line = pg.InfiniteLine(
+        self.ls_peak_line = SafeInfiniteLine(
             pos=0,
             angle=90,
             pen=pg.mkPen(color=(80, 255, 120), width=1.5, style=pg.QtCore.Qt.PenStyle.DashLine),
         )
-        self.p_ls.addItem(self.ls_peak_line)
+        self.p_ls.addItem(self.ls_peak_line, ignoreBounds=True)
 
         self._hide_marker_lines()
 
@@ -125,7 +127,7 @@ class PeriodogramWidget(QWidget):
             best_ls_idx = int(ls_powers.argmax())
             best_ls_p = float(ls_periods[best_ls_idx])
             if best_ls_p > 0:
-                self.ls_peak_line.setPos(best_ls_p)
+                self.ls_peak_line.setPos(math.log10(best_ls_p))
                 self.ls_peak_line.setVisible(True)
             self.p_ls.autoRange()
         else:
@@ -140,11 +142,17 @@ class PeriodogramWidget(QWidget):
             self.harmonic_line.setVisible(False)
             return
 
-        self.peak_line.setPos(period)
+        self.peak_line.setPos(math.log10(period))
         self.peak_line.setVisible(True)
 
-        self.subharmonic_line.setPos(period / 2.0)
+        self.subharmonic_line.setPos(math.log10(period / 2.0))
         self.subharmonic_line.setVisible(True)
 
-        self.harmonic_line.setPos(period * 2.0)
+        self.harmonic_line.setPos(math.log10(period * 2.0))
         self.harmonic_line.setVisible(True)
+
+    def clear(self) -> None:
+        """Remove plots and markers when a session has no result bundle."""
+        self.power_curve.clear()
+        self.ls_curve.clear()
+        self._hide_marker_lines()

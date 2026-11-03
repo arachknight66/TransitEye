@@ -31,6 +31,10 @@ class ClassificationCard(QFrame):
         title.setStyleSheet("font-weight: bold; font-size: 14px; color: #E0E0E0;")
         layout.addWidget(title)
 
+        self.lbl_model_note = QLabel("No model selected for this result.")
+        self.lbl_model_note.setWordWrap(True)
+        layout.addWidget(self.lbl_model_note)
+
         # Badge & Confidence line
         badge_layout = QHBoxLayout()
         self.lbl_badge = QLabel("NONE")
@@ -66,6 +70,7 @@ class ClassificationCard(QFrame):
             bar = QProgressBar()
             bar.setRange(0, 100)
             bar.setValue(0)
+            bar.setFormat("—")
             bar.setTextVisible(True)
             bar.setFixedHeight(14)
             bar.setStyleSheet(
@@ -78,6 +83,15 @@ class ClassificationCard(QFrame):
             layout.addLayout(row)
             self.bars[c] = (name_lbl, bar)
 
+    def set_model_note(self, model_id: str | None) -> None:
+        """Show the provenance limitation without changing the classification."""
+        if model_id:
+            self.lbl_model_note.setText(
+                f"Model: {model_id}. Performance and calibration on the current pipeline are unverified."
+            )
+        else:
+            self.lbl_model_note.setText("No model selected for this result.")
+
     def set_candidate(self, candidate: LoadedCandidate | None) -> None:
         """Update card for selected candidate."""
         if candidate is None:
@@ -85,6 +99,10 @@ class ClassificationCard(QFrame):
             return
 
         cls_name = candidate.predicted_class
+        if not candidate.probabilities or candidate.calibrated_confidence is None:
+            self.clear()
+            self.lbl_badge.setText("UNAVAILABLE")
+            return
         conf_pct = candidate.calibrated_confidence * 100.0
 
         # Update Badge
@@ -119,6 +137,7 @@ class ClassificationCard(QFrame):
         probs = candidate.probabilities or candidate.raw_data.get("probabilities", {}) or {}
         for c, (_, bar) in self.bars.items():
             p = float(probs.get(c, 0.0))
+            bar.setFormat("%p%")
             bar.setValue(int(round(p * 100.0)))
 
     def clear(self) -> None:
@@ -129,3 +148,4 @@ class ClassificationCard(QFrame):
         self.lbl_abstain.setVisible(False)
         for _, bar in self.bars.values():
             bar.setValue(0)
+            bar.setFormat("—")

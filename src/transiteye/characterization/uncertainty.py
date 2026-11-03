@@ -108,6 +108,7 @@ def compute_parameter_intervals(
                 init_period=refined.period_days,
                 init_duration_hours=refined.duration_hours,
                 init_depth_ppm=refined.measured_depth_ppm,
+                exposure_days=refined.exposure_days,
             )
             boot_periods.append(params["period_days"])
             boot_epochs.append(params["epoch_days"])
@@ -157,73 +158,12 @@ def compute_empirical_significance(
     random_seed: int = 42,
     device: str = "auto",
 ) -> tuple[float, float]:
-    """Compute noise-surrogate empirical search significance and resolution.
+    """Reject the invalid historical fixed-phase statistic.
 
-    Returns (empirical_significance, surrogate_resolution).
-    Resolution = 1.0 / (n_surrogates + 1).
+    A valid search-wide estimate requires applying the entire candidate search to
+    every noise surrogate under a separately validated null model.
     """
-    from transiteye.execution.compute import has_cuda, resolve_device
-
-    resolution = 1.0 / (n_surrogates + 1)
-    if observed_snr <= 0:
-        return 0.0, resolution
-
-    residuals = flux_detrended - model_curve
-    n_pts = len(residuals)
-
-    dur_days = candidate_duration_hours / 24.0
-    cadence_days = float(np.median(np.diff(time_days))) if n_pts > 1 else 0.002
-    block_size = max(5, int(round(dur_days / max(1e-4, cadence_days))))
-
-    rng = np.random.default_rng(random_seed)
-    n_blocks = (n_pts + block_size - 1) // block_size
-
-    # Test frequency around candidate period (+- 5%)
-    phase = ((time_days + 0.5 * candidate_period) % candidate_period) - 0.5 * candidate_period
-    in_box = np.abs(phase) <= (0.5 * dur_days)
-    n_in = int(np.count_nonzero(in_box))
-
-    if n_in < 2:
-        return 0.5, resolution
-
-    observed_stat = observed_snr
-    mad = float(np.median(np.abs(residuals - np.median(residuals))))
-    std_est = 1.4826 * mad
-    if std_est <= 0:
-        return 1.0, resolution
-
-    # Pre-generate deterministic block start indices on CPU so GPU and CPU match 100%
-    all_start_indices = rng.integers(
-        0, max(1, n_pts - block_size + 1), size=(n_surrogates, n_blocks)
+    raise RuntimeError(
+        "Search-wide empirical significance is unavailable: the historical "
+        "fixed-phase surrogate did not repeat the candidate search."
     )
-    offsets = np.arange(block_size, dtype=np.int64)
-    gather_idx = (all_start_indices[:, :, None] + offsets[None, None, :]).reshape(
-        n_surrogates, -1
-    )[:, :n_pts]
-
-    dev = resolve_device(device)
-    if dev == "cuda" and has_cuda():
-        import cupy as cp
-
-        res_gpu = cp.asarray(residuals)
-        idx_gpu = cp.asarray(gather_idx)
-        in_box_gpu = cp.asarray(in_box)
-
-        surr_matrix = res_gpu[idx_gpu]
-        in_flux = 1.0 + surr_matrix[:, in_box_gpu]
-        dip_vals = 1.0 - cp.mean(in_flux, axis=1)
-        surr_snrs = dip_vals / (std_est / np.sqrt(n_in))
-        exceedances = int(cp.count_nonzero(surr_snrs >= observed_stat).item())
-    else:
-        exceedances = 0
-        for s_idx in range(n_surrogates):
-            res_surr = residuals[gather_idx[s_idx]]
-            in_flux = 1.0 + res_surr[in_box]
-            dip_val = 1.0 - float(np.mean(in_flux))
-            surr_snr = dip_val / (std_est / np.sqrt(n_in))
-            if surr_snr >= observed_stat:
-                exceedances += 1
-
-    p_emp = (1 + exceedances) * resolution
-    empirical_significance = float(max(0.0, 1.0 - p_emp))
-    return empirical_significance, resolution

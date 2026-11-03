@@ -1,0 +1,120 @@
+{
+  "ablations": {
+    "drop_source_features": {
+      "accuracy": 0.99,
+      "macro_f1": 0.9948979591836735
+    },
+    "drop_variability_features": {
+      "accuracy": 0.97,
+      "macro_f1": 0.9795918367346939
+    },
+    "full_system": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0
+    },
+    "pass1_detrending_only": {
+      "accuracy": 1.0,
+      "macro_f1": 0.25
+    },
+    "real_data_only": {
+      "accuracy": 0.97,
+      "macro_f1": 0.9840425531914894
+    }
+  },
+  "confidence_intervals_95": {
+    "accuracy": [
+      1.0,
+      1.0
+    ],
+    "ece": [
+      0.012801918728656003,
+      0.013411261329713162
+    ],
+    "macro_f1": [
+      1.0,
+      1.0
+    ]
+  },
+  "ephemeris_recovery": {
+    "harmonic_matched_fraction": 0.0,
+    "interval_coverage_68": 1.0,
+    "interval_coverage_95": 1.0,
+    "median_depth_rel_error": 0.04604114054023296,
+    "median_duration_rel_error": 0.8818532132477652,
+    "overall_matched_fraction": 1.0,
+    "primary_matched_fraction": 1.0,
+    "total_candidates_evaluated": 50
+  },
+  "injection_recovery": {
+    "depths_ppm": [
+      200.0,
+      500.0,
+      1000.0,
+      2500.0,
+      5000.0,
+      10000.0
+    ],
+    "median_depth_rel_error_by_depth": [
+      0.0,
+      0.11402925480276645,
+      0.10794703434689222,
+      0.10378562543048356,
+      0.10231561647019516,
+      0.1052994343665834
+    ],
+    "recovery_fraction": [
+      0.0,
+      0.375,
+      0.625,
+      0.75,
+      0.875,
+      1.0
+    ],
+    "snr_threshold": 5.5
+  },
+  "metrics": {
+    "abstention_rate": 0.0,
+    "accuracy": 1.0,
+    "brier_score": 0.000239368599956965,
+    "effective_coverage": 1.0,
+    "expected_calibration_error": 0.013134468207173344,
+    "macro_f1": 1.0,
+    "per_class_f1": {
+      "eclipse_like": 1.0,
+      "other_artifact": 1.0,
+      "stellar_variability": 1.0,
+      "transit_like": 1.0
+    },
+    "per_class_precision": {
+      "eclipse_like": 1.0,
+      "other_artifact": 1.0,
+      "stellar_variability": 1.0,
+      "transit_like": 1.0
+    },
+    "per_class_recall": {
+      "eclipse_like": 1.0,
+      "other_artifact": 1.0,
+      "stellar_variability": 1.0,
+      "transit_like": 1.0
+    }
+  },
+  "n_labels": 100,
+  "n_targets": 100,
+  "protocol_version": "v2.0",
+  "robustness_strata": {
+    "high_snr_ge_10": {
+      "accuracy": 1.0,
+      "count": 81
+    },
+    "moderate_snr_lt_10": {
+      "accuracy": 1.0,
+      "count": 19
+    },
+    "sector_shift_partition": {
+      "accuracy": 0.0,
+      "count": 0,
+      "macro_f1": 0.0
+    }
+  },
+  "target_split": "test"
+}

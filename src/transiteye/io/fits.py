@@ -90,6 +90,12 @@ def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX"
                     "mission": _string(primary.get("MISSION")) or "TESS",
                     "creator": _string(primary.get("CREATOR")) or "unknown",
                     "origin": _string(primary.get("ORIGIN")) or "unknown",
+                    "selected_flux": selected_flux,
+                    **{
+                        key: str(value)
+                        for key in ("TIMEDEL", "NUM_FRM", "FRAMETIM", "INT_TIME", "READTIME", "EXPOSURE", "LIVETIME")
+                        if (value := extension.get(key, primary.get(key))) is not None
+                    },
                 },
             )
             return LightCurve(
@@ -110,6 +116,13 @@ def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX"
                     "flfrcsap": _string(extension.get("FLFRCSAP", primary.get("FLFRCSAP"))),
                     "teff": _string(primary.get("TEFF", extension.get("TEFF"))),
                     "logg": _string(primary.get("LOGG", extension.get("LOGG"))),
+                    # Preserve frame metadata as supplied; TIMEDEL is sampling, and
+                    # EXPOSURE/LIVETIME are total time on source, not one exposure.
+                    "time_resolution": _string(extension.get("TIMEDEL", primary.get("TIMEDEL"))),
+                    "num_frames": _string(extension.get("NUM_FRM", primary.get("NUM_FRM"))),
+                    "frame_time_seconds": _string(extension.get("FRAMETIM", primary.get("FRAMETIM"))),
+                    "integration_time_seconds": _string(extension.get("INT_TIME", primary.get("INT_TIME"))),
+                    "readout_time_seconds": _string(extension.get("READTIME", primary.get("READTIME"))),
                 },
             )
     except OSError as error:

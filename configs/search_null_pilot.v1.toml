@@ -1,0 +1,22 @@
+# Frozen development null experiment; not valid for correlated TESS light curves.
+schema_version = "1"
+seed = 7413
+points = 300
+cadence_minutes = 30.0
+noise_ppm = 500.0
+white_trials = 100
+correlated_trials = 40
+ar1_rho = 0.8
+permutations = 99
+alpha = 0.05
+max_white_alerts = 10
+dkw_confidence = 0.95
+
+[search]
+min_period = 0.5
+max_period = 2.5
+min_duration_hours = 0.5
+max_duration_hours = 3.0
+num_durations = 4
+oversample = 5.0
+device = "cpu"

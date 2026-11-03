@@ -78,6 +78,11 @@ class VettingCard(QFrame):
         self.lbl_depth_ci.setStyleSheet("font-size: 11px; color: #C0D8FF;")
         grid.addWidget(self.lbl_depth_ci, 5, 1)
 
+        grid.addWidget(QLabel("Fit exposure:"), 6, 0)
+        self.lbl_exposure = QLabel("not recorded")
+        self.lbl_exposure.setStyleSheet("font-size: 11px; color: #FFE080;")
+        grid.addWidget(self.lbl_exposure, 6, 1)
+
         layout.addLayout(grid)
 
         # TPF Stamp & Difference Image Plots
@@ -133,6 +138,16 @@ class VettingCard(QFrame):
         if candidate is None:
             self.clear()
             return
+
+        settings = bundle.metadata.get("analysis_settings") or {}
+        exposure_days = settings.get("trapezoid_exposure_days")
+        status = settings.get("exposure_status")
+        if exposure_days is None:
+            self.lbl_exposure.setText("not recorded")
+        elif status == "user_supplied":
+            self.lbl_exposure.setText(f"{float(exposure_days) * 86400:.1f} s (supplied)")
+        else:
+            self.lbl_exposure.setText(f"{float(exposure_days) * 86400:.1f} s (unverified assumption)")
 
         assessment = candidate.source_assessment
         self.lbl_badge.setText(assessment.replace("_", " ").upper())
@@ -243,6 +258,7 @@ class VettingCard(QFrame):
         self.lbl_depths.setText("-- / -- ppm")
         self.lbl_period_ci.setText("--")
         self.lbl_depth_ci.setText("--")
+        self.lbl_exposure.setText("not recorded")
         self.tpf_glw.setVisible(False)
         self.img_tpf.clear()
         self.img_diff.clear()

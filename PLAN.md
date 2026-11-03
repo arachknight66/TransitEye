@@ -6,6 +6,110 @@ This is the authoritative five-phase implementation sequence. Work within a phas
 unless a task explicitly states otherwise. A phase is complete only after its verification gate
 passes and `PROGRESS.md` records the evidence.
 
+## Working-product remediation (approved 2026-11-01)
+
+The prior phase gates must be revalidated because the legacy evaluator has label-conditioned features
+and non-independent recovery/coverage references. Historical artifacts remain unchanged and must not
+be used for scientific claims. This new remediation sequence supersedes the ordering of the
+post-release evaluation task below; the EB holdout stays sealed until a new protocol is frozen.
+
+- [x] **R1 Scientific integrity guardrails:** disable the legacy locked evaluator; remove
+  label-conditioned feature transformations and calibration augmentation from the supported pilot
+  trainer; disable the unvalidated fixed-phase significance output; stop implicit synthetic model
+  training and expose unavailable classification without blocking physical analysis. Document the
+  behavioral compatibility changes and add regression tests for leakage and missing-model handling.
+- [x] **R2 Shared scientific configuration and models:** make configuration, model identity, code,
+  and input provenance explicit across single and batch workflows; verify model checksums and
+  unify the feature path. Add exposure-aware fitting and candidate-level failure reporting.
+  Emit additive provenance and component checksums in schema-v3 result bundles while retaining schema-v2 read compatibility;
+  historical bundles and frozen evaluation artifacts are not rewritten.
+  Record the selected flux product and apply the same flux preference in individual and batch runs.
+  Apply and record shared quality, gap, BLS period/duration grid, detrending, screening and bootstrap
+  settings through the same typed configuration; default values preserve the historical search policy.
+  Record requested versus resolved device so `auto` and batch CPU spillover are auditable.
+  Record candidate-specific bootstrap seeds alongside the seed strategy in v3 output.
+  Preserve raw FITS exposure keywords; allow an explicit exposure duration and propagate it to both
+  fitting models and bootstrap refits. Mark the historical two-minute fallback as an assumption.
+  Use an exact boxcar average for the piecewise-linear trapezoid; retain instantaneous mode and
+  independently verify the integral. The Batman approximation remains separately qualified.
+  A candidate fit failure must be recorded in v3 results and displayed without dropping other
+  candidates; no failed fit may be represented as a successful physical inference.
+- [x] **R3 Durable batch and desktop workflows:** implement bounded scheduling, real timeouts,
+  pause/resume/cancel/retry, accurate accounting, cache validation, responsive desktop controls,
+  saved sessions, and consistent CLI/UI results. Desktop single-target and batch runs share the
+  inspector period bounds and the backend's 6.0 detection-SNR default; saved jobs remain unchanged.
+  The detached marker lifecycle fix passed clean-wheel headless and native checks; the user repeated
+  the manual Linux workflow on the current build successfully.
+- [x] **R3 integrity follow-up:** correct source vetting that can treat absent centroid/crowding or
+  zero-signal pixel data as evidence of an on-target source. Preserve v3 nullable field compatibility,
+  explicitly report insufficient evidence, do not fabricate a SAP/PDCSAP depth ratio, and verify
+  legacy bundles are not rewritten.
+- [ ] **R4 Independent validation and release:** freeze development benchmarks; perform real-data,
+  injection, clean-install, headless Qt, and manual Linux verification; then run the exposure/noise
+  inference study and generate an auditable report. A 100-target benchmark, external reproduction,
+  and independent model evaluation are not complete until their artifacts and gates exist.
+  Correct the recorded deep-eclipse fit failure by extending the normalized trapezoid depth bound
+  to 1.0 and rejecting impossible initial depths explicitly. This changes features in new analyses,
+  but does not change class definitions, splits, or the existing result schema; old bundles remain
+  readable and historical model scores do not validate the new feature path.
+  Reject optimizer results that did not converge, reporting trapezoid failures through existing
+  candidate errors and leaving failed optional physical refinements unavailable. Existing bundle
+  fields and schema remain unchanged, while new fit/feature outcomes may differ.
+  Flag candidates that include the unvalidated five-sample physical model using the existing
+  candidate flag list, consistently in JSON and Parquet; prior bundles remain unchanged.
+  Distinguish an attempted but failed physical refinement from a deliberately skipped one using
+  the existing candidate flags and missing-reason map; do not fabricate a detailed cause.
+
+  Development-only requested experiment: train an isolated three-class estimator on the new
+  catalog collections with source-group separation, held-out-group exclusion, candidate matching
+  and complete failure accounting. Existing four-class application contracts remain unchanged;
+  the experiment is not a deployable classifier or independent evaluation. Retraining may add the
+  additional v2 source collections under the same source-group and reserved-partition safeguards.
+  The user-requested 2026-11-02 expansion freezes 20 new catalog-proxy sources per supported
+  class (14 train and 6 test) before downloading or opening the new test observations. It excludes
+  prior known source identities, keeps all failed detections, locks the model before the test, and
+  reports conditional classification metrics separately from extraction and matching failures.
+  This remains a three-class research experiment, not a calibrated desktop model or R4 gate.
+  For the next user-requested expansion, freeze a larger source-disjoint development cohort using
+  the remaining catalog-backed sources, preserve previous test partitions, and record imbalance,
+  all failures and model limitations. Reuse only previously designated training features.
+  A further variability-focused expansion freezes new Gaia/TIC cross-matches and holds out source
+  groups before downloading their light curves; its one-class test cannot establish multiclass
+  accuracy. Earlier test sources remain excluded from training.
+
+  Desktop demo follow-up: explicitly launching the sample selects the historical v1 model only
+  after verifying the frozen model files. Display the choice and limitations; leave normal analysis
+  opt-in and preserve the existing result contract and independent-validation requirements.
+
+  R4 completion requires all of the following evidence, with failures and missing results counted:
+  - [ ] Validate physical-model integration across a declared grid and optimizer behavior; measure
+    period, depth, duration, and interval coverage against independent known truth.
+  - [ ] Run and document a frozen injection-recovery study and null controls, separate from
+    real-data evaluation, with recovery, parameter errors, and uncertainty coverage.
+    The development real-substrate pilot's exposure-status provenance was corrected to the existing
+    unverified-fallback value and rerun; earlier artifacts are preserved for audit.
+  - [ ] Audit catalog-derived labels and freeze source-separated selection and evaluation before
+    opening a fresh independent holdout; previously opened test sources are not a fresh holdout.
+    Development audit found automatically assigned review strings, false-positive/depth eclipse
+    proxies and ATL target-list variability proxies; none establishes source-local morphology.
+    Preserve historical manifests and disable legacy synthetic cohort builders and the historical
+    evaluation entry point rather than regenerating unsupported labels or reopening old tests.
+  - [ ] Develop and validate a search-wide significance calculation against appropriate null data;
+    keep the existing unavailable value until validation succeeds.
+  - [x] Freeze and run a 100-target development benchmark in the external workspace, recording
+    settings, runtime, memory, completion, failures, and interruption recovery.
+    Correct the legacy coordinator-only memory and total-target throughput before using it; retain
+    old report field names while documenting the new sampled process-tree and fresh-work semantics.
+    Historical benchmark artifacts are unchanged and do not establish current throughput or memory.
+  - [ ] Verify clean installation, headless and manual Linux workflows, and reproduction in another
+    person or environment; publish reproducibility inputs, versions, configurations and limitations.
+  - [ ] Produce a scientific report with methods, evidence, failure cases and limitations. Historical
+    evaluation outputs are not evidence for the current pipeline.
+
+R1 is a prerequisite for R2–R4. Historical releases and model artifacts remain available for audit,
+but the invalid legacy evaluation command and fixed-phase public significance helper must fail
+explicitly rather than generate unsupported results.
+
 ## Build preferences
 
 - **Mode:** Autonomous implementation in reviewable vertical slices.
@@ -323,4 +427,20 @@ SPOC/TESS-SPOC FITS
 
 Build order is fixed: **contracts/data → preprocessing/detection → characterization/uncertainty →
 features/classification/vetting → sector execution → desktop → locked evaluation/report/release**.
+
+## Post-release real-catalog retraining (2026-10-31)
+
+- [x] Acquired a separate TESS-EBs catalog tranche and combined its source groups with existing
+  real-catalog development partitions for a morphology-model retraining run.
+  - Rationale: the larger TOI expansion had too few usable eclipse-like sources for grouped model
+    selection; the curated MAST TESS-EBs catalog provides direct eclipsing-binary evidence.
+  - Compatibility: new manifests are versioned as `real_catalog_cohort.v3.*`; both original
+    source-group assignments are preserved. Both test partitions remain assigned to `test` and were
+    not read during training. The EB label describes catalogued system morphology, not source location.
+  - Acceptance: checksummed products, source-grouped manifests, reproducible feature extraction,
+    complete train/calibration/selection class support, and a saved model/training report.
+  - Verification: grouped five-fold CV and calibration/selection on development partitions;
+    independent evaluation remains pending and must use a newly frozen protocol.
+- [ ] Freeze an independent evaluation protocol for `morphology_real_catalog_v3`, audit catalog
+  label validity and source-local event matching, then perform one locked evaluation.
 

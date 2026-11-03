@@ -1,3 +1,10 @@
+# Historical release notice
+
+The evaluation and performance claims in the historical notes below are invalidated by
+label-conditioned feature transformations and non-independent recovery/coverage references.
+See `README.md` and `docs/model-card.md` for the current remediation status and the separately
+documented real-catalog proxy-label evaluation. This notice does not alter historical artifacts.
+
 # TransitEye v0.1.0 Release Notes
 
 TransitEye v0.1.0 is a complete, scientifically rigorous system for detecting, characterizing, classifying, and vetting signals in noisy TESS light curves.

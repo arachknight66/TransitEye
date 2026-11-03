@@ -1,0 +1,4028 @@
+{
+  "labels": [
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 274945059; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=17.3600805 d; morphology coefficient=0.26284359999999996. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-274945059",
+      "target_id": "274945059"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 465088681; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=12.0413734 d; morphology coefficient=0.2963772. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12,
+        39
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-465088681",
+      "target_id": "465088681"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 259070502; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=11.2008349 d; morphology coefficient=0.24971235. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-259070502",
+      "target_id": "259070502"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 338104678; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.44664952 d; morphology coefficient=0.67870295. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-338104678",
+      "target_id": "338104678"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 346783960; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.86615414 d; morphology coefficient=0.5142449. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-346783960",
+      "target_id": "346783960"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 270526513; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=39.4727069 d; morphology coefficient=0.35176584. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        19,
+        20,
+        21,
+        25,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-270526513",
+      "target_id": "270526513"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 242991317; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.95315836 d; morphology coefficient=0.5926991. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-242991317",
+      "target_id": "242991317"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 165991532; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=51.4178453 d; morphology coefficient=0.0643675. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15,
+        16,
+        21,
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-165991532",
+      "target_id": "165991532"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 39074957; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.00338518 d; morphology coefficient=0.5011085999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        21
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-39074957",
+      "target_id": "39074957"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 407594410; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.81689186 d; morphology coefficient=0.55163366. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-407594410",
+      "target_id": "407594410"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 286031430; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.317001634 d; morphology coefficient=0.69019467. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-286031430",
+      "target_id": "286031430"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 299096773; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.40712704 d; morphology coefficient=0.40649012. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-299096773",
+      "target_id": "299096773"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 320855910; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.75467927 d; morphology coefficient=0.48656720000000003. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        11,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-320855910",
+      "target_id": "320855910"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 73884611; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.6400715 d; morphology coefficient=0.5475384. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-73884611",
+      "target_id": "73884611"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 71847068; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.58742605 d; morphology coefficient=0.36255729999999997. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-71847068",
+      "target_id": "71847068"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 199661915; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=8.39990104 d; morphology coefficient=0.33947134. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15,
+        16,
+        19,
+        22,
+        23,
+        25,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-199661915",
+      "target_id": "199661915"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 25858367; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.27449005 d; morphology coefficient=0.55794173. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-25858367",
+      "target_id": "25858367"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 358232450; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.66977135 d; morphology coefficient=0.57403314. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        2,
+        29
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-358232450",
+      "target_id": "358232450"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 141332108; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.381620198 d; morphology coefficient=0.7086373. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        4,
+        31
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-141332108",
+      "target_id": "141332108"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 102643159; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.77691536 d; morphology coefficient=0.55922234. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12,
+        39
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-102643159",
+      "target_id": "102643159"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 279509403; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.74021376 d; morphology coefficient=0.858086. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18,
+        19,
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-279509403",
+      "target_id": "279509403"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 265435357; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.87750442 d; morphology coefficient=0.86116195. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13,
+        27
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-265435357",
+      "target_id": "265435357"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 283819432; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.267815546 d; morphology coefficient=0.750412. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16,
+        23,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-283819432",
+      "target_id": "283819432"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 182776916; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.22628869 d; morphology coefficient=0.7373506999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        34,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-182776916",
+      "target_id": "182776916"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 254003502; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.591456885 d; morphology coefficient=0.82420397. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-254003502",
+      "target_id": "254003502"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 285339013; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.91636847 d; morphology coefficient=0.6718234000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18,
+        24,
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-285339013",
+      "target_id": "285339013"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 303843296; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.71172617 d; morphology coefficient=0.9365839. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-303843296",
+      "target_id": "303843296"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 339568213; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.82329422 d; morphology coefficient=0.5760448. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-339568213",
+      "target_id": "339568213"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 160268882; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.27099714 d; morphology coefficient=0.9219285. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        20,
+        21
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-160268882",
+      "target_id": "160268882"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 338465029; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.19815173 d; morphology coefficient=0.5309526. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        38
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-338465029",
+      "target_id": "338465029"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 400445441; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.09768848 d; morphology coefficient=0.83927715. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9,
+        35,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-400445441",
+      "target_id": "400445441"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 264540478; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.52639214 d; morphology coefficient=0.8046479. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-264540478",
+      "target_id": "264540478"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 357040925; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.514039889 d; morphology coefficient=0.8118348000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-357040925",
+      "target_id": "357040925"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 427394772; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=6.47078376 d; morphology coefficient=0.488621. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-427394772",
+      "target_id": "427394772"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 299135660; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.76980525 d; morphology coefficient=0.33695635. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        3,
+        30
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-299135660",
+      "target_id": "299135660"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 427312571; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=6.06628207 d; morphology coefficient=0.4736785. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-427312571",
+      "target_id": "427312571"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 93911780; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=16.8430226 d; morphology coefficient=0.28047872. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-93911780",
+      "target_id": "93911780"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 91246422; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=18.7739778 d; morphology coefficient=0.08715384. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-91246422",
+      "target_id": "91246422"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 87260967; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.09055355 d; morphology coefficient=0.50443965. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13,
+        39
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-87260967",
+      "target_id": "87260967"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 26533207; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.76556681 d; morphology coefficient=0.7880484999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-26533207",
+      "target_id": "26533207"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 294261093; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.65831517 d; morphology coefficient=0.6143056. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-294261093",
+      "target_id": "294261093"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 65628544; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=12.1561888 d; morphology coefficient=0.18793657. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-65628544",
+      "target_id": "65628544"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 264592553; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.55520153 d; morphology coefficient=0.32872054. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-264592553",
+      "target_id": "264592553"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 455509774; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.90342513 d; morphology coefficient=0.6177648. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-455509774",
+      "target_id": "455509774"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 53085065; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.93306593 d; morphology coefficient=0.6560351. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-53085065",
+      "target_id": "53085065"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 309146836; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.42794415 d; morphology coefficient=0.25542852. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        4,
+        9,
+        10,
+        11,
+        28,
+        31,
+        35,
+        36,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-309146836",
+      "target_id": "309146836"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 458199516; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.01720626 d; morphology coefficient=0.42854115. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        36,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-458199516",
+      "target_id": "458199516"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 457427613; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.22281173 d; morphology coefficient=0.599283. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        36,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-457427613",
+      "target_id": "457427613"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 323968843; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.69952868 d; morphology coefficient=0.5172309. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12,
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-323968843",
+      "target_id": "323968843"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 11046410; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=8.12262108 d; morphology coefficient=0.43948472. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        31
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-11046410",
+      "target_id": "11046410"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 81609273; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.83877592 d; morphology coefficient=0.7496073000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        34,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-81609273",
+      "target_id": "81609273"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 140288359; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.76613312 d; morphology coefficient=0.8929992. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        6,
+        32,
+        33
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-140288359",
+      "target_id": "140288359"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 11491822; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=9.94659111 d; morphology coefficient=0.20677233. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        20
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-11491822",
+      "target_id": "11491822"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 409319605; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.13596011 d; morphology coefficient=0.57636285. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        33,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-409319605",
+      "target_id": "409319605"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 260131665; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.67253458 d; morphology coefficient=0.6605929. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-260131665",
+      "target_id": "260131665"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 279640088; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.92684564 d; morphology coefficient=0.36933088. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-279640088",
+      "target_id": "279640088"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 207511576; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.36801347 d; morphology coefficient=0.60789263. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-207511576",
+      "target_id": "207511576"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 393819751; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.0517787 d; morphology coefficient=0.8028866. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-393819751",
+      "target_id": "393819751"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 436103335; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.70428542 d; morphology coefficient=0.4235735. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-436103335",
+      "target_id": "436103335"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 379783522; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.45009447 d; morphology coefficient=0.48591942. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-379783522",
+      "target_id": "379783522"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 424719589; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.64074568 d; morphology coefficient=0.12356469. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15,
+        16,
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-424719589",
+      "target_id": "424719589"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 440676745; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=14.9768053 d; morphology coefficient=0.12944031. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-440676745",
+      "target_id": "440676745"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 181862539; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.14453975 d; morphology coefficient=0.56425303. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-181862539",
+      "target_id": "181862539"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 426588729; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.42585512 d; morphology coefficient=0.5387445. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-426588729",
+      "target_id": "426588729"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 469924870; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.0725582 d; morphology coefficient=0.89398706. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16,
+        17
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-469924870",
+      "target_id": "469924870"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 258314976; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.96626826 d; morphology coefficient=0.43684822. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-258314976",
+      "target_id": "258314976"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 397361078; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.20772154 d; morphology coefficient=0.7585629. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-397361078",
+      "target_id": "397361078"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 470358759; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=19.2083565 d; morphology coefficient=0.14778975. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-470358759",
+      "target_id": "470358759"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 341029467; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=13.2085964 d; morphology coefficient=0.20671809. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-341029467",
+      "target_id": "341029467"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 50897998; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.48537486 d; morphology coefficient=0.62063736. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-50897998",
+      "target_id": "50897998"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 365198355; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.558749983 d; morphology coefficient=0.7746453000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-365198355",
+      "target_id": "365198355"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 139825840; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.68816343 d; morphology coefficient=0.50749207. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        27,
+        28
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-139825840",
+      "target_id": "139825840"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 62702862; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.15130335 d; morphology coefficient=0.90823567. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-62702862",
+      "target_id": "62702862"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 229804573; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.46409377 d; morphology coefficient=0.6290914000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        27,
+        28
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-229804573",
+      "target_id": "229804573"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 70442570; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=11.5269229 d; morphology coefficient=0.30311609999999994. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        28
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-70442570",
+      "target_id": "70442570"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 435715608; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.3886147 d; morphology coefficient=0.32064570000000003. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-435715608",
+      "target_id": "435715608"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 149861542; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.65863523 d; morphology coefficient=0.44405115. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        31
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-149861542",
+      "target_id": "149861542"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 453012065; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=13.3886087 d; morphology coefficient=0.6172799. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-453012065",
+      "target_id": "453012065"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 93997745; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.12448505 d; morphology coefficient=0.9051906999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        9,
+        35,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-93997745",
+      "target_id": "93997745"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 275259749; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.46723142 d; morphology coefficient=0.44837955. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18,
+        19,
+        24,
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-275259749",
+      "target_id": "275259749"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 322650462; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.979273392 d; morphology coefficient=0.46876866. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-322650462",
+      "target_id": "322650462"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 103566595; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.19445029 d; morphology coefficient=0.8436419. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19,
+        25,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-103566595",
+      "target_id": "103566595"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 282270717; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.74051226 d; morphology coefficient=0.63591814. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        33
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-282270717",
+      "target_id": "282270717"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 169815759; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=12.4274859 d; morphology coefficient=0.54648435. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-169815759",
+      "target_id": "169815759"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 236973844; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.29803076 d; morphology coefficient=0.40054609999999996. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15,
+        17,
+        21,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-236973844",
+      "target_id": "236973844"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 168384614; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.26769884 d; morphology coefficient=0.63321877. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-168384614",
+      "target_id": "168384614"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 129538133; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=12.0919522 d; morphology coefficient=0.23664050000000003. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-129538133",
+      "target_id": "129538133"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 172171873; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.52508704 d; morphology coefficient=0.5023217999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        20
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-172171873",
+      "target_id": "172171873"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 396903513; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.16860414 d; morphology coefficient=0.5219127. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-396903513",
+      "target_id": "396903513"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 409455615; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.21921424 d; morphology coefficient=0.6450585. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16,
+        17
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-409455615",
+      "target_id": "409455615"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 11799874; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.25792732 d; morphology coefficient=0.3655538. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        20
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-11799874",
+      "target_id": "11799874"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 126586580; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.92733319 d; morphology coefficient=0.5530024. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-126586580",
+      "target_id": "126586580"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 323292655; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.66988385 d; morphology coefficient=0.5954646. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12,
+        13,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-323292655",
+      "target_id": "323292655"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 11799872; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.25785743 d; morphology coefficient=0.36379957. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        20
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-11799872",
+      "target_id": "11799872"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 306410072; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.36203454 d; morphology coefficient=0.5511825. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        11,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-306410072",
+      "target_id": "306410072"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 148158540; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.8495522 d; morphology coefficient=0.5438221999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-148158540",
+      "target_id": "148158540"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 181463644; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.72735583 d; morphology coefficient=0.5996100999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-181463644",
+      "target_id": "181463644"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 60658382; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.75048191 d; morphology coefficient=0.24265409. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-60658382",
+      "target_id": "60658382"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 63315565; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.855352318 d; morphology coefficient=0.60409117. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15,
+        16
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-63315565",
+      "target_id": "63315565"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 56332484; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.922555781 d; morphology coefficient=0.6340729. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        34,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-56332484",
+      "target_id": "56332484"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 66563761; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.40575625 d; morphology coefficient=0.5775536. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        33
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-66563761",
+      "target_id": "66563761"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 394508465; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.40217286 d; morphology coefficient=0.46926564. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-394508465",
+      "target_id": "394508465"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 22937402; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.38268275 d; morphology coefficient=0.48350736. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        33,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-22937402",
+      "target_id": "22937402"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 120258315; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.91153476 d; morphology coefficient=0.5399035. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-120258315",
+      "target_id": "120258315"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 123042728; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.3128307 d; morphology coefficient=0.6353426. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-123042728",
+      "target_id": "123042728"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 91638523; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.16643418 d; morphology coefficient=0.48420683. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        3,
+        30
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-91638523",
+      "target_id": "91638523"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 123153249; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.87842385 d; morphology coefficient=0.6743720999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        8,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-123153249",
+      "target_id": "123153249"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 30562668; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.85224209 d; morphology coefficient=0.4776265. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        9,
+        35,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-30562668",
+      "target_id": "30562668"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 301956407; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.83125717 d; morphology coefficient=0.45076358. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12,
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-301956407",
+      "target_id": "301956407"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 455463415; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.85205096 d; morphology coefficient=0.34903932. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-455463415",
+      "target_id": "455463415"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 394728064; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=42.6178946 d; morphology coefficient=0.15708792. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12,
+        38,
+        39
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-394728064",
+      "target_id": "394728064"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 59091000; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=14.7894291 d; morphology coefficient=0.23757150000000002. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-59091000",
+      "target_id": "59091000"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 150284425; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.00444619 d; morphology coefficient=0.37673062. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        8,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-150284425",
+      "target_id": "150284425"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 214299836; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.74246071 d; morphology coefficient=0.86545146. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-214299836",
+      "target_id": "214299836"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 243475355; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.09578539 d; morphology coefficient=0.55822366. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-243475355",
+      "target_id": "243475355"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 302771290; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.19523888 d; morphology coefficient=0.5637611. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18,
+        19,
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-302771290",
+      "target_id": "302771290"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 59739922; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.55434713 d; morphology coefficient=0.5570977. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-59739922",
+      "target_id": "59739922"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 169168102; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.49960124 d; morphology coefficient=0.45393459999999997. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-169168102",
+      "target_id": "169168102"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 50758245; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.51473472 d; morphology coefficient=0.560822. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-50758245",
+      "target_id": "50758245"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 147026702; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.0728219 d; morphology coefficient=0.45630124. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9,
+        10
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-147026702",
+      "target_id": "147026702"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 140066660; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.66422924 d; morphology coefficient=0.96111095. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        9,
+        34,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-140066660",
+      "target_id": "140066660"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 32268776; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.476214051 d; morphology coefficient=0.60663724. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        3,
+        30
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-32268776",
+      "target_id": "32268776"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 340110295; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.6544428 d; morphology coefficient=0.8974687. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-340110295",
+      "target_id": "340110295"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 53292822; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.28988958 d; morphology coefficient=0.5380199999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        34,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-53292822",
+      "target_id": "53292822"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 177631209; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.14420813 d; morphology coefficient=0.35953897. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-177631209",
+      "target_id": "177631209"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 441422527; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.93626115 d; morphology coefficient=0.8984754. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-441422527",
+      "target_id": "441422527"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 270622446; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.44506894 d; morphology coefficient=0.5247795999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        2,
+        29
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-270622446",
+      "target_id": "270622446"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 146039664; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=17.8368584 d; morphology coefficient=0.11021119. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-146039664",
+      "target_id": "146039664"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 410418820; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=8.56952599 d; morphology coefficient=0.23104464. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12,
+        13,
+        27
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-410418820",
+      "target_id": "410418820"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 2236015; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.13466039 d; morphology coefficient=0.37343228. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-2236015",
+      "target_id": "2236015"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 449650980; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.27838467 d; morphology coefficient=0.78035164. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-449650980",
+      "target_id": "449650980"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 37435039; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.19856921 d; morphology coefficient=0.47335. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-37435039",
+      "target_id": "37435039"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 259901124; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.456083808 d; morphology coefficient=0.88300645. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        2,
+        13,
+        27,
+        28,
+        29
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-259901124",
+      "target_id": "259901124"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 38125059; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.22992108 d; morphology coefficient=0.35991842. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-38125059",
+      "target_id": "38125059"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 370960295; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.09408207 d; morphology coefficient=0.8733040000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9,
+        10
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-370960295",
+      "target_id": "370960295"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 391051349; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=6.00388472 d; morphology coefficient=0.7125411. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-391051349",
+      "target_id": "391051349"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 457173024; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.798916226 d; morphology coefficient=0.6430188. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-457173024",
+      "target_id": "457173024"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 268944966; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.39116117 d; morphology coefficient=0.6150943. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        18,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-268944966",
+      "target_id": "268944966"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 353129911; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.97181719 d; morphology coefficient=0.29759386. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-353129911",
+      "target_id": "353129911"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 121945407; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.905570348 d; morphology coefficient=0.4948026. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-121945407",
+      "target_id": "121945407"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 365089053; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.775562216 d; morphology coefficient=0.6892286999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-365089053",
+      "target_id": "365089053"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 150442264; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.98168756 d; morphology coefficient=0.67112744. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        27,
+        28,
+        29,
+        30,
+        32,
+        33,
+        35,
+        36,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-150442264",
+      "target_id": "150442264"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 428102518; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=10.9206219 d; morphology coefficient=0.27247876. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-428102518",
+      "target_id": "428102518"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 44222598; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.16186471 d; morphology coefficient=0.76813984. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-44222598",
+      "target_id": "44222598"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 290476605; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.74425885 d; morphology coefficient=0.15771091. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-290476605",
+      "target_id": "290476605"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 339566276; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.24031863 d; morphology coefficient=0.6460073000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-339566276",
+      "target_id": "339566276"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 357358259; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.4961588 d; morphology coefficient=0.5225866. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-357358259",
+      "target_id": "357358259"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 188512866; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.68148997 d; morphology coefficient=0.5306095000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        21
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-188512866",
+      "target_id": "188512866"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 296449358; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.335137862 d; morphology coefficient=0.94346094. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9,
+        10,
+        35,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-296449358",
+      "target_id": "296449358"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 282925798; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.44401913 d; morphology coefficient=0.5713465999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15,
+        16,
+        21,
+        22,
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-282925798",
+      "target_id": "282925798"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 24733359; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.378541912 d; morphology coefficient=0.9028193000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        9,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-24733359",
+      "target_id": "24733359"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 135443051; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.879306726 d; morphology coefficient=0.58374065. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-135443051",
+      "target_id": "135443051"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 348517784; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.11087136 d; morphology coefficient=0.4849719. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-348517784",
+      "target_id": "348517784"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 388843945; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.20958202 d; morphology coefficient=0.3677519. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-388843945",
+      "target_id": "388843945"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 159636127; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.814694126 d; morphology coefficient=0.63083756. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15,
+        16,
+        22,
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-159636127",
+      "target_id": "159636127"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 49418981; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.56774514 d; morphology coefficient=0.5123372. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-49418981",
+      "target_id": "49418981"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 418295363; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.04688077 d; morphology coefficient=0.5365326. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-418295363",
+      "target_id": "418295363"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 18028547; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.39912199 d; morphology coefficient=0.12440008. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-18028547",
+      "target_id": "18028547"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 266394699; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.77554444 d; morphology coefficient=0.41700485. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-266394699",
+      "target_id": "266394699"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 173710176; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.61884657 d; morphology coefficient=0.75964165. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16,
+        17
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-173710176",
+      "target_id": "173710176"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 341258182; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.48990919 d; morphology coefficient=0.43283364. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-341258182",
+      "target_id": "341258182"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 231048083; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.317909044 d; morphology coefficient=1.008364. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        2,
+        3,
+        29,
+        30
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-231048083",
+      "target_id": "231048083"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 172529744; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=9.01198055 d; morphology coefficient=0.22276081. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        21
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-172529744",
+      "target_id": "172529744"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 190390679; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=6.05153443 d; morphology coefficient=0.53786504. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        9
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-190390679",
+      "target_id": "190390679"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 275658545; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.98461134 d; morphology coefficient=0.9867505. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-275658545",
+      "target_id": "275658545"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 26432264; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.05005258 d; morphology coefficient=0.7421622. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-26432264",
+      "target_id": "26432264"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 294327312; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.918546162 d; morphology coefficient=0.58452344. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        4,
+        5,
+        6,
+        7,
+        9
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-294327312",
+      "target_id": "294327312"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 270371961; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.36818911 d; morphology coefficient=0.37825847. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        4,
+        31
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-270371961",
+      "target_id": "270371961"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 141148940; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.73030982 d; morphology coefficient=0.552408. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-141148940",
+      "target_id": "141148940"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 125958765; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.61735815 d; morphology coefficient=1.0250237. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-125958765",
+      "target_id": "125958765"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 55404385; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.95205132 d; morphology coefficient=0.32447788. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        27,
+        28,
+        29,
+        31,
+        32,
+        34,
+        35,
+        36,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-55404385",
+      "target_id": "55404385"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 84342725; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.69869827 d; morphology coefficient=0.6342601. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-84342725",
+      "target_id": "84342725"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 371066950; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.631279302 d; morphology coefficient=0.7798594. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-371066950",
+      "target_id": "371066950"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 384812248; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.36536437 d; morphology coefficient=0.6627166. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18,
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-384812248",
+      "target_id": "384812248"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 24400247; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=7.21796409 d; morphology coefficient=0.23464775. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        6,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-24400247",
+      "target_id": "24400247"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 410359089; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.752321991 d; morphology coefficient=0.8919741. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        9
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-410359089",
+      "target_id": "410359089"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 14948284; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.70368656 d; morphology coefficient=0.54451936. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-14948284",
+      "target_id": "14948284"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 63454475; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.86747677 d; morphology coefficient=0.5980810000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-63454475",
+      "target_id": "63454475"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 393639812; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.7381397 d; morphology coefficient=0.59346104. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-393639812",
+      "target_id": "393639812"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 8669966; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.39445431 d; morphology coefficient=0.9000155999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-8669966",
+      "target_id": "8669966"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 27112021; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.407991118 d; morphology coefficient=0.9565135. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-27112021",
+      "target_id": "27112021"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 377506471; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.7747462 d; morphology coefficient=0.6488242. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        18,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-377506471",
+      "target_id": "377506471"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 5205367; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.99281264 d; morphology coefficient=0.48475105. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-5205367",
+      "target_id": "5205367"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 125267683; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.61022949 d; morphology coefficient=0.6330614999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-125267683",
+      "target_id": "125267683"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 278413303; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.84265298 d; morphology coefficient=0.89866877. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12,
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-278413303",
+      "target_id": "278413303"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 191769621; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=16.9850358 d; morphology coefficient=0.14456244. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-191769621",
+      "target_id": "191769621"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 442918617; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.66425073 d; morphology coefficient=0.48727623. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-442918617",
+      "target_id": "442918617"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 234933888; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=6.911349 d; morphology coefficient=0.30842070000000005. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        33
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-234933888",
+      "target_id": "234933888"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 291145873; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.23940615 d; morphology coefficient=0.50495625. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-291145873",
+      "target_id": "291145873"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 128886984; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.63398608 d; morphology coefficient=0.7818236999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-128886984",
+      "target_id": "128886984"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 366557556; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.448776307 d; morphology coefficient=0.95093405. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        18,
+        24,
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-366557556",
+      "target_id": "366557556"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 49547177; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.616987609 d; morphology coefficient=0.7681682. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        33
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-49547177",
+      "target_id": "49547177"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 348759511; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.71606937 d; morphology coefficient=0.15856063. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8,
+        35
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-348759511",
+      "target_id": "348759511"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 341550561; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.10571828 d; morphology coefficient=0.8473511999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        8,
+        9,
+        34,
+        35,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-341550561",
+      "target_id": "341550561"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 12790306; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.18472913 d; morphology coefficient=0.6090963. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-12790306",
+      "target_id": "12790306"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 126336928; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.698038513 d; morphology coefficient=0.65612483. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-126336928",
+      "target_id": "126336928"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 150388753; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.41355157 d; morphology coefficient=0.8691517. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        15,
+        16,
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-150388753",
+      "target_id": "150388753"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 468792279; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.78157606 d; morphology coefficient=0.30354857. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-468792279",
+      "target_id": "468792279"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 403153647; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.33774468 d; morphology coefficient=0.27672252. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-403153647",
+      "target_id": "403153647"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 420645952; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.84651621 d; morphology coefficient=0.69286054. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19,
+        25,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-420645952",
+      "target_id": "420645952"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 164674435; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.74181859 d; morphology coefficient=1.0025948. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-164674435",
+      "target_id": "164674435"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 219346326; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.425738879 d; morphology coefficient=0.74287987. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        4,
+        5
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-219346326",
+      "target_id": "219346326"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 470966839; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.14579563 d; morphology coefficient=0.4234134. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        20
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-470966839",
+      "target_id": "470966839"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 450104319; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.51057077 d; morphology coefficient=0.5381943. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-450104319",
+      "target_id": "450104319"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 62573638; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.71601515 d; morphology coefficient=0.37286714. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-62573638",
+      "target_id": "62573638"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 219707463; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.50708603 d; morphology coefficient=0.18105593. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        20
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-219707463",
+      "target_id": "219707463"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 348759510; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.71613482 d; morphology coefficient=0.16676316. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-348759510",
+      "target_id": "348759510"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 377390037; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.80448961 d; morphology coefficient=0.81343794. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        21
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-377390037",
+      "target_id": "377390037"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 48084398; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.12180694 d; morphology coefficient=0.5543767. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-48084398",
+      "target_id": "48084398"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 11286209; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.19093357 d; morphology coefficient=0.5722378. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        32
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-11286209",
+      "target_id": "11286209"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 406758816; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.06333684 d; morphology coefficient=0.5420219000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        21
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-406758816",
+      "target_id": "406758816"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 26489741; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.93348449 d; morphology coefficient=0.38847053. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-26489741",
+      "target_id": "26489741"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 57652994; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.27853013 d; morphology coefficient=0.36655659999999995. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        36
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-57652994",
+      "target_id": "57652994"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 5969274; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.05796724 d; morphology coefficient=0.5279874. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-5969274",
+      "target_id": "5969274"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 3311888; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.0010398 d; morphology coefficient=0.7202371999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        19
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-3311888",
+      "target_id": "3311888"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 353863850; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.12918084 d; morphology coefficient=0.7858956. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16,
+        17,
+        24
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-353863850",
+      "target_id": "353863850"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 270622440; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.44506003 d; morphology coefficient=0.5051074999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        2,
+        29
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-270622440",
+      "target_id": "270622440"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 13351941; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.58060875 d; morphology coefficient=0.5375135. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-13351941",
+      "target_id": "13351941"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 392909786; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.203833719 d; morphology coefficient=0.6317394000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-392909786",
+      "target_id": "392909786"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 181233908; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.79753153 d; morphology coefficient=0.6334863000000001. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        13
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-181233908",
+      "target_id": "181233908"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 266769522; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.536158992 d; morphology coefficient=0.73504597. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        3
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-266769522",
+      "target_id": "266769522"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 31134762; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.78725259 d; morphology coefficient=0.45493690000000003. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-31134762",
+      "target_id": "31134762"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 141148944; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.86524848 d; morphology coefficient=0.5701418. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        22
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-141148944",
+      "target_id": "141148944"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 139468902; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.454734218 d; morphology coefficient=0.7409791. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        28
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-139468902",
+      "target_id": "139468902"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 453059861; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.772054096 d; morphology coefficient=0.6061113. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-453059861",
+      "target_id": "453059861"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 113061684; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.69322945 d; morphology coefficient=0.88219905. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        13,
+        27
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-113061684",
+      "target_id": "113061684"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 256352113; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.468076842 d; morphology coefficient=0.75170696. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        16,
+        17,
+        18,
+        24,
+        25
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-256352113",
+      "target_id": "256352113"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 74528791; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.80207547 d; morphology coefficient=0.58822215. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        8
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-74528791",
+      "target_id": "74528791"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 42705187; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.13032753 d; morphology coefficient=0.6201707. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-42705187",
+      "target_id": "42705187"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 417175621; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.33272491 d; morphology coefficient=0.34122854. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-417175621",
+      "target_id": "417175621"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 64608449; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.25024651 d; morphology coefficient=0.7933445. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        7,
+        33,
+        34
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-64608449",
+      "target_id": "64608449"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 448913059; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.367772182 d; morphology coefficient=0.98559415. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11,
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-448913059",
+      "target_id": "448913059"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 445921773; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.43096893 d; morphology coefficient=0.5743256999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        5
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-445921773",
+      "target_id": "445921773"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 359677968; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.617472006 d; morphology coefficient=0.7518111. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-359677968",
+      "target_id": "359677968"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 92774987; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=24.2391808 d; morphology coefficient=0.09361163. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-92774987",
+      "target_id": "92774987"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 274509791; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=1.19884991 d; morphology coefficient=0.6037326. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        23,
+        24,
+        25,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-274509791",
+      "target_id": "274509791"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 409523757; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=3.72752726 d; morphology coefficient=0.45268342. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-409523757",
+      "target_id": "409523757"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 231826813; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.900754255 d; morphology coefficient=0.5932996. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        1,
+        2,
+        28,
+        29
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-231826813",
+      "target_id": "231826813"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 424508303; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.08333589 d; morphology coefficient=0.52683115. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-424508303",
+      "target_id": "424508303"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 241017747; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=2.32939713 d; morphology coefficient=0.54394937. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        17,
+        18
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-241017747",
+      "target_id": "241017747"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 266769521; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.536167242 d; morphology coefficient=0.7969126999999999. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        3,
+        30
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-266769521",
+      "target_id": "266769521"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 319936228; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=9.64643942 d; morphology coefficient=0.32125762. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        10,
+        11,
+        37
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-319936228",
+      "target_id": "319936228"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 229676244; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.105983609 d; morphology coefficient=0.62888026. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-229676244",
+      "target_id": "229676244"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 143117999; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=5.70074984 d; morphology coefficient=0.18893233. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        6,
+        33
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-143117999",
+      "target_id": "143117999"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 308085294; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=4.33291383 d; morphology coefficient=0.80714405. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        2,
+        5,
+        9,
+        10,
+        11,
+        12
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-308085294",
+      "target_id": "308085294"
+    },
+    {
+      "ambiguous": false,
+      "evidence_identifier": "TIC 120016; TESS-EBs signal 1",
+      "evidence_uri": "https://archive.stsci.edu/hlsp/tess-ebs",
+      "label": "eclipse_like",
+      "label_source": "tess_eb_catalog",
+      "notes": "Curated TESS-EBs catalog system; period=0.326370752 d; morphology coefficient=0.8491125. Label concerns signal morphology; source location remains unclassified.",
+      "review_status": "verified",
+      "sectors": [
+        11
+      ],
+      "snapshot_date": "2026-10-31",
+      "source_group_id": "tic-120016",
+      "target_id": "120016"
+    }
+  ],
+  "schema_version": "1"
+}

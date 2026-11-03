@@ -1,0 +1,17 @@
+# Frozen before the second, development-only quadrature study.
+schema_version = "1"
+integration_method = "simpson"
+period_days = 3.0
+semi_major_axis_stellar_radii = 10.0
+radius_ratios = [0.02, 0.1]
+impact_parameters = [0.0, 0.899999, 0.9, 0.900001]
+exposure_minutes = [2.0, 10.0, 30.0]
+limb_darkening = [0.3, 0.22]
+sample_factors = [5, 11, 21, 51, 101]
+reference_points = 2001
+reference_check_points = 1001
+time_start_days = -0.2
+time_end_days = 0.2
+time_points = 161
+reference_tolerance_ppm = 0.1
+comparison_tolerance_ppm = 1.0

@@ -123,3 +123,14 @@ def test_locked_config_frozen_checksum() -> None:
     assert len(sha256) == 64
     # The hash is recorded and must not change silently
     assert "target_split = \"test\"" in content.decode("utf-8")
+
+
+def test_legacy_evaluator_cannot_open_inputs_or_write_results(tmp_path: Path) -> None:
+    import pytest
+
+    from transiteye.evaluation.runner import run_locked_evaluation
+
+    output = tmp_path / "results"
+    with pytest.raises(RuntimeError, match="legacy locked evaluator is disabled"):
+        run_locked_evaluation(tmp_path / "missing.toml", output)
+    assert not output.exists()

@@ -1,0 +1,990 @@
+{
+  "assignments": [
+    {
+      "source_group_id": "tic-102643159",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-103566595",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-11046410",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-11286209",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-113061684",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-11491822",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-11799872",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-11799874",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-120016",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-120258315",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-121945407",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-123042728",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-123153249",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-125267683",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-125958765",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-126336928",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-126586580",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-12790306",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-128886984",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-129538133",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-13351941",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-135443051",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-139468902",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-139825840",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-140066660",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-140288359",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-141148940",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-141148944",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-141332108",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-143117999",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-146039664",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-147026702",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-148158540",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-14948284",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-149861542",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-150284425",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-150388753",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-150442264",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-159636127",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-160268882",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-164674435",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-165991532",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-168384614",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-169168102",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-169815759",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-172171873",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-172529744",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-173710176",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-177631209",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-18028547",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-181233908",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-181463644",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-181862539",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-182776916",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-188512866",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-190390679",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-191769621",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-199661915",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-207511576",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-214299836",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-219346326",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-219707463",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-2236015",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-22937402",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-229676244",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-229804573",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-231048083",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-231826813",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-234933888",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-236973844",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-241017747",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-242991317",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-243475355",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-24400247",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-24733359",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-254003502",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-256352113",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-258314976",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-25858367",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-259070502",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-259901124",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-260131665",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-26432264",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-264540478",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-264592553",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-26489741",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-26533207",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-265435357",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-266394699",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-266769521",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-266769522",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-268944966",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-270371961",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-270526513",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-270622440",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-270622446",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-27112021",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-274509791",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-274945059",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-275259749",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-275658545",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-278413303",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-279509403",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-279640088",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-282270717",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-282925798",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-283819432",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-285339013",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-286031430",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-290476605",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-291145873",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-294261093",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-294327312",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-296449358",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-299096773",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-299135660",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-301956407",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-302771290",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-303843296",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-30562668",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-306410072",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-308085294",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-309146836",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-31134762",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-319936228",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-320855910",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-322650462",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-32268776",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-323292655",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-323968843",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-3311888",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-338104678",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-338465029",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-339566276",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-339568213",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-340110295",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-341029467",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-341258182",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-341550561",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-346783960",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-348517784",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-348759510",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-348759511",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-353129911",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-353863850",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-357040925",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-357358259",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-358232450",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-359677968",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-365089053",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-365198355",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-366557556",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-370960295",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-371066950",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-37435039",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-377390037",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-377506471",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-379783522",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-38125059",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-384812248",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-388843945",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-39074957",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-391051349",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-392909786",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-393639812",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-393819751",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-394508465",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-394728064",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-396903513",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-397361078",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-400445441",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-403153647",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-406758816",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-407594410",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-409319605",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-409455615",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-409523757",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-410359089",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-410418820",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-417175621",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-418295363",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-420645952",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-424508303",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-424719589",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-426588729",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-42705187",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-427312571",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-427394772",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-428102518",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-435715608",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-436103335",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-440676745",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-441422527",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-44222598",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-442918617",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-445921773",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-448913059",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-449650980",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-450104319",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-453012065",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-453059861",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-455463415",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-455509774",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-457173024",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-457427613",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-458199516",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-465088681",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-468792279",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-469924870",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-470358759",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-470966839",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-48084398",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-49418981",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-49547177",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-50758245",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-50897998",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-5205367",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-53085065",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-53292822",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-55404385",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-56332484",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-57652994",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-59091000",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-5969274",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-59739922",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-60658382",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-62573638",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-62702862",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-63315565",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-63454475",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-64608449",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-65628544",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-66563761",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-70442570",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-71847068",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-73884611",
+      "split": "selection"
+    },
+    {
+      "source_group_id": "tic-74528791",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-81609273",
+      "split": "test"
+    },
+    {
+      "source_group_id": "tic-84342725",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-8669966",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-87260967",
+      "split": "calibration"
+    },
+    {
+      "source_group_id": "tic-91246422",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-91638523",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-92774987",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-93911780",
+      "split": "train"
+    },
+    {
+      "source_group_id": "tic-93997745",
+      "split": "train"
+    }
+  ],
+  "manifest_id": "29402c8c2b85b771",
+  "schema_version": "1"
+}

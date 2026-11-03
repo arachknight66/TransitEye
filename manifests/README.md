@@ -19,3 +19,34 @@ The frozen Phase 1 pilot cohort consists of:
   `calibration` (8), `selection` (8), `test` (8), or `sector_shift` (8), ensuring zero source leakage.
 - `pilot_products.v1.json`: Immutable MAST discovery product inventory for all 68 targets across their
   observed sectors (78 FITS products).
+
+The real-data expansion assembled on 2026-10-29 is documented separately from the synthetic cohort experiments:
+
+- `real_catalog_cohort.v1.labels.json`: 863 catalog-labelled TIC sources with evidence URIs and explicit catalog provenance. Counts are 250 `transit_like`, 221 `eclipse_like`, 208 `stellar_variability`, and 184 `other_artifact`; the set is not class-balanced. The 37 v2 `manual_review` records were excluded because they were generated review placeholders rather than externally sourced labels.
+- `real_catalog_cohort.v1.splits.json`: source-grouped train/calibration/selection/test assignments filtered from the v2 split snapshot; every sector for a TIC remains in that TIC's partition.
+- `real_catalog_cohort.v1.products.json`: 881 genuine MAST SPOC light-curve products from 863 distinct targets, including 18 additional real sectors downloaded during acquisition. Every entry has a SHA-256 checksum and can be resolved under `.transiteye-workspace/data/real_catalog_cohort_v1/`.
+
+The FITS files are kept outside Git. Each downloaded product was checked for a readable light-curve table and matching TIC ID and sector header. Catalog labels are evidence-backed proxies and are not equivalent to independent visual review of every light curve. The real-cohort model was trained using source-grouped train, calibration, and selection partitions, then evaluated once on the locked test split under `configs/evaluation_real_catalog.v1.toml`. Treat the result as performance against these catalog-derived proxies, not as a final scientifically adjudicated estimate. The synthetic cohort v2/v3 benchmark scores are not valid real-data performance estimates.
+
+Workspace cleanup on 2026-10-31 removed the generated v2/v3 FITS datasets and the v3 feature cache. The v2 build mixed downloaded products with class-signal-synthesized light curves, and v3 was generated from synthetic class-shaped light curves. Fifty-eight original MAST downloads from the v2 acquisition were retained separately, with checksums, in `.transiteye-workspace/data/cohort_v2_mast_originals_v1/` and `cohort_v2_mast_originals.v1.products.json`. The original v2/v3 labels and product manifests remain as historical provenance; they no longer describe complete local datasets. The pilot and real catalog cohort datasets were retained.
+
+A separate real-data expansion was acquired on 2026-10-31:
+
+- `real_catalog_cohort.v2.labels.json`: 911 new TIC source groups from a fresh NASA Exoplanet Archive TOI query; 541 `transit_like` disposition proxies, 335 `other_artifact` false-alarm/false-positive proxies, and 35 deep-false-positive `eclipse_like` proxies. These are catalog disposition/depth proxies, not independently adjudicated light-curve morphology labels. `stellar_variability` is absent from this expansion.
+- `real_catalog_cohort.v2.splits.json`: a frozen source-group split (409 train, 183 calibration, 183 selection, 136 test; manifest ID `1860a4c238736c2e`). All targets are new relative to the v1 cohort. The test partition has not been opened.
+- `real_catalog_cohort.v2.products.json`: 911 original MAST TESS light curves with SHA-256 and checked TIC/sector headers, stored under `.transiteye-workspace/data/real_catalog_cohort_v2/`. Of 918 discovered products, seven downloads failed and are listed in `real_catalog_cohort.v2.acquisition_report.json`.
+
+Model fitting on this expansion is currently blocked by the rare eclipse-like proxy class. The feature pipeline yielded only 14 eclipse examples in train, eight in calibration, and eight in selection. Fourteen training examples do not support the existing five-fold stratified grouped cross-validation safely, so the trainer's guard stopped before fitting. Do not treat this cohort as a complete four-class retraining or use the 136-source test split for tuning.
+
+A separate catalog-backed EB tranche was acquired from the MAST TESS-EBs v1.0 HLSP on 2026-10-31:
+
+- `real_catalog_tess_ebs.v1.labels.json`: 246 unique TIC source groups labelled `eclipse_like` from the curated catalog, after excluding TICs already present in the real cohorts. These labels identify known EB systems; they do not encode source location or guarantee that the strongest automatic event in a SPOC light curve is the catalogued eclipse.
+- `real_catalog_tess_ebs.v1.products.json`: 246 original SPOC light curves with SHA-256 checksums and catalog-matched sectors; files reside under `.transiteye-workspace/data/real_catalog_tess_ebs_v1/`. The raw MAST catalog and checksum are also preserved there. Five targets in the 500-target bright-source tranche had no matching SPOC product; the remaining tranche targets were not queried after the MAST service stalled.
+- `real_catalog_tess_ebs.v1.splits.json`: frozen TIC-grouped split (177 train, 20 calibration, 22 selection, 27 test; ID `29402c8c2b85b771`). Its test partition was not opened.
+- `real_catalog_tess_ebs.v1.feature_audit.json`: the fixed pipeline produced finite features for 217/219 development sources (175 train, 20 calibration, 22 selection); two train fit initializations failed. The 27-source holdout remains unopened.
+
+The retraining snapshot combines the v1 real-catalog partitions and the new EB tranche while preserving each source group's original assignment:
+
+- `real_catalog_cohort.v3.labels.json`, `real_catalog_cohort.v3.products.json`, and `real_catalog_cohort.v3.splits.json` identify 1,109 sources and 1,127 product records; split ID `ed040a75524d3c72`, product manifest ID `3dc2e59d579c4327`. Combined partitions contain 774 train, 104 calibration, 108 selection, and 123 test sources. `.transiteye-workspace/data/real_catalog_cohort_v3/` contains links only for development products; neither test partition was read during training.
+- `morphology_real_catalog_v3` was trained without synthetic augmentation or label-conditioned feature edits. It used 772 finite training vectors, 104 calibration vectors, and 108 selection vectors. Usable supports were train: 325 eclipse, 130 artifact, 142 stellar-variability, 175 transit; calibration: 44, 14, 21, 25; selection: 44, 18, 21, 25. Two EB train fit failures are recorded in the report.
+- The selected random forest achieved grouped-CV macro-F1 `0.692` and transit-like recall `0.617`; these are training-partition model-selection results, not independent performance estimates. Calibration-set Brier `0.435` and ECE `0.077` are fit-partition diagnostics only. No test split has been evaluated for this candidate.

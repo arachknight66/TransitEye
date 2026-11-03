@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
-from transiteye.__main__ import main
+import pytest
+
+from transiteye.__main__ import _settings_from_args, build_parser, main
 from transiteye.config import ensure_workspace, load_config
 from transiteye.datasets.labels import LabelRecord, LabelSource, MorphologyLabel, write_labels
 from transiteye.datasets.splits import (
@@ -11,6 +14,7 @@ from transiteye.datasets.splits import (
     SplitManifest,
     write_split_manifest,
 )
+from transiteye.execution.store import JobStore
 
 
 def test_workspace_config_creates_external_directories(tmp_path: Path) -> None:
@@ -22,6 +26,28 @@ def test_workspace_config_creates_external_directories(tmp_path: Path) -> None:
     assert config.workspace.results_directory.is_dir()
 
 
+def test_job_status_can_read_persisted_failure_details(tmp_path: Path, capsys) -> None:
+    config_path = tmp_path / "config.toml"
+    workspace = tmp_path / "workspace"
+    config_path.write_text(f'[workspace]\nroot = "{workspace}"\n', encoding="utf-8")
+    store = JobStore(workspace / "state.db")
+    store.create_job("saved", [("bad", "/bad.fits")], {})
+    store.mark_task_failed("saved:bad", "input checksum mismatch")
+    assert main(["job-status", "saved", "--config", str(config_path), "--tasks"]) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["failed_targets"] == 1
+    assert result["tasks"][0]["error_message"] == "input checksum mismatch"
+
+
+def test_empty_batch_source_is_not_reported_as_success(tmp_path: Path) -> None:
+    source = tmp_path / "empty"
+    source.mkdir()
+    config = tmp_path / "config.toml"
+    config.write_text(f'[workspace]\nroot = "{tmp_path / "workspace"}"\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="No FITS light curves"):
+        main(["run-batch", str(source), "--config", str(config)])
+
+
 def test_cli_exposes_version(capsys: object) -> None:
     try:
         main(["--version"])
@@ -29,6 +55,20 @@ def test_cli_exposes_version(capsys: object) -> None:
         assert error.code == 0
     captured = capsys.readouterr()  # type: ignore[attr-defined]
     assert "0.1.0" in captured.out
+
+
+def test_single_and_batch_cli_share_analysis_options() -> None:
+    parser = build_parser()
+    common = [
+        "--device", "cpu", "--quality-mask", "0x0", "--gap-threshold-hours", "4",
+        "--bls-min-period-days", "1", "--bls-max-period-days", "3",
+        "--bootstrap-replicates", "10", "--exposure-seconds", "120",
+    ]
+    single = _settings_from_args(parser.parse_args(["analyze-fits", "test.fits", *common]))
+    batch = _settings_from_args(parser.parse_args(["run-batch", "test.fits", *common]))
+    assert single == batch
+    assert single.quality_mask == 0
+    assert single.exposure_status == "user_supplied"
 
 
 def test_cli_validates_manifest(tmp_path: Path, capsys: object) -> None:

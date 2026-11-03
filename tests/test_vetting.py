@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 
 from transiteye.characterization.fitting import RefinedCandidate
@@ -142,6 +144,34 @@ def test_tier1_unresolved_in_crowded_field_without_pixels() -> None:
 
     assert evidence.assessment == SourceAssessment.UNRESOLVED
     assert evidence.crowdsap == 0.65
+
+
+def test_tier1_missing_centroids_or_crowding_are_not_target_consistent() -> None:
+    dual, refined = _make_vetting_fixture()
+    missing_centroid = replace(dual, prepared=replace(dual.prepared, centroid_column=None, centroid_row=None))
+    result = run_tier1_source_vetting(missing_centroid, refined)
+    assert result.assessment is SourceAssessment.UNRESOLVED
+    assert result.centroid_shift_sigma is None
+    assert result.centroid_shift_pixels is None
+    assert result.sap_to_pdcsap_depth_ratio is None
+    missing_crowding = replace(dual, prepared=replace(dual.prepared, metadata={}))
+    result = run_tier1_source_vetting(missing_crowding, refined)
+    assert result.assessment is SourceAssessment.UNRESOLVED
+    assert result.crowdsap is None
+
+
+def test_tier2_zero_difference_image_is_unresolved() -> None:
+    dual, refined = _make_vetting_fixture()
+    time = dual.prepared.time_days
+    tpf = TargetPixelData(
+        time_days=time, flux_cube=np.ones((len(time), 3, 3)), flux_err_cube=None,
+        aperture_mask=np.ones((3, 3), dtype=bool), target_pixel_coord=(1.0, 1.0),
+        provenance=dual.prepared.provenance, metadata={},
+    )
+    result = run_tier2_source_vetting(dual, refined, tpf)
+    assert result.assessment is SourceAssessment.UNRESOLVED
+    assert result.difference_image_offset_pixels is None
+    assert "no measurable" in result.summary_reason
 
 
 def test_tier2_target_consistent_with_tpf() -> None:

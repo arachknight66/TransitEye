@@ -75,6 +75,19 @@ def test_bls_detects_injected_transit() -> None:
     assert abs(bls.best_epoch_days - 2.1) < 0.2
 
 
+def test_candidate_search_respects_custom_period_range() -> None:
+    dual = _make_dual_curve(
+        num_days=8.0, cadence_minutes=20.0,
+        transit_params=((1.5, 2.0, 1.0, 10000.0),),
+    )
+    result = find_candidates(
+        dual, max_candidates=1, min_period=1.5, max_period=2.5,
+        min_duration_hours=0.5, max_duration_hours=2.0, device="cpu",
+    )
+    assert np.min(result.primary_bls.periods) >= 1.5
+    assert np.max(result.primary_bls.periods) <= 2.5
+
+
 def test_variability_search_detects_sinusoid() -> None:
     dual = _make_dual_curve(
         num_days=20.0,

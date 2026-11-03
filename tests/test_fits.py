@@ -25,6 +25,11 @@ def _write_tess_fixture(path: Path) -> None:
     table = fits.BinTableHDU.from_columns(columns)
     table.header["TIMESYS"] = "TDB"
     table.header["BJDREFI"] = 2457000
+    table.header["TIMEDEL"] = 0.01
+    table.header["NUM_FRM"] = 60
+    table.header["FRAMETIM"] = 2.0
+    table.header["INT_TIME"] = 1.98
+    table.header["READTIME"] = 0.02
     primary = fits.PrimaryHDU()
     primary.header["TICID"] = 123456
     primary.header["SECTOR"] = 42
@@ -45,6 +50,15 @@ def test_reader_preserves_delivered_cadences_and_metadata(tmp_path: Path) -> Non
     assert light_curve.provenance.sector == 42
     assert light_curve.provenance.time_system == "TDB"
     assert light_curve.provenance.checksum_sha256 is not None
+    assert light_curve.provenance.metadata["NUM_FRM"] == "60"
+    assert light_curve.provenance.metadata["TIMEDEL"] == "0.01"
+    assert light_curve.provenance.metadata["selected_flux"] == "PDCSAP_FLUX"
+    assert read_tess_light_curve(path, flux_preference="SAP_FLUX").provenance.metadata["selected_flux"] == "SAP_FLUX"
+    assert light_curve.metadata["time_resolution"] == "0.01"
+    assert light_curve.metadata["num_frames"] == "60"
+    assert light_curve.metadata["frame_time_seconds"] == "2.0"
+    assert light_curve.metadata["integration_time_seconds"] == "1.98"
+    assert "exposure_days" not in light_curve.metadata
 
 
 def test_reader_falls_back_to_sap_when_pdcsap_is_absent(tmp_path: Path) -> None:

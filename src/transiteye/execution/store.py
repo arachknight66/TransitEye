@@ -65,6 +65,17 @@ class TargetTaskRecord:
     error_message: str | None = None
 
 
+def _task_from_row(row: sqlite3.Row) -> TargetTaskRecord:
+    return TargetTaskRecord(
+        task_id=row["task_id"], job_id=row["job_id"], target_id=row["target_id"],
+        source_uri=row["source_uri"], status=TaskStatus(row["status"]),
+        attempt_count=row["attempt_count"], created_at=row["created_at"],
+        completed_at=row["completed_at"], input_sha256=row["input_sha256"],
+        bundle_path=row["bundle_path"], candidate_count=row["candidate_count"],
+        error_message=row["error_message"],
+    )
+
+
 class JobStore:
     """Thread-safe SQLite state store operating with Write-Ahead Logging (WAL)."""
 
@@ -204,34 +215,30 @@ class JobStore:
             )
             return cur.rowcount
 
-    def get_pending_tasks(self, job_id: str) -> list[TargetTaskRecord]:
-        """Fetch all remaining pending, interrupted, or retried tasks for a job."""
+    def get_pending_tasks(self, job_id: str, limit: int | None = None) -> list[TargetTaskRecord]:
+        """Fetch pending tasks; interrupted tasks must first be reset explicitly."""
         with self._get_connection() as conn:
             rows = conn.execute(
                 """
                 SELECT * FROM target_tasks
-                WHERE job_id = ? AND (status = ? OR status = ?)
-                ORDER BY created_at ASC;
+                WHERE job_id = ? AND status = ?
+                ORDER BY created_at ASC, task_id ASC
+                LIMIT ?;
                 """,
-                (job_id, TaskStatus.PENDING.value, TaskStatus.RUNNING.value),
+                (job_id, TaskStatus.PENDING.value, limit if limit is not None else -1),
             ).fetchall()
-            return [
-                TargetTaskRecord(
-                    task_id=r["task_id"],
-                    job_id=r["job_id"],
-                    target_id=r["target_id"],
-                    source_uri=r["source_uri"],
-                    status=TaskStatus(r["status"]),
-                    attempt_count=r["attempt_count"],
-                    created_at=r["created_at"],
-                    completed_at=r["completed_at"],
-                    input_sha256=r["input_sha256"],
-                    bundle_path=r["bundle_path"],
-                    candidate_count=r["candidate_count"],
-                    error_message=r["error_message"],
-                )
-                for r in rows
-            ]
+            return [_task_from_row(row) for row in rows]
+
+    def list_tasks(self, job_id: str, *, limit: int = 500, offset: int = 0) -> list[TargetTaskRecord]:
+        """Read a bounded page of persisted target records, including failures."""
+        if not 1 <= limit <= 1000 or offset < 0:
+            raise ValueError("Task page limit must be 1–1000 and offset must be nonnegative.")
+        with self._get_connection() as conn:
+            rows = conn.execute(
+                "SELECT * FROM target_tasks WHERE job_id = ? ORDER BY created_at, task_id LIMIT ? OFFSET ?",
+                (job_id, limit, offset),
+            ).fetchall()
+            return [_task_from_row(row) for row in rows]
 
     def update_job_status(
         self,
@@ -251,6 +258,40 @@ class JobStore:
                 (status.value, now, error_message, job_id),
             )
 
+    def transition_job(self, job_id: str, allowed: tuple[JobStatus, ...], status: JobStatus) -> bool:
+        """Atomically change a job only if its current state permits the transition."""
+        if not allowed:
+            return False
+        placeholders = ",".join("?" for _ in allowed)
+        with self._get_connection() as conn:
+            cursor = conn.execute(
+                f"UPDATE jobs SET status = ?, updated_at = ?, error_message = NULL "
+                f"WHERE job_id = ? AND status IN ({placeholders})",
+                (status.value, time.time(), job_id, *(item.value for item in allowed)),
+            )
+            return cursor.rowcount == 1
+
+    def retry_failed_tasks(self, job_id: str) -> int:
+        """Requeue failed tasks after a job has stopped; successful results are retained."""
+        with self._get_connection() as conn:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute("SELECT status FROM jobs WHERE job_id = ?", (job_id,)).fetchone()
+            if row is None:
+                raise KeyError(f"Job not found: {job_id}")
+            if row["status"] not in (JobStatus.COMPLETED.value, JobStatus.FAILED.value):
+                raise ValueError("Retry requires a completed or failed job.")
+            result = conn.execute(
+                "UPDATE target_tasks SET status = ?, completed_at = NULL, error_message = NULL "
+                "WHERE job_id = ? AND status = ?",
+                (TaskStatus.PENDING.value, job_id, TaskStatus.FAILED.value),
+            )
+            if result.rowcount:
+                conn.execute(
+                    "UPDATE jobs SET status = ?, failed_targets = failed_targets - ?, updated_at = ? WHERE job_id = ?",
+                    (JobStatus.PAUSED.value, result.rowcount, time.time(), job_id),
+                )
+            return result.rowcount
+
     def mark_task_running(self, task_id: str) -> None:
         """Mark task as actively running and increment attempt count."""
         with self._get_connection() as conn:
@@ -269,16 +310,17 @@ class JobStore:
         bundle_path: str,
         candidate_count: int,
         input_sha256: str | None = None,
+        error_message: str | None = None,
     ) -> None:
         """Mark task as successfully completed and increment job counter."""
         now = time.time()
         with self._get_connection() as conn:
-            conn.execute(
+            updated = conn.execute(
                 """
                 UPDATE target_tasks
                 SET status = ?, completed_at = ?, bundle_path = ?,
-                    candidate_count = ?, input_sha256 = ?, error_message = NULL
-                WHERE task_id = ?;
+                    candidate_count = ?, input_sha256 = ?, error_message = ?
+                WHERE task_id = ? AND status IN (?, ?);
                 """,
                 (
                     TaskStatus.COMPLETED.value,
@@ -286,11 +328,16 @@ class JobStore:
                     bundle_path,
                     candidate_count,
                     input_sha256,
+                    error_message,
                     task_id,
+                    TaskStatus.PENDING.value,
+                    TaskStatus.RUNNING.value,
                 ),
             )
+            if updated.rowcount != 1:
+                return
             # Update parent job completed_targets
-            job_id = task_id.split(":")[0]
+            job_id = conn.execute("SELECT job_id FROM target_tasks WHERE task_id = ?", (task_id,)).fetchone()[0]
             conn.execute(
                 """
                 UPDATE jobs
@@ -304,15 +351,18 @@ class JobStore:
         """Mark task as failed and increment job failed counter."""
         now = time.time()
         with self._get_connection() as conn:
-            conn.execute(
+            updated = conn.execute(
                 """
                 UPDATE target_tasks
                 SET status = ?, completed_at = ?, error_message = ?
-                WHERE task_id = ?;
+                WHERE task_id = ? AND status IN (?, ?);
                 """,
-                (TaskStatus.FAILED.value, now, error_message, task_id),
+                (TaskStatus.FAILED.value, now, error_message, task_id,
+                 TaskStatus.PENDING.value, TaskStatus.RUNNING.value),
             )
-            job_id = task_id.split(":")[0]
+            if updated.rowcount != 1:
+                return
+            job_id = conn.execute("SELECT job_id FROM target_tasks WHERE task_id = ?", (task_id,)).fetchone()[0]
             conn.execute(
                 """
                 UPDATE jobs

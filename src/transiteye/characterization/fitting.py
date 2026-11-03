@@ -29,6 +29,7 @@ class RefinedCandidate:
     phase_coverage: float
     trapezoid_model_curve: NDArray[np.float64]
     batman_model_curve: NDArray[np.float64] | None
+    exposure_days: float = 2.0 / 1440.0
 
 
 def evaluate_trapezoid(
@@ -42,15 +43,44 @@ def evaluate_trapezoid(
     supersample: int = 5,
     exposure_days: float = 2.0 / 1440.0,
 ) -> NDArray[np.float64]:
-    """Evaluate a symmetrical exposure-integrated trapezoid model.
+    """Evaluate a symmetric trapezoid with an exact periodic boxcar average.
 
     duration_days: Total transit duration (T1 to T4).
     ingress_fraction: Fraction of half-duration spent in ingress/egress (in [0, 1]).
+    supersample <= 1 selects instantaneous samples; larger values select the exact integral.
     """
-    if supersample <= 1:
-        offsets = np.array([0.0])
-    else:
-        offsets = np.linspace(-0.5 * exposure_days, 0.5 * exposure_days, supersample)
+    if period_days <= 0 or duration_days <= 0 or not 0 <= ingress_fraction <= 1:
+        raise ValueError("Period and duration must be positive and ingress fraction must be in [0, 1].")
+    if supersample > 1:
+        if not np.isfinite(exposure_days) or exposure_days <= 0:
+            raise ValueError("Exposure must be finite and positive for integrated samples.")
+        half_duration = 0.5 * duration_days
+        ingress = ingress_fraction * half_duration
+        flat_end = half_duration - ingress
+
+        def area_from_center(phase: NDArray[np.float64]) -> NDArray[np.float64]:
+            distance = np.minimum(np.abs(phase), half_duration)
+            area = np.minimum(distance, flat_end)
+            if ingress > 0:
+                ramp = np.maximum(distance - flat_end, 0.0)
+                area = area + ramp - ramp * ramp / (2.0 * ingress)
+            return np.sign(phase) * area
+
+        area_per_period = 2.0 * float(area_from_center(np.array([0.5 * period_days]))[0])
+
+        def cumulative(times: NDArray[np.float64]) -> NDArray[np.float64]:
+            relative = times - epoch_days
+            cycles = np.floor((relative + 0.5 * period_days) / period_days)
+            phase = relative - cycles * period_days
+            return cycles * area_per_period + area_from_center(phase)
+
+        integrated_dip = (
+            cumulative(time_days + 0.5 * exposure_days)
+            - cumulative(time_days - 0.5 * exposure_days)
+        ) / exposure_days
+        return np.asarray(baseline - depth * integrated_dip, dtype=np.float64)
+
+    offsets = np.array([0.0])
 
     # Broadcast evaluation over sub-exposure offsets
     # time shape: (N,), offsets shape: (S,) -> (N, S)
@@ -87,8 +117,11 @@ def fit_trapezoid(
     init_period: float,
     init_duration_hours: float,
     init_depth_ppm: float,
+    exposure_days: float = 2.0 / 1440.0,
 ) -> tuple[dict[str, float], NDArray[np.float64], float, float]:
     """Fit a symmetrical trapezoid model using bounded non-linear least squares."""
+    if not np.isfinite(init_depth_ppm) or not 0.0 <= init_depth_ppm <= 1_000_000.0:
+        raise ValueError("initial depth must be finite and between 0 and 1,000,000 ppm")
     weights = 1.0 / flux_err if flux_err is not None else np.ones_like(flux)
     weights = np.where(weights <= 0, 1.0, weights)
 
@@ -120,7 +153,7 @@ def fit_trapezoid(
         init_epoch + 0.2 * init_period,
         1.2 * init_period,
         max(1e-2, 3.0 * init_dur_days),
-        0.5,
+        1.0,
         0.99,
         1.05,
     ]
@@ -134,6 +167,7 @@ def fit_trapezoid(
             depth=p[3],
             ingress_fraction=p[4],
             baseline=p[5],
+            exposure_days=exposure_days,
         )
         return (f_fit - model) * w_fit
 
@@ -145,6 +179,8 @@ def fit_trapezoid(
         f_scale=0.1,
         max_nfev=300,
     )
+    if not res.success:
+        raise RuntimeError(f"trapezoid optimizer did not converge: {res.message}")
     p_opt = res.x
 
     model_curve = evaluate_trapezoid(
@@ -155,6 +191,7 @@ def fit_trapezoid(
         depth=p_opt[3],
         ingress_fraction=p_opt[4],
         baseline=p_opt[5],
+        exposure_days=exposure_days,
     )
 
     n_data = len(flux)
@@ -209,6 +246,7 @@ def fit_batman_refinement(
     init_duration_days: float,
     init_depth: float,
     u_coeffs: tuple[float, float] = (0.30, 0.22),
+    exposure_days: float = 2.0 / 1440.0,
 ) -> tuple[dict[str, float], NDArray[np.float64], float] | None:
     """Refine candidate parameters using batman quadratic limb-darkened transit model."""
     weights = 1.0 / flux_err if flux_err is not None else np.ones_like(flux)
@@ -241,7 +279,7 @@ def fit_batman_refinement(
         params.u = u_list
         params.limb_dark = "quadratic"
 
-        model = batman.TransitModel(params, time_days)
+        model = batman.TransitModel(params, time_days, supersample_factor=5, exp_time=exposure_days)
         m_flux = model.light_curve(params)
         return (flux - m_flux) * weights
 
@@ -253,6 +291,8 @@ def fit_batman_refinement(
             loss="soft_l1",
             max_nfev=200,
         )
+        if not res.success:
+            return None
         p_opt = res.x
 
         params = batman.TransitParams()
@@ -265,7 +305,7 @@ def fit_batman_refinement(
         params.w = 90.0
         params.u = u_list
         params.limb_dark = "quadratic"
-        model_obj = batman.TransitModel(params, time_days)
+        model_obj = batman.TransitModel(params, time_days, supersample_factor=5, exp_time=exposure_days)
         model_curve = model_obj.light_curve(params)
 
         n_data = len(flux)
@@ -315,6 +355,7 @@ def refine_candidate(
     batman_snr_threshold: float = 7.0,
     teff: float | None = None,
     logg: float | None = None,
+    exposure_days: float = 2.0 / 1440.0,
 ) -> RefinedCandidate:
     """Refine detected candidate with trapezoid fitting and optional batman refinement."""
     trap_params, trap_curve, chi2_nu, trap_bic = fit_trapezoid(
@@ -325,6 +366,7 @@ def refine_candidate(
         init_period=candidate.period_days or 1.0,
         init_duration_hours=candidate.duration_hours or 2.0,
         init_depth_ppm=candidate.depth_ppm or 1000.0,
+        exposure_days=exposure_days,
     )
 
     # Optional batman refinement for transit-like candidates with SNR >= batman_snr_threshold
@@ -342,6 +384,7 @@ def refine_candidate(
             init_duration_days=trap_params["duration_hours"] / 24.0,
             init_depth=trap_params["depth_ppm"] / 1e6,
             u_coeffs=u_coeffs,
+            exposure_days=exposure_days,
         )
         if batman_res is not None:
             _, batman_curve, batman_bic = batman_res
@@ -375,4 +418,5 @@ def refine_candidate(
         phase_coverage=coverage,
         trapezoid_model_curve=trap_curve,
         batman_model_curve=batman_curve,
+        exposure_days=exposure_days,
     )

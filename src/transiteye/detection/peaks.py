@@ -28,6 +28,12 @@ def find_candidates(
     max_candidates: int = 3,
     snr_threshold: float = 6.0,
     device: str = "auto",
+    min_period: float = 0.3,
+    max_period: float | None = None,
+    min_duration_hours: float = 0.5,
+    max_duration_hours: float = 12.0,
+    num_durations: int = 15,
+    frequency_factor: float = 5.0,
 ) -> DetectionResult:
     """Search a light curve for periodic transit/eclipse candidates and stellar variability.
 
@@ -85,6 +91,12 @@ def find_candidates(
         flux_detrended,
         flux_err=flux_err,
         device=device,
+        min_period=min_period,
+        max_period=max_period,
+        min_duration_hours=min_duration_hours,
+        max_duration_hours=max_duration_hours,
+        num_durations=num_durations,
+        oversample=frequency_factor,
     )
 
     candidates: list[Candidate] = []
@@ -164,6 +176,12 @@ def find_candidates(
                 curr_flux,
                 flux_err=flux_err,
                 device=device,
+                min_period=min_period,
+                max_period=max_period,
+                min_duration_hours=min_duration_hours,
+                max_duration_hours=max_duration_hours,
+                num_durations=num_durations,
+                oversample=frequency_factor,
             )
             residual_bls.append(next_bls)
             curr_bls = next_bls

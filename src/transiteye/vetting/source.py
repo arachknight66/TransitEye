@@ -23,16 +23,16 @@ class VettingEvidence:
 
     assessment: SourceAssessment
     tier: int
-    centroid_shift_sigma: float
-    centroid_shift_pixels: float
-    sap_to_pdcsap_depth_ratio: float
-    crowdsap: float
+    centroid_shift_sigma: float | None
+    centroid_shift_pixels: float | None
+    sap_to_pdcsap_depth_ratio: float | None
+    crowdsap: float | None
     difference_image_offset_pixels: float | None
     difference_image_offset_sigma: float | None
     aperture_depth_growth_ratio: float | None
     summary_reason: str
     details: dict[str, Any]
-    centroid_shift_arcsec: float = 0.0
+    centroid_shift_arcsec: float | None = None
     difference_image_offset_arcsec: float | None = None
 
 
@@ -43,8 +43,6 @@ def run_tier1_source_vetting(
     """Run Tier 1 source vetting using delivered light-curve columns and headers."""
     prepared = dual_light_curve.prepared
     time_days = prepared.time_days
-    detrended_flux = dual_light_curve.detrended_flux
-    flux_delivered = prepared.flux_normalized
 
     period_days = max(1e-4, float(candidate.period_days))
     duration_days = float(candidate.duration_hours) / 24.0
@@ -56,24 +54,22 @@ def run_tier1_source_vetting(
     # 1. CROWDSAP value
     crowd_val: Any = prepared.metadata.get("crowdsap")
     try:
-        crowdsap = float(np.clip(float(crowd_val), 0.0, 1.0)) if crowd_val is not None else 1.0
+        crowdsap = float(crowd_val) if crowd_val is not None else None
+        if crowdsap is not None and (not math.isfinite(crowdsap) or not 0 <= crowdsap <= 1):
+            crowdsap = None
     except (ValueError, TypeError):
-        crowdsap = 1.0
+        crowdsap = None
 
     # 2. SAP to PDCSAP depth ratio
-    if np.sum(in_transit_mask) >= 3:
-        d_deliv = max(0.0, 1.0 - float(np.median(flux_delivered[in_transit_mask])))
-        d_detrend = max(1e-5, 1.0 - float(np.median(detrended_flux[in_transit_mask])))
-        sap_to_pdcsap_depth_ratio = float(d_deliv / d_detrend)
-    else:
-        sap_to_pdcsap_depth_ratio = 1.0
+    # A delivered curve and its detrended version are not the independent SAP and PDCSAP products.
+    sap_to_pdcsap_depth_ratio = None
 
     # 3. Centroid Shift
     col = prepared.centroid_column
     row = prepared.centroid_row
 
-    dist_px = 0.0
-    shift_sigma = 0.0
+    dist_px: float | None = None
+    shift_sigma: float | None = None
 
     if (
         col is not None
@@ -86,8 +82,8 @@ def run_tier1_source_vetting(
         x_out = col[oot_mask]
         y_out = row[oot_mask]
 
-        valid_in = ~np.isnan(x_in) & ~np.isnan(y_in)
-        valid_out = ~np.isnan(x_out) & ~np.isnan(y_out)
+        valid_in = np.isfinite(x_in) & np.isfinite(y_in)
+        valid_out = np.isfinite(x_out) & np.isfinite(y_out)
 
         if np.sum(valid_in) >= 3 and np.sum(valid_out) >= 10:
             x_in_m, y_in_m = float(np.mean(x_in[valid_in])), float(np.mean(y_in[valid_in]))
@@ -107,16 +103,19 @@ def run_tier1_source_vetting(
 
             shift_sigma = float(dist_px / denom)
 
-    dist_arcsec = float(dist_px * TESS_PIXEL_SCALE_ARCSEC)
+    dist_arcsec = float(dist_px * TESS_PIXEL_SCALE_ARCSEC) if dist_px is not None else None
 
     # Decision policy
     # Statistically significant centroid shift indicates off-target source
-    if shift_sigma >= 3.5 and dist_px >= 0.2:
+    if shift_sigma is not None and dist_px is not None and shift_sigma >= 3.5 and dist_px >= 0.2:
         assessment = SourceAssessment.BLEND_SUSPECTED
         reason = (
             f"Statistically significant centroid shift during transit: "
             f"{dist_px:.3f} px ({dist_arcsec:.1f}\", {shift_sigma:.1f} sigma)."
         )
+    elif crowdsap is None or dist_px is None or shift_sigma is None:
+        assessment = SourceAssessment.UNRESOLVED
+        reason = "Insufficient valid centroid or crowding measurements for source localization."
     elif crowdsap < 0.85:
         # Crowded field with no pixel evidence to resolve
         assessment = SourceAssessment.UNRESOLVED
@@ -142,7 +141,7 @@ def run_tier1_source_vetting(
         difference_image_offset_sigma=None,
         aperture_depth_growth_ratio=None,
         summary_reason=reason,
-        details={"flux_depth_delivered": d_deliv if "d_deliv" in locals() else 0.0},
+        details={},
         centroid_shift_arcsec=dist_arcsec,
         difference_image_offset_arcsec=None,
     )
@@ -199,7 +198,7 @@ def run_tier2_source_vetting(
 
     x_target, y_target = tpf_data.target_pixel_coord
 
-    if total_drop > 1e-6:
+    if math.isfinite(total_drop) and total_drop > 1e-6:
         # Meshgrid of pixel coordinates (x=column, y=row)
         y_grid, x_grid = np.mgrid[0:rows, 0:cols]
         x_diff_centroid = float(np.sum(x_grid * pos_diff) / total_drop)
@@ -215,8 +214,8 @@ def run_tier2_source_vetting(
         )
         offset_sigma = float(offset_dist_px / max(0.05, (oot_pixel_std / max(1.0, total_drop))))
     else:
-        offset_dist_px = 0.0
-        offset_sigma = 0.0
+        offset_dist_px = None
+        offset_sigma = None
 
     # Concentric Aperture Growth Test
     # Core aperture: radius <= 1.2 px around target
@@ -233,7 +232,7 @@ def run_tier2_source_vetting(
 
     d_core = 0.0
     d_large = 0.0
-    growth_ratio = 1.0
+    growth_ratio = None
 
     if len(f_core) > 0 and len(f_large) > 0:
         base_core = np.nanmedian(f_core[oot_mask])
@@ -244,16 +243,19 @@ def run_tier2_source_vetting(
             if d_core > 1e-5:
                 growth_ratio = float(d_large / d_core)
 
-    diff_offset_arcsec = float(offset_dist_px * TESS_PIXEL_SCALE_ARCSEC)
+    diff_offset_arcsec = float(offset_dist_px * TESS_PIXEL_SCALE_ARCSEC) if offset_dist_px is not None else None
 
     # Tier 2 Decision Policy
-    if offset_dist_px >= 0.5 and offset_sigma >= 3.0:
+    if offset_dist_px is None or offset_sigma is None:
+        assessment = SourceAssessment.UNRESOLVED
+        reason = "Difference image has no measurable positive transit signal; source location is unresolved."
+    elif offset_dist_px >= 0.5 and offset_sigma >= 3.0:
         assessment = SourceAssessment.BLEND_SUSPECTED
         reason = (
             f"Difference image centroid is displaced from target by {offset_dist_px:.2f} px "
-            f"({diff_offset_arcsec:.1f}\", {offset_sigma:.1f} sigma), confirming an off-target blend."
+            f"({diff_offset_arcsec:.1f}\", {offset_sigma:.1f} sigma), suggesting an off-target blend."
         )
-    elif growth_ratio >= 1.4 and offset_dist_px >= 0.3:
+    elif growth_ratio is not None and growth_ratio >= 1.4 and offset_dist_px >= 0.3:
         assessment = SourceAssessment.BLEND_SUSPECTED
         reason = (
             f"Transit depth grows with larger aperture (growth ratio={growth_ratio:.2f}) "
@@ -263,13 +265,13 @@ def run_tier2_source_vetting(
         assessment = SourceAssessment.TARGET_CONSISTENT
         reason = (
             f"Difference image centroid coincides with target star within {offset_dist_px:.2f} px "
-            f"({diff_offset_arcsec:.1f}\", {offset_sigma:.1f} sigma), confirming on-target origin."
+            f"({diff_offset_arcsec:.1f}\", {offset_sigma:.1f} sigma), consistent with on-target origin."
         )
     else:
         assessment = SourceAssessment.UNRESOLVED
         reason = (
             f"Pixel difference offset {offset_dist_px:.2f} px ({diff_offset_arcsec:.1f}\") is ambiguous; "
-            f"crowdsap={tier1.crowdsap:.2f}."
+            "Additional source localization is required."
         )
 
     return VettingEvidence(

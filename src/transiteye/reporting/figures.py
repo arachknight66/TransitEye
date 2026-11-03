@@ -82,9 +82,11 @@ def generate_vetting_sheet(
     )
     dil_depth_ppm = cand.get("dilution_corrected_depth_ppm")
     snr = float(cand.get("detection_snr", 0.0))
-    sig = float(cand.get("search_significance") or 0.0)
+    sig = cand.get("search_significance")
     pred_cls = str(cand.get("predicted_class", "unknown"))
-    conf = float(cand.get("calibrated_confidence") or 0.0)
+    conf = cand.get("calibrated_confidence")
+    sig_text = f"{float(sig):.2f}" if sig is not None and np.isfinite(float(sig)) else "unavailable"
+    conf_text = f"{float(conf) * 100.0:.1f}% conf" if conf is not None and np.isfinite(float(conf)) else "unavailable"
     abstained = bool(cand.get("abstained", False))
     vetting = str(cand.get("source_assessment", "not_assessed"))
 
@@ -95,7 +97,8 @@ def generate_vetting_sheet(
 
     # 1. Full Light Curve
     ax_lc = fig.add_subplot(gs[0, :])
-    ax_lc.plot(times, raw_flux, ".", color="#9E9E9E", markersize=1.5, alpha=0.5, label="Raw PDCSAP")
+    flux_column = (meta.get("provenance") or {}).get("metadata", {}).get("selected_flux") or "delivered flux"
+    ax_lc.plot(times, raw_flux, ".", color="#9E9E9E", markersize=1.5, alpha=0.5, label=f"Normalized {flux_column}")
     ax_lc.plot(times, trend, "-", color="#E53935", linewidth=1.5, label="Biweight Trend")
     ax_lc.set_title(f"Target TIC {target_id} — Full Sector Light Curve", fontsize=12, fontweight="bold")
     ax_lc.set_xlabel("Time (BJD - 2457000)")
@@ -190,6 +193,10 @@ def generate_vetting_sheet(
         if dil_depth_ppm is not None and not np.isnan(float(dil_depth_ppm))
         else "N/A"
     )
+    shift = cand.get("centroid_shift_sigma")
+    crowd = cand.get("crowdsap_value")
+    shift_text = f"{float(shift):.2f} σ" if shift is not None and np.isfinite(float(shift)) else "unavailable"
+    crowd_text = f"{float(crowd):.3f}" if crowd is not None and np.isfinite(float(crowd)) else "unavailable"
     summary_text = (
         f"CANDIDATE CHARACTERIZATION & VETTING\n"
         f"────────────────────────────────────────────\n"
@@ -199,12 +206,12 @@ def generate_vetting_sheet(
         f"• Measured Depth:      {depth_ppm:.1f} ppm (Dilution-corr: {dil_str})\n"
         f"• Transit Duration:    {dur_h:.2f} hours\n"
         f"• Detection SNR:       {snr:.1f}\n"
-        f"• Search Significance: {sig:.2f}\n"
-        f"• Morphology Class:    {pred_cls.upper()} ({conf*100.0:.1f}% conf)\n"
-        f"• Abstention:          {'YES (Ambiguous)' if abstained else 'NO (High Confidence)'}\n"
+        f"• Search Significance: {sig_text}\n"
+        f"• Morphology Class:    {pred_cls.upper()} ({conf_text})\n"
+        f"• Abstention:          {'YES' if abstained else 'NO'}\n"
         f"• Source Attribution:  {vetting.upper()}\n"
-        f"• Centroid Shift:      {cand.get('centroid_shift_sigma', 'N/A')} σ\n"
-        f"• CROWDSAP:            {cand.get('crowdsap_value', 'N/A')}\n"
+        f"• Centroid Shift:      {shift_text}\n"
+        f"• CROWDSAP:            {crowd_text}\n"
     )
     ax_meta.text(
         0.05,

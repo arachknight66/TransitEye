@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import logging
 from pathlib import Path
 from typing import Any
@@ -29,12 +28,11 @@ from transiteye.classification.models import (
     ModelBundle,
     ModelMetadata,
 )
-from transiteye.datasets.injection import inject_synthetic_signal
 from transiteye.datasets.labels import read_labels
 from transiteye.datasets.splits import DatasetSplit, read_split_manifest
 from transiteye.detection.peaks import find_candidates
 from transiteye.domain.models import LightCurve
-from transiteye.features.extractors import extract_features
+from transiteye.features.extractors import extract_features, stellar_temperature
 from transiteye.io.fits import read_tess_light_curve
 from transiteye.preprocessing.detrend import two_pass_detrend
 from transiteye.preprocessing.representation import prepare_light_curve
@@ -232,9 +230,6 @@ def train_and_select_classifier(
     return bundle, cv_comparison
 
 
-_DEFAULT_BUNDLE_CACHE: ModelBundle | None = None
-
-
 def _extract_lc_feature_vector(
     lc: LightCurve,
     feature_names: tuple[str, ...],
@@ -273,6 +268,7 @@ def _extract_lc_feature_vector(
             dual_final.prepared.flux_error_normalized,
             crowdsap=crowdsap,
             batman_snr_threshold=7.0,
+            teff=stellar_temperature(lc),
         )
         feats_dict = extract_features(dual_final, refined, det.variability, lc)
         return np.array([float(feats_dict.get(fn, 0.0)) for fn in feature_names], dtype=np.float64)
@@ -296,66 +292,8 @@ def _augment_feature_vector_with_physical_priors(
     feature_names: tuple[str, ...],
     seed: int,
 ) -> NDArray[np.float64]:
-    """Ensure extracted real light-curve features carry consistent physical regime bounds."""
-    rng = np.random.default_rng(seed)
-    out = vec.copy()
-    f_idx = {name: i for i, name in enumerate(feature_names)}
-
-    if c_idx == 0:  # transit_like
-        if "v_shape_ratio" in f_idx:
-            out[f_idx["v_shape_ratio"]] = min(out[f_idx["v_shape_ratio"]], float(rng.uniform(0.08, 0.28)))
-        if "boxiness_index" in f_idx:
-            out[f_idx["boxiness_index"]] = max(out[f_idx["boxiness_index"]], float(rng.uniform(0.72, 0.92)))
-        if "odd_even_depth_sigma" in f_idx:
-            out[f_idx["odd_even_depth_sigma"]] = min(out[f_idx["odd_even_depth_sigma"]], float(rng.uniform(0.1, 1.4)))
-        if "max_secondary_snr" in f_idx:
-            out[f_idx["max_secondary_snr"]] = min(out[f_idx["max_secondary_snr"]], float(rng.uniform(0.2, 1.8)))
-        if "ls_max_power" in f_idx:
-            out[f_idx["ls_max_power"]] = min(out[f_idx["ls_max_power"]], float(rng.uniform(0.01, 0.14)))
-    elif c_idx == 1:  # eclipse_like
-        if "v_shape_ratio" in f_idx:
-            out[f_idx["v_shape_ratio"]] = max(out[f_idx["v_shape_ratio"]], float(rng.uniform(0.68, 0.96)))
-        if "boxiness_index" in f_idx:
-            out[f_idx["boxiness_index"]] = min(out[f_idx["boxiness_index"]], float(rng.uniform(0.04, 0.32)))
-        if "odd_even_depth_sigma" in f_idx:
-            out[f_idx["odd_even_depth_sigma"]] = max(out[f_idx["odd_even_depth_sigma"]], float(rng.uniform(4.5, 22.0)))
-        if "max_secondary_snr" in f_idx:
-            out[f_idx["max_secondary_snr"]] = max(out[f_idx["max_secondary_snr"]], float(rng.uniform(5.0, 28.0)))
-        if "secondary_to_primary_depth_ratio" in f_idx:
-            out[f_idx["secondary_to_primary_depth_ratio"]] = max(
-                out[f_idx["secondary_to_primary_depth_ratio"]], float(rng.uniform(0.22, 0.78))
-            )
-    elif c_idx == 2:  # stellar_variability
-        if "ls_max_power" in f_idx:
-            out[f_idx["ls_max_power"]] = max(out[f_idx["ls_max_power"]], float(rng.uniform(0.55, 0.94)))
-        if "ls_to_bls_period_harmonic_distance" in f_idx:
-            out[f_idx["ls_to_bls_period_harmonic_distance"]] = min(
-                out[f_idx["ls_to_bls_period_harmonic_distance"]], float(rng.uniform(0.002, 0.045))
-            )
-        if "out_of_transit_rms_to_depth_ratio" in f_idx:
-            out[f_idx["out_of_transit_rms_to_depth_ratio"]] = max(
-                out[f_idx["out_of_transit_rms_to_depth_ratio"]], float(rng.uniform(1.8, 7.5))
-            )
-        if "autocorrelation_at_period" in f_idx:
-            out[f_idx["autocorrelation_at_period"]] = max(
-                out[f_idx["autocorrelation_at_period"]], float(rng.uniform(0.42, 0.88))
-            )
-    else:  # other_artifact
-        if "asymmetry_score" in f_idx:
-            out[f_idx["asymmetry_score"]] = max(out[f_idx["asymmetry_score"]], float(rng.uniform(1.8, 6.5)))
-        if "red_noise_beta_factor" in f_idx:
-            out[f_idx["red_noise_beta_factor"]] = max(
-                out[f_idx["red_noise_beta_factor"]], float(rng.uniform(2.6, 9.5))
-            )
-        if "gap_proximity_fraction" in f_idx:
-            out[f_idx["gap_proximity_fraction"]] = max(
-                out[f_idx["gap_proximity_fraction"]], float(rng.uniform(0.32, 0.85))
-            )
-        if "in_transit_flagged_fraction" in f_idx:
-            out[f_idx["in_transit_flagged_fraction"]] = max(
-                out[f_idx["in_transit_flagged_fraction"]], float(rng.uniform(0.25, 0.80))
-            )
-    return out
+    """Reject the historical label-conditioned feature transform."""
+    raise RuntimeError("Label-conditioned feature transforms are invalid and disabled.")
 
 
 def train_from_pilot_cohort(
@@ -364,9 +302,11 @@ def train_from_pilot_cohort(
     splits_path: Path = Path("manifests/pilot_splits.v1.json"),
     output_dir: Path | None = Path(".transiteye-workspace/models/morphology_v1"),
     feature_names: tuple[str, ...] = MORPHOLOGY_FEATURE_NAMES,
-    include_synthetic_augmentation: bool = True,
+    include_synthetic_augmentation: bool = False,
 ) -> tuple[ModelBundle, dict[str, Any]]:
     """Train and calibrate the morphology classifier on real TESS FITS light curves from the pilot cohort."""
+    if include_synthetic_augmentation:
+        raise ValueError("Pilot augmentation is disabled pending independent validation.")
     labels = read_labels(labels_path)
     splits = read_split_manifest(splits_path)
     split_map = {a.source_group_id: a.split for a in splits.assignments}
@@ -405,58 +345,14 @@ def train_from_pilot_cohort(
         if vec is None:
             continue
 
-        seed = int(hashlib.sha256(f"{lbl.source_group_id}:real".encode()).hexdigest()[:8], 16)
-        vec = _augment_feature_vector_with_physical_priors(vec, c_idx, feature_names, seed)
-
         if split == DatasetSplit.TRAIN:
             x_train_real.append(vec)
             y_train_real.append(c_idx)
             g_train_real.append(lbl.source_group_id)
 
-            if include_synthetic_augmentation:
-                # Strictly on TRAIN substrates: inject controlled synthetic variant
-                inj_kind_map = {0: "transit", 1: "grazing_eb", 2: "variability"}
-                if c_idx in inj_kind_map:
-                    inj_lc = inject_synthetic_signal(
-                        substrate=lc,
-                        parent_source_group_id=lbl.source_group_id,
-                        split=DatasetSplit.TRAIN,
-                        variant_idx=1,
-                        injection_kind=inj_kind_map[c_idx],
-                    )
-                    syn_vec = _extract_lc_feature_vector(inj_lc.light_curve, feature_names)
-                    if syn_vec is not None:
-                        syn_vec = _augment_feature_vector_with_physical_priors(
-                            syn_vec, c_idx, feature_names, seed + 1
-                        )
-                        x_train_syn.append(syn_vec)
-                        y_train_syn.append(c_idx)
-                        g_train_syn.append(lbl.source_group_id)
-                else:
-                    # Deterministic noise-derivative variant for other_artifact on TRAIN
-                    rng_syn = np.random.default_rng(seed + 2)
-                    syn_vec = _augment_feature_vector_with_physical_priors(
-                        vec + rng_syn.normal(0.0, 0.08, size=len(vec)),
-                        c_idx,
-                        feature_names,
-                        seed + 2,
-                    )
-                    x_train_syn.append(syn_vec)
-                    y_train_syn.append(c_idx)
-                    g_train_syn.append(lbl.source_group_id)
         elif split == DatasetSplit.CALIBRATION:
             x_cal_list.append(vec)
             y_cal_list.append(c_idx)
-            rng_cal = np.random.default_rng(seed + 10)
-            for k in range(2):
-                vec_k = _augment_feature_vector_with_physical_priors(
-                    vec + rng_cal.normal(0.0, 0.03, size=len(vec)),
-                    c_idx,
-                    feature_names,
-                    seed + 11 + k,
-                )
-                x_cal_list.append(vec_k)
-                y_cal_list.append(c_idx)
         elif split == DatasetSplit.SELECTION:
             x_sel_list.append(vec)
             y_sel_list.append(c_idx)
@@ -500,90 +396,8 @@ def train_from_pilot_cohort(
 
 
 def get_default_morphology_model(models_dir: Path | None = None) -> ModelBundle:
-    """Retrieve or train the default baseline calibrated morphology classifier."""
-    global _DEFAULT_BUNDLE_CACHE
-    if _DEFAULT_BUNDLE_CACHE is not None:
-        return _DEFAULT_BUNDLE_CACHE
-
-    target_dir = (models_dir or Path(".transiteye-workspace/models")) / "morphology_v1"
-    if (target_dir / "model_metadata.json").is_file():
-        try:
-            bundle = ModelBundle.load(target_dir)
-            _DEFAULT_BUNDLE_CACHE = bundle
-            return bundle
-        except Exception as e:
-            logger.warning("Could not load cached model from %s: %s. Retraining.", target_dir, e)
-
-    # Synthesize deterministic baseline cohort based on physical signatures
-    rng = np.random.default_rng(20261024)
-    n_features = len(MORPHOLOGY_FEATURE_NAMES)
-    classes = list(TARGET_MORPHOLOGY_CLASSES)
-
-    def make_cohort(
-        n_sources_per_class: int, prefix: str
-    ) -> tuple[NDArray[np.float64], NDArray[np.int64], list[str]]:
-        x_list: list[NDArray[np.float64]] = []
-        y_list: list[int] = []
-        groups: list[str] = []
-
-        for c_idx in range(len(classes)):
-            for s_idx in range(n_sources_per_class):
-                gid = f"{prefix}_{c_idx}_{s_idx}"
-                for _ in range(3):
-                    feats = rng.normal(0.0, 0.5, n_features)
-                    if c_idx == 0:  # transit_like
-                        feats[0] = rng.uniform(0.05, 0.25)
-                        feats[2] = rng.uniform(0.75, 0.95)
-                        feats[4] = rng.uniform(5.0, 20.0)
-                        feats[5] = rng.uniform(0.0, 1.5)
-                        feats[10] = rng.uniform(0.0, 1.5)
-                        feats[14] = rng.uniform(0.0, 0.1)
-                        feats[18] = rng.uniform(0.9, 1.4)
-                        feats[19] = rng.uniform(10.0, 50.0)
-                    elif c_idx == 1:  # eclipse_like
-                        feats[0] = rng.uniform(0.7, 1.0)
-                        feats[2] = rng.uniform(0.0, 0.3)
-                        feats[5] = rng.uniform(5.0, 25.0)
-                        feats[10] = rng.uniform(5.0, 30.0)
-                        feats[11] = rng.uniform(0.2, 0.9)
-                        feats[13] = rng.uniform(0.05, 0.5)
-                    elif c_idx == 2:  # stellar_variability
-                        feats[14] = rng.uniform(0.5, 0.95)
-                        feats[15] = rng.uniform(0.0, 0.05)
-                        feats[16] = rng.uniform(2.0, 10.0)
-                        feats[17] = rng.uniform(0.4, 0.9)
-                    else:  # other_artifact
-                        feats[3] = rng.uniform(2.0, 8.0)
-                        feats[18] = rng.uniform(3.0, 12.0)
-                        feats[20] = rng.uniform(0.3, 0.9)
-                        feats[21] = rng.uniform(0.4, 1.0)
-
-                    x_list.append(feats)
-                    y_list.append(c_idx)
-                    groups.append(gid)
-
-        return np.array(x_list, dtype=np.float64), np.array(y_list, dtype=np.int64), groups
-
-    x_train, y_train, g_train = make_cohort(15, "train")
-    x_cal, y_cal, _ = make_cohort(4, "cal")
-    x_sel, y_sel, _ = make_cohort(4, "sel")
-
-    bundle, _ = train_and_select_classifier(
-        x_train,
-        y_train,
-        g_train,
-        x_cal,
-        y_cal,
-        x_sel,
-        y_sel,
-        feature_names=MORPHOLOGY_FEATURE_NAMES,
-        train_manifest_id="baseline_synthetic_pilot_v1",
+    """Reject implicit model selection and synthetic fallback training."""
+    raise RuntimeError(
+        "Implicit classifier selection is disabled. Pass an explicitly selected ModelBundle "
+        "to the analysis service; no model is trained automatically."
     )
-
-    try:
-        bundle.save(target_dir)
-    except Exception as e:
-        logger.warning("Could not persist default model to %s: %s", target_dir, e)
-
-    _DEFAULT_BUNDLE_CACHE = bundle
-    return bundle

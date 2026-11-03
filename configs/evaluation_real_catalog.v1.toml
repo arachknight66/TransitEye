@@ -1,0 +1,46 @@
+# Frozen on 2026-10-30 before opening the real-cohort test FITS products.
+# Do not tune thresholds, feature processing, or model choice after this evaluation.
+
+[protocol]
+protocol_id = "real_catalog_cohort_v1_locked_eval"
+version = "1.0"
+date_frozen = "2026-10-30"
+target_split = "test"
+expected_test_sources = 96
+labels_manifest = "manifests/real_catalog_cohort.v1.labels.json"
+splits_manifest = "manifests/real_catalog_cohort.v1.splits.json"
+products_manifest = "manifests/real_catalog_cohort.v1.products.json"
+data_dir = ".transiteye-workspace/data/real_catalog_cohort_v1"
+model_dir = ".transiteye-workspace/models/morphology_real_catalog_v1"
+model_id = "morphology_real_catalog_v1"
+tau_confidence = 0.4
+tau_margin = 0.1
+bootstrap_replicates = 1000
+bootstrap_seed = 20261030
+confidence_interval = 0.95
+
+[protocol.sha256]
+runner = "69fdd5f376abc8f456ff0caa0677f8c0b6ae908a3911cf8cb3fad2ae3eef6acf"
+labels_manifest = "056ec18f2537383f35c775fbdda37408f3aedb48a2ca7261df01e42181388015"
+splits_manifest = "9fe940557d47ec98d7ed6d8e0c27a6b15733164728d106420b31da3e47bf4a79"
+products_manifest = "04b285475a76e8e1130a8ce30e586a983949a54a3ec7722d1720757f851c2f9b"
+model_metadata = "aa930ff02dd56a0da22be50ef5386989f43615cd1c6f26524f4a3fd04bf093a3"
+model_estimator = "de139441237410d11603737231f7bd842c6806b90c5d24f35e85319a57aca72b"
+model_calibrator = "59338074204c8545bad72711a82e45713a29f811ecd78cb3a59194c0d4a5c9a7"
+
+[protocol.search]
+preprocessing = "prepare_light_curve; two_pass_detrend window 0.75 days"
+candidate_policy = "one candidate; BLS SNR threshold 1.5, then 0.5 only if no candidate"
+pass2 = "candidate-masked two-pass detrend"
+refinement = "refine_candidate with crowdsap and batman_snr_threshold 7.0"
+feature_order = "MORPHOLOGY_FEATURE_NAMES from the frozen model artifact"
+product_selection = "one latest-sector FITS per source, ordered by sector then local filename"
+
+[protocol.scoring]
+classification_metrics = ["accuracy", "macro_f1", "per_class_precision", "per_class_recall", "per_class_f1", "expected_calibration_error", "brier_score", "abstention_rate", "effective_coverage"]
+primary_scope = "classification conditional on a candidate feature vector being extracted"
+system_scope = "all 96 sources; no-candidate and failed extraction are abstentions and count as incorrect for class recall"
+bootstrap_group = "source_group_id"
+system_calibration = "not reported; no-candidate/failed rows have no model probabilities"
+threshold_tuning = false
+model_selection_on_test = false

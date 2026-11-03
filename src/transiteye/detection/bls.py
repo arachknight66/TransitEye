@@ -54,7 +54,7 @@ def run_bls(
     min_dur_days = min_duration_hours / 24.0
     max_dur_days = min(max_duration_hours / 24.0, 0.25 * min_period)
     if max_dur_days <= min_dur_days:
-        max_dur_days = min_dur_days * 1.5
+        max_dur_days = min(min_dur_days * 1.5, np.nextafter(min_period, 0.0))
 
     durations_days = np.geomspace(min_dur_days, max_dur_days, num_durations)
 
@@ -68,6 +68,11 @@ def run_bls(
         maximum_period=max_period,
         frequency_factor=oversample,
     )
+    # Astropy's grid may overshoot requested limits by one grid step.
+    periods = np.asarray(periods, dtype=np.float64)
+    periods = periods[(periods >= min_period) & (periods <= max_period)]
+    if periods.size == 0:
+        raise ValueError("No trial periods fall within the requested BLS search range.")
 
     # Run BLS
     power_results = model.power(periods, durations_days)

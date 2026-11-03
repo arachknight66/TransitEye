@@ -6,7 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QColor, QPalette
 from PyQt6.QtWidgets import QApplication
 
@@ -38,7 +38,13 @@ def main() -> int:
     parser.add_argument("--file", type=Path, default=None, help="Initial TESS light-curve FITS file to load")
     parser.add_argument("--bundle", type=Path, default=None, help="Initial result bundle directory to display")
     parser.add_argument("--tpf", type=Path, default=None, help="Companion Target Pixel File (TPF)")
+    parser.add_argument("--demo", action="store_true", help="Analyze a local sample light curve")
+    parser.add_argument("--demo-file", type=Path, help="Use this FITS file as the sample")
     args = parser.parse_args()
+    if args.demo_file and not args.demo:
+        parser.error("--demo-file requires --demo")
+    if args.demo and (args.file or args.bundle or args.tpf):
+        parser.error("--demo cannot be combined with --file, --bundle, or --tpf")
 
     app = QApplication(sys.argv)
     app.setApplicationName("TransitEye")
@@ -54,6 +60,8 @@ def main() -> int:
         window.display_bundle_from_path(args.bundle)
 
     window.show()
+    if args.demo:
+        QTimer.singleShot(0, lambda: window.start_sample(args.demo_file))
     return app.exec()
 
 

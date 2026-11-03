@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import QVBoxLayout, QWidget
 
 from transiteye_desktop.bundle_loader import LoadedBundle
 from transiteye_desktop.downsample import min_max_downsample
+from transiteye_desktop.widgets.safe_graphics import SafeInfiniteLine
 
 
 class LightCurvePlotWidget(QWidget):
@@ -45,7 +46,7 @@ class LightCurvePlotWidget(QWidget):
         self.p_raw.addItem(self.masked_scatter)
 
         self.detrend_curve = self.p_detrend.plot(pen=pg.mkPen(color=(70, 140, 240), width=1), name="Detrended")
-        self.baseline_line = pg.InfiniteLine(pos=1.0, angle=0, pen=pg.mkPen(color=(120, 120, 120), style=pg.QtCore.Qt.PenStyle.DashLine))
+        self.baseline_line = SafeInfiniteLine(pos=1.0, angle=0, pen=pg.mkPen(color=(120, 120, 120), style=pg.QtCore.Qt.PenStyle.DashLine))
         self.p_detrend.addItem(self.baseline_line)
 
         # Transit highlight regions

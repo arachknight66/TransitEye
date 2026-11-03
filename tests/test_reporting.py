@@ -98,3 +98,28 @@ def test_generate_vetting_sheet_png(tmp_path: Path) -> None:
     res = generate_vetting_sheet(bundle_dir, out_png, candidate_index=0)
     assert res.exists()
     assert res.stat().st_size > 10000  # Non-trivial image file
+
+
+def test_vetting_sheet_displays_missing_source_measurements(tmp_path: Path, monkeypatch) -> None:
+    from matplotlib.figure import Figure
+
+    bundle = _create_mock_bundle(tmp_path / "bundle")
+    parquet = bundle / "candidates.parquet"
+    table = pq.read_table(parquet)
+    for name in ("centroid_shift_sigma", "crowdsap_value"):
+        index = table.schema.get_field_index(name)
+        table = table.set_column(index, name, pa.array([float("nan")]))
+    pq.write_table(table, parquet)
+    captured = []
+    original = Figure.savefig
+
+    def capture(figure, *args, **kwargs):
+        captured.extend(text.get_text() for axis in figure.axes for text in axis.texts)
+        return original(figure, *args, **kwargs)
+
+    monkeypatch.setattr(Figure, "savefig", capture)
+    generate_vetting_sheet(bundle, tmp_path / "sheet.png")
+    card = next(text for text in captured if "CANDIDATE CHARACTERIZATION" in text)
+    assert "Centroid Shift:      unavailable" in card
+    assert "CROWDSAP:            unavailable" in card
+    assert "NO (High Confidence)" not in card

@@ -1,0 +1,42 @@
+{
+  "catalog_candidates": 2028,
+  "class_counts": {
+    "eclipse_like": 35,
+    "other_artifact": 335,
+    "transit_like": 541
+  },
+  "download_successes": 911,
+  "failed_downloads": [
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "388624270"
+    },
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "279947414"
+    },
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "258557847"
+    },
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "97158538"
+    },
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "224418572"
+    },
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "273690178"
+    },
+    {
+      "reason": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+      "target_id": "156991337"
+    }
+  ],
+  "mast_discovered": 918,
+  "product_manifest_id": "a99b26674959989e",
+  "split_manifest_id": "67a669c59869b903"
+}

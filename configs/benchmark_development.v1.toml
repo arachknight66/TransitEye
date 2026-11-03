@@ -1,0 +1,20 @@
+# Frozen development workload; not an independent scientific evaluation.
+schema_version = "1"
+split_manifest = "manifests/real_catalog_cohort.v1.splits.json"
+product_manifest = "manifests/real_catalog_cohort.v1.products.json"
+data_directory = ".transiteye-workspace/data/real_catalog_cohort_v1"
+target_count = 100
+source_selection = "first numeric TIC TRAIN groups with a downloaded product; newest downloaded sector"
+workers = 4
+device = "cpu"
+target_timeout_seconds = 180.0
+pause_after_finished = 10
+rss_sample_seconds = 0.25
+
+[analysis]
+max_candidates = 1
+snr_threshold = 6.0
+screen_snr_threshold = 5.0
+bootstrap_replicates = 40
+bls_min_period_days = 0.3
+bls_max_period_days = 5.0

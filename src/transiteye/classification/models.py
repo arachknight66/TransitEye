@@ -14,6 +14,7 @@ import numpy as np
 
 from transiteye.domain.models import Classification, MorphologyClass, SourceAssessment
 from transiteye.features.registry import FEATURE_MAP, FeatureFamily, validate_feature_vector
+from transiteye.provenance import model_fingerprint
 
 # The 4 target morphology classes (UNCERTAIN is reserved for abstentions)
 TARGET_MORPHOLOGY_CLASSES: tuple[MorphologyClass, ...] = (
@@ -60,6 +61,7 @@ class ModelBundle:
     metadata: ModelMetadata
     estimator: Any
     calibrator: Any | None = None
+    artifact_sha256: str | None = None
 
     def predict(
         self,
@@ -152,6 +154,7 @@ class ModelBundle:
             cal_path = bundle_dir / "calibrator.joblib"
             joblib.dump(self.calibrator, cal_path)
             meta_dict["has_calibrator"] = True
+            meta_dict["calibrator_sha256"] = hashlib.sha256(cal_path.read_bytes()).hexdigest()
         else:
             meta_dict["has_calibrator"] = False
 
@@ -166,8 +169,19 @@ class ModelBundle:
         return bundle_dir
 
     @classmethod
-    def load(cls, bundle_dir: Path) -> ModelBundle:
-        """Load model bundle from directory."""
+    def load(
+        cls,
+        bundle_dir: Path,
+        *,
+        expected_calibrator_sha256: str | None = None,
+        require_verified_calibrator: bool = False,
+    ) -> ModelBundle:
+        """Load a trusted local model and verify recorded file checksums before deserialization.
+
+        Checksums establish integrity, not trust: joblib files can execute code and must
+        originate from a trusted source. Legacy calibrated bundles need an externally
+        recorded calibrator checksum for strict loading.
+        """
         meta_path = bundle_dir / "model_metadata.json"
         if not meta_path.is_file():
             raise FileNotFoundError(f"Model metadata not found at {meta_path}")
@@ -176,7 +190,8 @@ class ModelBundle:
             meta_dict = json.load(f)
 
         has_calibrator = meta_dict.pop("has_calibrator", False)
-        meta_dict.pop("estimator_sha256", None)
+        estimator_sha256 = meta_dict.pop("estimator_sha256", None)
+        calibrator_sha256 = meta_dict.pop("calibrator_sha256", None)
 
         metadata = ModelMetadata(
             model_id=meta_dict["model_id"],
@@ -198,11 +213,24 @@ class ModelBundle:
         )
 
         est_path = bundle_dir / "estimator.joblib"
+        if not estimator_sha256 or hashlib.sha256(est_path.read_bytes()).hexdigest() != estimator_sha256:
+            raise ValueError("Model estimator checksum is missing or does not match.")
+        cal_path = bundle_dir / "calibrator.joblib"
+        expected_cal = expected_calibrator_sha256 or calibrator_sha256
+        if has_calibrator:
+            if not cal_path.is_file():
+                raise FileNotFoundError(f"Model calibrator not found at {cal_path}")
+            if require_verified_calibrator and not expected_cal:
+                raise ValueError("A trusted calibrator checksum is required for this legacy model.")
+            if expected_cal and hashlib.sha256(cal_path.read_bytes()).hexdigest() != expected_cal:
+                raise ValueError("Model calibrator checksum does not match.")
         estimator = joblib.load(est_path)
 
         calibrator = None
-        cal_path = bundle_dir / "calibrator.joblib"
-        if has_calibrator and cal_path.is_file():
+        if has_calibrator:
             calibrator = joblib.load(cal_path)
 
-        return cls(metadata=metadata, estimator=estimator, calibrator=calibrator)
+        return cls(
+            metadata=metadata, estimator=estimator, calibrator=calibrator,
+            artifact_sha256=model_fingerprint(bundle_dir),
+        )

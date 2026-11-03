@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from collections.abc import Mapping
 from pathlib import Path
@@ -16,6 +17,31 @@ from transiteye.detection.peaks import DetectionResult
 from transiteye.domain.models import AnalysisResult, MorphologyClass, as_jsonable
 from transiteye.preprocessing.detrend import DualLightCurve
 from transiteye.vetting.source import VettingEvidence
+
+_BUNDLE_COMPONENTS = ("result.json", "arrays.npz", "candidates.parquet")
+
+
+def _file_checksum(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def verify_bundle_integrity(bundle_dir: Path) -> bool:
+    """Check a v3 bundle's component hashes; older bundles are not reusable as cache entries."""
+    try:
+        manifest = json.loads((bundle_dir / "integrity.json").read_text(encoding="utf-8"))
+        checksums = manifest["sha256"]
+        return all(
+            isinstance(checksums[name], str)
+            and len(checksums[name]) == 64
+            and checksums[name] == _file_checksum(bundle_dir / name)
+            for name in _BUNDLE_COMPONENTS
+        )
+    except (OSError, ValueError, TypeError, KeyError):
+        return False
 
 
 def write_result_bundle(
@@ -98,16 +124,16 @@ def write_result_bundle(
     np.savez_compressed(target_dir / "arrays.npz", **arrays_dict)
 
     # 3. Write candidates.parquet
-    def _cls_prob(cand_id: str, m_cls: MorphologyClass) -> float:
-        cls_obj = analysis_result.classifications.get(cand_id)
-        if cls_obj is None:
-            return 0.0
-        return float(cls_obj.probabilities.get(m_cls, 0.0))
-
-    def _cls_conf(cand_id: str) -> float:
+    def _cls_prob(cand_id: str, m_cls: MorphologyClass) -> float | None:
         cls_obj = analysis_result.classifications.get(cand_id)
         if cls_obj is None or not cls_obj.probabilities:
-            return 0.0
+            return None
+        return float(cls_obj.probabilities.get(m_cls, 0.0))
+
+    def _cls_conf(cand_id: str) -> float | None:
+        cls_obj = analysis_result.classifications.get(cand_id)
+        if cls_obj is None or not cls_obj.probabilities:
+            return None
         return float(max(cls_obj.probabilities.values()))
 
     def _vet_val(cand_id: str, attr: str, feat_fallback: str | None = None) -> float:
@@ -115,12 +141,14 @@ def write_result_bundle(
             val = getattr(vetting_map[cand_id], attr, None)
             if val is not None:
                 return float(val)
+            return float("nan")
         if feat_fallback and features_map and cand_id in features_map:
             f_val = features_map[cand_id].get(feat_fallback)
             if f_val is not None:
                 return float(f_val)
         return float("nan")
 
+    result_candidates = {candidate.candidate_id: candidate for candidate in analysis_result.candidates}
     columns: dict[str, Any] = {
         "candidate_id": [c.candidate.candidate_id for c in refined_candidates],
         "period_days": [float(c.period_days) for c in refined_candidates],
@@ -136,11 +164,11 @@ def write_result_bundle(
         "observed_event_count": [
             int(c.candidate.observed_event_count or 0) for c in refined_candidates
         ],
-        "detection_snr": [float(c.candidate.detection_snr or 0.0) for c in refined_candidates],
+        "detection_snr": [
+            result_candidates[c.candidate.candidate_id].detection_snr for c in refined_candidates
+        ],
         "search_significance": [
-            float(c.candidate.search_significance)
-            if c.candidate.search_significance is not None
-            else float("nan")
+            result_candidates[c.candidate.candidate_id].search_significance
             for c in refined_candidates
         ],
         "ingress_fraction": [float(c.ingress_fraction) for c in refined_candidates],
@@ -263,7 +291,36 @@ def write_result_bundle(
     )
 
     table = pa.Table.from_pydict(columns, schema=schema)
+    refined_ids = {ref.candidate.candidate_id for ref in refined_candidates}
+    failed_rows: list[dict[str, Any]] = []
+    for candidate in analysis_result.candidates:
+        if candidate.candidate_id in refined_ids:
+            continue
+        row: dict[str, Any] = dict.fromkeys(schema.names)
+        row.update({
+            "candidate_id": candidate.candidate_id,
+            "period_days": candidate.period_days,
+            "epoch_days": candidate.epoch_days,
+            "duration_hours": candidate.duration_hours,
+            "measured_depth_ppm": candidate.depth_ppm,
+            "observed_event_count": candidate.observed_event_count,
+            "detection_snr": candidate.detection_snr,
+            "aliases_days": list(candidate.aliases_days),
+            "flags": list(candidate.flags),
+            "predicted_class": "none",
+            "abstained": True,
+            "source_assessment": "not_assessed",
+        })
+        failed_rows.append(row)
+    if failed_rows:
+        table = pa.concat_tables([table, pa.Table.from_pylist(failed_rows, schema=schema)])
     pq.write_table(table, target_dir / "candidates.parquet")
+
+    if analysis_result.schema_version == "3":
+        manifest = {"sha256": {name: _file_checksum(target_dir / name) for name in _BUNDLE_COMPONENTS}}
+        (target_dir / "integrity.json").write_text(
+            json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
 
     return target_dir
 

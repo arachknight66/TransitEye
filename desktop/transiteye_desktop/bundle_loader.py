@@ -28,9 +28,9 @@ class LoadedCandidate:
     phase_coverage: float
     aliases_days: list[float]
     detection_snr: float
-    search_significance: float
+    search_significance: float | None
     predicted_class: str
-    calibrated_confidence: float
+    calibrated_confidence: float | None
     probabilities: dict[str, float]
     abstained: bool
     source_assessment: str
@@ -191,7 +191,7 @@ def load_result_bundle(bundle_dir: Path | str) -> LoadedBundle:
             elif probs:
                 cal_conf = float(max(probs.values()))
             else:
-                cal_conf = 0.0
+                cal_conf = None
 
             raw_flags = row.get("flags")
             if isinstance(raw_flags, str):
@@ -211,7 +211,7 @@ def load_result_bundle(bundle_dir: Path | str) -> LoadedBundle:
             sig_val = (
                 float(sig_raw)
                 if sig_raw is not None and not np.isnan(float(sig_raw))
-                else 0.0
+                else None
             )
 
             c_models = cand_models.get(idx, {})
