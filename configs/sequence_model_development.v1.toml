@@ -1,0 +1,67 @@
+schema_version = 1
+protocol_id = "real_catalog_v3_candidate_sequence_cnn_v1"
+created_date = "2026-11-10"
+purpose = "Research-only candidate morphology classifier; no locked-test access or independent performance claim."
+random_seed = 42
+
+[dataset]
+labels = "manifests/real_catalog_cohort.v3.labels.json"
+splits = "manifests/real_catalog_cohort.v3.splits.json"
+products = ".transiteye-workspace/data/real_catalog_cohort_v3_dev_products.v1.json"
+data_directory = ".transiteye-workspace/data/real_catalog_cohort_v3_dev"
+product_manifest_id = "be22af78c3a062f6"
+split_manifest_id = "ed040a75524d3c72"
+fit_partition = "train"
+calibration_partition = "calibration"
+selection_partition = "selection"
+test_partitions_opened = false
+group_field = "source_group_id"
+
+[candidate_search]
+max_candidates = 1
+primary_detection_snr = 1.5
+fallback_detection_snr = 0.5
+period_min_days = 0.3
+period_max_rule = "half_observed_baseline"
+duration_min_hours = 0.5
+duration_max_hours = 12.0
+num_durations = 15
+frequency_factor = 5.0
+
+[sequence]
+alignment = "fold_primary_candidate_event"
+half_window_in_durations = 5.0
+bins = 256
+channels = ["delivered_normalized_flux", "detrended_flux", "bin_occupancy"]
+flux_scaling = "per_channel_median_centered_robust_mad_clipped_10"
+empty_bin_flux = 0.0
+empty_bin_occupancy = 0.0
+period_epoch_duration_as_model_features = false
+target_sector_catalog_and_split_metadata_as_features = false
+
+[model]
+architecture = "small_1d_residual_cnn"
+input_channels = 3
+output_classes = ["transit_like", "eclipse_like", "stellar_variability", "other_artifact"]
+weights_initialization = "pytorch_default_seeded"
+pretrained_weights = false
+dropout = 0.25
+
+[training]
+device = "cuda"
+batch_size = 32
+optimizer = "AdamW"
+learning_rate = 0.001
+weight_decay = 0.0001
+maximum_epochs = 100
+early_stopping_patience = 15
+class_weighting = "inverse_sqrt_train_support"
+calibration = "scalar_temperature_on_calibration_partition"
+selection_use = "predeclared_model_selection_only"
+synthetic_augmentation = false
+label_conditioned_transforms = false
+
+[reporting]
+required_counts = ["all_sources", "sequence_extraction_failures", "fit_failures", "class_support_by_partition"]
+claim_independent_performance = false
+label_scope = "catalog-derived source-level proxy labels; detected-candidate local morphology is unverified"

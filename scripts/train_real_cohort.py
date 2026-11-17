@@ -11,7 +11,9 @@ import argparse
 import hashlib
 import json
 import logging
+import multiprocessing
 from collections import Counter
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
@@ -35,6 +37,28 @@ from transiteye.io.manifest import read_manifest
 LOGGER = logging.getLogger("transiteye.train_real_cohort")
 
 
+def _extract_source_features(
+    task: tuple[str, str, str | None, tuple[str, ...]],
+) -> tuple[str, np.ndarray | None, str | None]:
+    """Extract one source's features in a bounded worker process."""
+    target_id, path_text, expected_sha256, feature_names = task
+    fits_path = Path(path_text)
+    try:
+        if expected_sha256:
+            digest = hashlib.sha256(fits_path.read_bytes()).hexdigest()
+            if digest != expected_sha256:
+                return target_id, None, "product checksum mismatch"
+        light_curve = read_tess_light_curve(fits_path)
+        vector = _extract_lc_feature_vector(
+            light_curve, feature_names, device="cpu"
+        )
+        if vector is None or not np.all(np.isfinite(vector)):
+            return target_id, None, "no candidate or non-finite features"
+        return target_id, vector, None
+    except Exception as exc:
+        return target_id, None, f"feature extraction error: {exc!r}"
+
+
 def train_real_cohort(
     data_dir: Path,
     products_path: Path,
@@ -42,9 +66,12 @@ def train_real_cohort(
     splits_path: Path,
     output_dir: Path,
     model_id: str = "morphology_real_catalog_v1",
+    workers: int = 4,
 ) -> dict[str, Any]:
     """Extract real features and train/calibrate without opening the locked test split."""
     labels = read_labels(labels_path)
+    if workers < 1:
+        raise ValueError("workers must be at least one.")
     splits = read_split_manifest(splits_path)
     validate_labels_against_split(labels, splits)
     split_by_group = {item.source_group_id: item.split for item in splits.assignments}
@@ -76,6 +103,8 @@ def train_real_cohort(
     total_training_labels = sum(
         split_by_group[item.source_group_id] != DatasetSplit.TEST for item in labels
     )
+    tasks: list[tuple[str, str, str | None, tuple[str, ...]]] = []
+    task_labels: list[tuple[Any, DatasetSplit]] = []
     processed = 0
     for label in labels:
         split = split_by_group[label.source_group_id]
@@ -106,32 +135,32 @@ def train_real_cohort(
                 excluded.append({"target_id": label.target_id, "reason": "product checksum mismatch"})
                 continue
 
-        try:
-            light_curve = read_tess_light_curve(fits_path)
-            vector = _extract_lc_feature_vector(light_curve, MORPHOLOGY_FEATURE_NAMES)
-        except Exception as exc:
-            LOGGER.exception("Feature extraction failed for TIC %s", label.target_id)
-            excluded.append(
-                {"target_id": label.target_id, "reason": f"feature extraction error: {exc!r}"}
-            )
-            continue
-        if vector is None or not np.all(np.isfinite(vector)):
-            excluded.append(
-                {"target_id": label.target_id, "reason": "no candidate or non-finite features"}
-            )
-            continue
-
         class_name = label.label.value
         if class_name not in class_indices:
             excluded.append(
                 {"target_id": label.target_id, "reason": f"unsupported label {class_name}"}
             )
             continue
-        feature_rows[split].append(vector)
-        labels_by_split[split].append(class_indices[class_name])
-        support_by_split[split.value][class_name] += 1
-        if split == DatasetSplit.TRAIN:
-            groups_train.append(label.source_group_id)
+        tasks.append((label.target_id, str(fits_path), expected_sha256, MORPHOLOGY_FEATURE_NAMES))
+        task_labels.append((label, split))
+
+    # Use spawn and CPU workers so CUDA state is never inherited or contended between workers.
+    # executor.map preserves the frozen label order while keeping the queue bounded internally.
+    context = multiprocessing.get_context("spawn")
+    with ProcessPoolExecutor(max_workers=workers, mp_context=context) as pool:
+        for index, (target_id, vector, error) in enumerate(pool.map(_extract_source_features, tasks), start=1):
+            if index == 1 or index % 10 == 0 or index == len(tasks):
+                LOGGER.info("Completed feature extraction %d/%d (TIC %s)", index, len(tasks), target_id)
+            if error is not None or vector is None:
+                excluded.append({"target_id": target_id, "reason": error or "feature extraction failed"})
+                continue
+            label, split = task_labels[index - 1]
+            class_name = label.label.value
+            feature_rows[split].append(vector)
+            labels_by_split[split].append(class_indices[class_name])
+            support_by_split[split.value][class_name] += 1
+            if split == DatasetSplit.TRAIN:
+                groups_train.append(label.source_group_id)
 
     for split, counts in support_by_split.items():
         LOGGER.info("Usable %s examples by class: %s", split, dict(counts))
@@ -173,7 +202,7 @@ def train_real_cohort(
             "used_synthetic_augmentation": False,
             "label_conditioned_feature_transforms": False,
             "test_split_opened": False,
-            "retrained_from_model_id": "morphology_real_catalog_v1" if model_id != "morphology_real_catalog_v1" else None,
+            "retrained_from_model_id": None,
             "usable_support_by_split": {
                 split: dict(counts) for split, counts in support_by_split.items()
             },
@@ -183,7 +212,7 @@ def train_real_cohort(
 
     report = {
         "model_id": bundle.metadata.model_id,
-        "retrained_from_model_id": "morphology_real_catalog_v1" if model_id != "morphology_real_catalog_v1" else None,
+        "retrained_from_model_id": None,
         "estimator_name": bundle.metadata.estimator_name,
         "feature_names": list(MORPHOLOGY_FEATURE_NAMES),
         "training_manifest_id": splits.manifest_id,
@@ -223,10 +252,14 @@ def main() -> int:
     parser.add_argument("--splits", type=Path, default=Path("manifests/real_catalog_cohort.v1.splits.json"))
     parser.add_argument("--output-dir", type=Path, default=Path(".transiteye-workspace/models/morphology_real_catalog_v1"))
     parser.add_argument("--model-id", default="morphology_real_catalog_v1")
+    parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    report = train_real_cohort(args.data_dir, args.products, args.labels, args.splits, args.output_dir, args.model_id)
+    report = train_real_cohort(
+        args.data_dir, args.products, args.labels, args.splits, args.output_dir,
+        args.model_id, args.workers,
+    )
     print(json.dumps({key: value for key, value in report.items() if key != "excluded_targets"}, indent=2, sort_keys=True))
     return 0
 

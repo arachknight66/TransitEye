@@ -1,0 +1,63 @@
+schema_version = 1
+protocol_id = "labeled_catalog_event_candidate_sequence_binary_v1"
+created_date = "2026-11-14"
+purpose = "Research-only binary candidate morphology model; catalog event proxies; no desktop integration or independent performance claim."
+seed = 42
+
+[labels]
+classes = ["transit_like", "eclipse_like"]
+unlabeled_products_are_negative = false
+require_candidate_to_event_match = true
+candidate_must_have_at_least_two_observed_events = true
+other_artifact_and_variability_trained = false
+
+[partitions]
+group_field = "TIC"
+existing_train_groups_remain_train = true
+existing_calibration_selection_or_test_groups = "exclude"
+new_group_allocation = [0.70, 0.10, 0.10, 0.10]
+new_group_partition_names = ["train", "calibration", "selection", "fresh_holdout"]
+fresh_holdout_opened = false
+
+[candidate_search]
+max_candidates = 3
+snr_threshold = 6.0
+min_period_days = 0.3
+max_period_rule = "half_observed_time_baseline"
+min_duration_hours = 0.5
+max_duration_hours = 12.0
+num_durations = 15
+frequency_factor = 5.0
+
+[candidate_event_match]
+relative_period_tolerance = 0.02
+period_alias_factors = [0.5, 1.0, 2.0]
+minimum_phase_tolerance_hours = 0.5
+phase_tolerance_duration_multiplier = 1.25
+eclipsing_binary_secondary_phase_allowed = true
+
+[sequence]
+alignment = "blind_detected_candidate_ephemeris"
+half_window_in_durations = 5.0
+bins = 256
+channels = ["delivered_normalized_flux", "detrended_flux", "bin_occupancy"]
+catalog_and_identity_fields_as_features = false
+
+[model]
+architecture = "small_1d_residual_cnn"
+class_count = 2
+pretrained_weights = false
+desktop_integration = false
+
+[training]
+establish_random_forest_baseline_on_same_candidates = true
+fit_partition = "train"
+calibration_partition = "calibration"
+selection_partition = "selection"
+holdout_partition = "fresh_holdout"
+device = "cuda"
+batch_size = 32
+maximum_epochs = 100
+early_stopping_patience = 15
+calibration = "scalar_temperature_on_calibration_partition"
+selection_use = "model_choice_and_early_stopping_only"

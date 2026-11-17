@@ -1,0 +1,12 @@
+schema_version = 1
+dataset_id = "mast_tess_unlabeled_50000_v1"
+target_count = 50000
+selection_seed = "transiteye-mast-unlabeled-v1"
+sector_first = 1
+sector_last = 13
+product_kind = "TESS SPOC light curve"
+inventory_source = "https://archive.stsci.edu/missions/tess/download_scripts/sector/"
+download_endpoint = "https://mast.stsci.edu/api/v0.1/Download/file/"
+source_exclusion = "All target IDs in Git manifests and local workspace FITS products"
+label_status = "unlabeled"
+supervised_training_allowed = false

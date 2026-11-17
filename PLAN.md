@@ -48,6 +48,78 @@ post-release evaluation task below; the EB holdout stays sealed until a new prot
   injection, clean-install, headless Qt, and manual Linux verification; then run the exposure/noise
   inference study and generate an auditable report. A 100-target benchmark, external reproduction,
   and independent model evaluation are not complete until their artifacts and gates exist.
+  - [x] **New experimental PyTorch sequence classifier (approved 2026-11-10):** freeze a
+    source-grouped candidate-sequence protocol and train a fresh tabular baseline on the same
+    development sources before fitting a neural model. Then train a deterministic PyTorch model
+    from scratch using detected-candidate light-curve sequences. Do not load or fine-tune historical
+    classifier weights. Use train for fitting, calibration for probability calibration, and selection
+    only for a predeclared choice; keep every test partition unopened. Record fit/extraction failures,
+    class supports, seeds, checksums, code/dependency versions, and label limitations. This is
+    experimental and does not change default desktop behavior, class taxonomy, split manifests, or
+    result schemas. Gate neural training on a successful reproducible baseline and frozen sequence
+    specification. Catalog-proxy labels do not establish candidate-local ground truth, so this
+    experiment cannot support an independent accuracy claim.
+  - [x] **User-requested 50,000-target MAST corpus:** froze and downloaded 50,000 distinct Sector
+    1–13 TESS SPOC light curves through the MAST Portal. Excluded every target already present in
+    project manifests or workspace files, kept labels explicitly unset in the frozen product
+    manifest, recorded per-product hashes and all failures, and stored data outside Git. This added
+    an unlabeled input corpus only; no
+    existing partition or classifier training protocol changes, and the corpus is not approved for
+    supervised use. Acquisition report: 50,000 successful, zero failed; 50,000 distinct TICs; 95.77
+    GB stored in the ignored workspace. All files passed FITS structure, TIC/sector, and light-curve
+    column checks. The PRIMARY FITS CHECKSUM is valid, while LIGHTCURVE/APERTURE CHECKSUM values are
+    invalid and DATASUM is absent; per-product statuses are retained in the report.
+  - [x] **User-requested TOI label cross-reference:** joined exact TIC IDs to the current ExoFOP-TESS
+    TOI table (8,175 rows, source CSV SHA-256 in the report) and required same-sector evidence.
+    Matched 139 products to 157 TOI events. Assigned 111 `transit_like` catalog proxy labels where
+    TESS and TFOPWG dispositions were both `PC`; retained 28 products with ambiguous/conflicting
+    dispositions and 49,861 without a TOI match as unlabeled. No entries were converted to negatives.
+    Wrote a separate 50,000-row Parquet label sidecar and all 157 event matches as JSONL. The frozen
+    product manifest, model features, and data partitions are unchanged; proxies are not independent
+    morphology truth.
+  - [x] **User-requested confirmed-exoplanet TESS cohort:** snapshotted 6,464 confirmed planets from
+    NASA Exoplanet Archive `pscomppars`; 6,157 records have TIC IDs representing 4,561 host TICs.
+    MAST inventory matched 4,242 host TICs to 22,880 SPOC products; 319 TIC hosts have no available
+    product. All 22,880 products downloaded with zero failures. A separate event-time overlay assigned
+    16,989 `transit_like` catalog proxies across 3,290 TICs when a confirmed transiting planet's
+    frozen transit window overlapped the product interval. The other 5,891 products remain unlabeled
+    (no confirmed transiting planet, incomplete ephemeris, or event outside interval). Preserve
+    planet-to-host relationships and group all products by host. Host confirmation alone is not a
+    morphology label; the proxy is not flux-shape adjudication. Original manifest remains unchanged.
+  - [x] **User-requested EB catalog labels:** created a separate sidecar for all 32,057 MAST SPOC
+    products. Exact TIC joins, explicit sector evidence, FITS TIC/sector checks, and primary-eclipse
+    timing against product intervals yielded 10,595 `eclipse_like` catalog proxies. The remaining
+    21,462 stay unlabeled with reasons; the known-EB table without sector data supplies context only.
+    All 32,057 catalog-match audit records and source-group IDs are retained. The frozen product
+    manifest, model features, and partitions are unchanged. The labels do not confirm curve morphology
+    or source localization. Sidecar and report are in the external workspace; generator is
+    `scripts/label_mast_eclipsing_binary_catalogs.py`.
+  - [x] **Transit-like proxies for the EB cohort:** exact-joined all 32,057 products to the frozen
+    ExoFOP-TESS TOI snapshot and applied the existing same-sector disposition policy. Found 248
+    `transit_like` TOI proxy products. Of these, 105 also carry an EB catalog proxy; those remain
+    product-level conflicts in the combined sidecar. The unambiguous combined overlay has 10,490
+    `eclipse_like` and 143 `transit_like` products; 21,424 products remain unlabeled. Event records,
+    raw dispositions, snapshot hash, and cross-catalog overlaps are retained. Candidate-level
+    morphology still requires matching detected signals to event ephemerides.
+  - [x] **Labeled-data candidate-sequence experiment (approved 2026-11-14):** clean and combine only
+    unambiguous transit-like and eclipse-like sidecars from the confirmed-planet, EB/TOI, and
+    50,000-target cohorts. Deduplicate products, resolve TIC-level class conflicts, exclude identities
+    assigned outside TRAIN in prior frozen splits, then freeze deterministic source-grouped
+    train/calibration/selection/unopened-holdout assignments before reading FITS data. Apply the blind
+    candidate search and require detected ephemerides to match a catalog event; unmatched detections
+    remain counted but unlabeled. Establish a tabular baseline on the exact same matched development
+    candidates, then train a separate binary PyTorch sequence CNN from scratch. Do not infer negatives
+    from unlabeled products, train the unsupported variability/artifact classes, tune on the holdout,
+    or integrate the experiment into the desktop. Completed 2026-11-14: froze 23,084 products
+    across 6,886 TIC groups, then blind-searched 6,255 development groups; 3,940 matched event
+    candidates and 2,315 did not. Trained on 3,162 sequences, calibrated on 392, and selected on 386.
+    CNN selection macro-F1 was 0.9254 versus 0.8158 for the same-candidate random-forest baseline.
+    After model lock, opened the 631-source holdout once for inference-only final evaluation. Blind
+    matching yielded 364 candidates (355 eclipse-like, 9 transit-like); 267 sources had no matched
+    candidate. Holdout macro-F1 was 0.7429 for the CNN and 0.6135 for the random-forest baseline;
+    balanced accuracy was 0.7693 and 0.8410 respectively. The transit-like support of nine is too
+    small for a reliable class-specific conclusion. The holdout is now spent and must not be reused
+    for tuning. Labels remain catalog proxies, not independent visual morphology adjudication.
   Correct the recorded deep-eclipse fit failure by extending the normalized trapezoid depth bound
   to 1.0 and rejecting impossible initial depths explicitly. This changes features in new analyses,
   but does not change class definitions, splits, or the existing result schema; old bundles remain

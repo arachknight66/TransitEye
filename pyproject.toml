@@ -30,6 +30,9 @@ desktop = [
     "pyqt6>=6.7,<7",
     "pyqtgraph>=0.13,<1",
 ]
+torch-cuda = [
+  "torch==2.15.0",
+]
 
 [project.scripts]
 transiteye = "transiteye.__main__:main"
@@ -57,3 +60,11 @@ line-length = 100
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 ignore = ["E501"]
+
+[[tool.uv.index]]
+name = "pytorch-cu132"
+url = "https://download.pytorch.org/whl/cu132"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu132" }

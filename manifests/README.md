@@ -50,3 +50,41 @@ The retraining snapshot combines the v1 real-catalog partitions and the new EB t
 - `real_catalog_cohort.v3.labels.json`, `real_catalog_cohort.v3.products.json`, and `real_catalog_cohort.v3.splits.json` identify 1,109 sources and 1,127 product records; split ID `ed040a75524d3c72`, product manifest ID `3dc2e59d579c4327`. Combined partitions contain 774 train, 104 calibration, 108 selection, and 123 test sources. `.transiteye-workspace/data/real_catalog_cohort_v3/` contains links only for development products; neither test partition was read during training.
 - `morphology_real_catalog_v3` was trained without synthetic augmentation or label-conditioned feature edits. It used 772 finite training vectors, 104 calibration vectors, and 108 selection vectors. Usable supports were train: 325 eclipse, 130 artifact, 142 stellar-variability, 175 transit; calibration: 44, 14, 21, 25; selection: 44, 18, 21, 25. Two EB train fit failures are recorded in the report.
 - The selected random forest achieved grouped-CV macro-F1 `0.692` and transit-like recall `0.617`; these are training-partition model-selection results, not independent performance estimates. Calibration-set Brier `0.435` and ECE `0.077` are fit-partition diagnostics only. No test split has been evaluated for this candidate.
+
+To restore the v3 development inputs in a clean workspace, run
+`python3 scripts/download_training_cohort.py`. The script requests every product through the MAST
+Portal Download API (the portal may redirect internally to MAST object storage), deterministically
+selects the latest sector per source, acquires only the 774 train, 104 calibration, and 108 selection
+sources, and excludes all 123 test sources before making archive requests. It writes FITS files under the ignored
+`.transiteye-workspace/data/real_catalog_cohort_v3_dev/`, a development-only product manifest, and
+an acquisition report with each outcome under `.transiteye-workspace/data/`. Downloads are
+resumable; each accepted file must match the frozen manifest SHA-256 and its FITS TIC, sector, table,
+time, and flux headers. A download failure is retained in the report rather than silently omitted.
+This cohort inherits the proxy-label and historical feature-pipeline limitations above.
+
+## Unlabeled 50,000-target MAST corpus
+
+The user-requested `mast_tess_unlabeled_50000_v1` corpus is a separate acquisition from the labeled
+model cohort. Its frozen product manifest (`d1f546b027534bb7`) selects 50,000 distinct TIC targets
+from MAST's official Sector 1–13 SPOC light-curve bulk inventories using the seed in
+`configs/mast_unlabeled_corpus.v1.toml`. It excluded 5,403 target identities already present in
+project manifests or local FITS products. The frozen product manifest keeps every morphology label
+unset. A separate, versioned TOI overlay was created from the current public ExoFOP-TESS TOI CSV
+(retrieved 2026-11-11; source URL and SHA-256 are in the report), joined by exact TIC ID and gated
+on the TOI sector list including the product sector. It matched 139 products to 157 TOI events and
+assigned 111 `transit_like` catalog proxy labels where both TESS and TFOPWG dispositions are `PC`.
+The 28 products with ambiguous/conflicting dispositions and 49,861 without a TOI match remain
+unlabeled; no unmatched entry was treated as a negative. Raw dispositions are retained. These
+catalog proxies are not independently adjudicated morphology or confirmation that a planet exists,
+and they do not change existing model partitions. Products and the 50,000-entry manifest remain outside Git under
+`.transiteye-workspace/data/mast_unlabeled_50000_v1/`. `scripts/download_unlabeled_mast_corpus.py`
+requests each product through the MAST Portal Download API, validates FITS target/sector/table
+headers, records archive SHA-256 and failures in `acquisition_report.v1.json`, and supports resume.
+The acquisition completed on 2026-11-11: all 50,000 products downloaded successfully, with zero
+failures, 50,000 unique target IDs, and 95,773,392,000 bytes stored outside Git. Each product passed
+structural, TIC/sector, and light-curve column checks and has a locally computed SHA-256. The FITS
+PRIMARY CHECKSUM validates; LIGHTCURVE and APERTURE CHECKSUM values are invalid, and DATASUM is
+absent in these archive products. Per-HDU checksum-header results are retained in the report. The
+TOI overlay is stored as `labels_toi_proxy.v1.parquet`, with all TIC-matched events in
+`toi_matches.v1.jsonl` and the audit in `toi_crossmatch_report.v1.json`. Catalog IDs, dispositions,
+ephemerides, and TIC parameters must not be used as model features.

@@ -13,10 +13,84 @@
 **Current implementation:** Historical phases are implemented, but their release and scientific gates
 require revalidation. R1 guardrails have passed. The real MAST cohort has a historical locked
 proxy-label evaluation; its test split is already open, and the later EB holdout remains sealed.
-**Last updated:** 2026-11-01
+**Last updated:** 2026-11-14
 **Status:** R1–R3 passed; R4 scientific and release gates remain open.
 
 ## Completed
+
+- [x] User-requested cleaning and training of the isolated labeled candidate-sequence experiment:
+  combined only unambiguous transit-like/eclipsing-like sidecars, deduplicated by product, removed
+  623 TICs already assigned to prior nontrain splits, excluded seven products without valid event
+  timing, and froze the cohort before opening FITS. The frozen cohort contains 23,084 products from
+  6,886 TIC groups, with 6,255 development and 631 fresh-holdout groups. Blind searches matched
+  3,940 development candidates; 2,315 were recorded as unmatched. Fit a fresh same-candidate random
+  forest and a PyTorch CNN from scratch on 3,162 train sequences; calibrated on 392 and selected on
+  386. Selection macro-F1: CNN 0.9254, random forest 0.8158; these selection results are not
+  independent performance estimates. The CNN selection confusion matrix (transit-like, eclipse-like
+  order) is `[[25, 5], [3, 353]]`; selection support is 30 and 356 respectively. After locking the
+  model, performed one inference-only evaluation on the 631-source fresh holdout. The blind matcher
+  found 364 candidates (355 eclipse-like, 9 transit-like); 267 sources had no matched candidate.
+  Holdout CNN macro-F1/balanced accuracy were 0.7429/0.7693; the same-candidate forest scored
+  0.6135/0.8410. The transit-like support is only nine, so its class metrics are highly uncertain;
+  overall accuracy is dominated by the eclipse-like majority. The holdout is now spent and must not
+  be used for tuning. No desktop integration or four-class claim. Report, model weights, baseline, matched
+  sequences, and candidate audit are stored outside Git in
+  `.transiteye-workspace/models/labeled_candidate_sequence_v1/`. Cohort manifest SHA-256:
+  `16fb30ca0d6d1ab93a001d53757750fb9a5832dc1b73d6292aa95414276e07d6`. Ruff, Python compilation,
+  checkpoint reload/forward pass, holdout artifact-hash and coverage checks, and `git diff --check`
+  passed; pytest was not run.
+
+- [x] User-requested eclipsing-binary label cross-reference: exact-joined 32,057 downloaded SPOC
+  products to three frozen EB catalog tables and required a catalog-listed product sector plus a
+  primary-eclipse ephemeris window within the FITS product interval. Assigned 10,595 `eclipse_like`
+  catalog-proxy labels across 4,305 TIC source groups; left 21,462 products unlabeled (20,774
+  catalog-sector mismatches, 542 context-only matches without sector data, 146 primary epochs
+  outside the product interval). All FITS TIC/sector headers matched, and the frozen product
+  manifest remains unlabeled. The Parquet sidecar, all 32,532 catalog-event matches, and provenance
+  report are under `.transiteye-workspace/data/mast_eclipsing_binary_catalogs_v1/`; generator:
+  `scripts/label_mast_eclipsing_binary_catalogs.py`. Ruff, Python compilation, and sidecar integrity
+  checks passed. The labels are not flux-shape or source-local validation and cannot serve as
+  independent morphology truth.
+
+- [x] Added TOI-derived labels to the eclipsing-binary cohort: exact-joined the frozen 8,175-row
+  ExoFOP-TESS snapshot (retrieved 2026-11-11; SHA-256
+  `d7b12ec7e2fd1c59850eff41a6aee19714294afd14d9a734c4f3f0fa4e70c786`) to all 32,057 products by
+  TIC and required same-sector evidence. The approved dispositions yielded 248 `transit_like` TOI
+  proxy products; 441 products with same-sector ambiguous/unsupported dispositions and 303 with
+  off-sector TOIs remain unlabeled, as do 31,065 without a TOI match. There are 105 products labeled
+  by both catalog overlays, all with conflicting `eclipse_like`/`transit_like` product classes;
+  the combined sidecar leaves these unlabeled. It provides 10,490 unambiguous `eclipse_like` and
+  143 `transit_like` product proxies, with 21,424 unlabeled. Separate TOI and combined Parquet
+  overlays, all event matches, the catalog snapshot, and report are in
+  `.transiteye-workspace/data/mast_eclipsing_binary_catalogs_v1/`; generator:
+  `scripts/crossmatch_eb_products_toi.py`. Ruff, Python compilation, and output consistency checks
+  passed. Same-sector proxies still require event-to-candidate matching before candidate-level
+  training; no catalog absence was treated as a negative.
+
+- [x] Completed the confirmed-exoplanet TESS cohort and event-timed transit proxy overlay: the
+  frozen NASA Exoplanet Archive snapshot contains 6,464 planet rows (6,157 with TIC IDs, 4,561
+  distinct host TICs); 4,242 hosts have 22,880 SPOC sector products and 319 have no matching product.
+  Downloaded all 22,880 products with zero failures (15,163 previously verified, 7,717 newly
+  downloaded). Exact host-TIC joins plus each confirmed transiting planet's period, BJD transit
+  epoch, and duration yielded 16,989 `transit_like` catalog-proxy product labels across 3,290 TICs.
+  The other 5,891 products remain unlabeled: 4,436 host-sector products have no confirmed planet
+  with `discoverymethod=Transit`, 227 have incomplete transit ephemerides, and 1,228 have no predicted
+  transit window in the product interval. All FITS TIC/sector headers matched; the frozen product
+  manifest still has every morphology label unset. Parquet labels, per-planet event matches, and a
+  provenance report are under `.transiteye-workspace/data/mast_confirmed_exoplanet_tess_v1/`;
+  generator: `scripts/label_confirmed_planet_transits.py`. Ruff, Python compilation, and sidecar
+  integrity checks passed. The archive snapshot lacks ephemeris uncertainties; time-window labels
+  use stored parameter precision and duration and are not flux-shape or source-local ground truth.
+
+- [x] User-requested restoration of the `real_catalog_cohort_v3` training dataset directly through
+  the MAST Portal Download API: acquired and verified 986 latest-sector FITS products (774 train,
+  104 calibration, 108 selection) in the external workspace. All 986 match frozen SHA-256 values
+  and FITS TIC/sector/table/column checks; 123 v3 test-assigned sources were excluded before archive
+  requests. The test partition is not a fresh independent holdout because some identities overlap
+  the historically opened v1 test. Product manifest ID `be22af78c3a062f6`; split manifest ID
+  `ed040a75524d3c72`. Acquisition details are recorded in
+  `.transiteye-workspace/data/real_catalog_cohort_v3_dev_acquisition.v1.json`. Labels remain catalog
+  proxies; no model was trained or evaluated in this acquisition task.
 
 - [x] Fourth-class review-candidate acquisition: queried 100 NASA TOI false-alarm events and,
   after known prior/reserved identity exclusions and confirmed-planet checks, downloaded 59 TESS
@@ -196,7 +270,37 @@ proxy-label evaluation; its test split is already open, and the later EB holdout
   - Evidence: `scripts/verify_clean_release.sh`, `RELEASE_NOTES.md`; verified dependency lock, Ruff lint,
   78/78 test suite, CLI commands, PDF 3-page compliance, and Git hygiene. Phase 5 gate passed.
 
+- [x] User-requested 50,000-target MAST expansion: acquired 50,000 distinct target light curves
+  through the MAST Portal Download API from the frozen Sector 1–13 inventory. The inventory had
+  126,994 new source IDs after excluding 5,403 known project identities. Manifest
+  `d1f546b027534bb7` fixes the selection, with every label unset. On 2026-11-11 14:19 IST, all
+  50,000 products passed FITS structure, TIC/sector, and light-curve column checks; all 50,000 have
+  recorded local SHA-256 values, and the report lists zero failed products. The corpus occupies
+  95,773,392,000 bytes outside Git. FITS checksum audit: PRIMARY CHECKSUM valid; LIGHTCURVE and
+  APERTURE CHECKSUM invalid; DATASUM absent in all three HDUs. These archive-header statuses are
+  recorded per product. The corpus remains unlabeled and is not a supervised training set or fresh
+  evaluation cohort. A follow-up TOI label overlay is tracked below; the frozen product manifest
+  remains unchanged.
+
 ## In Progress
+
+- [~] User-requested confirmed-exoplanet TESS data: NASA Exoplanet Archive `pscomppars` currently
+  returns 6,464 confirmed planets across 4,857 host names; 6,157 planet rows map to 4,561 distinct
+  TIC IDs. Across 107 MAST SPOC sector inventories, 4,242 hosts have 22,880 available products;
+  319 TIC hosts have no matching product. Frozen manifest `a5d1e030a4c424d5`. At 2026-11-11
+  15:54 IST, 850 products were on disk and the latest acquisition report checkpoint recorded 750
+  successful downloads with no failures. Download every matched sector light curve. This is a
+  confirmed-host cohort, not a light-curve morphology label set; products must stay source-grouped.
+
+- [x] User-requested TOI label cross-reference: exact-joined the current ExoFOP-TESS TOI CSV (8,175
+  rows; file SHA-256 and source URL recorded in the report) to the frozen 50,000-target corpus by
+  TIC ID and required the TOI sector to include the product sector. Found 139 matching products and
+  157 TOI events. Added 111 `transit_like` catalog proxy labels where TESS and TFOPWG dispositions
+  both say `PC`; kept 28 products with ambiguous/conflicting dispositions and 49,861 products with
+  no TOI match unlabeled. All raw same-sector event dispositions are retained. The 50,000-row label
+  overlay is stored separately as Parquet, with 157 event-level matches in JSONL and a provenance
+  report in the external workspace. The frozen product manifest and model inputs are unchanged;
+  catalog labels are proxies, not independently adjudicated morphology.
 
 - [x] User-requested further data expansion: queried 2,000 Gaia variability candidates and
   cross-matched a bounded 500-source subset; 29 qualified TESS light curves were downloaded and
@@ -300,6 +404,41 @@ proxy-label evaluation; its test split is already open, and the later EB holdout
   model exposure-sampling convergence study, then investigate the recorded fit failure and measure
   parameter accuracy and interval coverage. No held-out source data are needed for this first study;
   the separate EB holdout remains sealed.
+  - [x] New experimental PyTorch sequence classifier (approved 2026-11-10): the user selected a
+    from-scratch PyTorch candidate-sequence model, independent of historical classifier weights.
+    Frozen the sequence and baseline protocols in `configs/sequence_model_development.v1.toml` and
+    `configs/model_baseline_development.v1.toml`. Both exclude every test partition; baseline uses
+    source-grouped 5-fold CV over train, with separate calibration and selection sources, no
+    synthetic augmentation, and no label-conditioned transforms. Corrected trainer metadata so a
+    fresh fit is not mislabeled as retrained from the historical model. The 986-product development
+    set has now passed SHA-256 verification (986/986, zero missing or mismatched files); current
+    acquisition report has 986 successes and zero failures. The first serial baseline run was
+    stopped after 200 sources because it was too slow; no artifacts were written. The trainer now
+    uses four spawned CPU workers in stable input order with per-source checksum checks and explicit
+    error records. The frozen baseline config records CPU execution and four workers. The restarted
+    fresh baseline completed: 771 usable train, 104 calibration, and 108 selection sources; three
+    feature failures were recorded. Random Forest was selected at source-grouped 5-fold CV
+    macro-F1 0.698 / transit-like recall 0.571, versus HistGradientBoosting 0.673 / 0.571 and
+    logistic regression 0.614 / 0.589. These are development model-selection results on catalog
+    proxies, not independent performance estimates. Evidence is in the external workspace
+    `models/morphology_fresh_baseline_v1/`; no test FITS were opened.
+    Implemented candidate-centered sequence construction and an isolated PyTorch training command
+    in `scripts/train_sequence_model.py`; it excludes test FITS before reading, uses fresh
+    initialization, calibration-only temperature scaling, and selection-only epoch choice. The
+    v1 and v2 runs exposed unsupported deterministic CUDA pooling gradients and produced no model
+    artifacts; both protocols are preserved. V3 uses explicit reshape-and-mean pooling and writes
+    a checksummed sequence cache. Its fresh CNN trained successfully at epoch 6, calibrated with
+    temperature 1.349, and recorded selection accuracy 0.630 / macro-F1 0.608. There were 986
+    usable sequences, all four classes remained represented in train/calibration/selection, and
+    extraction had zero failures. Reloading the weights reproduced the saved selection metrics
+    exactly. These selection metrics are model-selection evidence, not independent performance.
+    The artifact and report are in external workspace
+    `models/candidate_sequence_cnn_v3/`; no test FITS were opened. This remains research-only because
+    labels are catalog proxies, not candidate-local ground truth. `uv sync --locked --all-extras`
+    succeeded; PyTorch 2.15.0+cu132 and CuPy 14.2.0 both detect the RTX 3050, and a CUDA matrix
+    multiplication succeeded. `CandidateSequenceCNN` in
+    `src/transiteye/classification/sequence_model.py` is isolated and not imported by the default
+    backend or desktop.
   - Fit change control: a historical failure from the already-open v1 test source is reproducible
     with initial depth 764,878 ppm versus the 500,000 ppm optimizer limit. Extend the physically
     allowable normalized depth to 1.0 and explicitly reject impossible initial depths. This source
@@ -611,3 +750,7 @@ catalog-derived labels, validated exposure integration and the larger evaluation
 | 2026-10-31 | Acquired and froze `real_catalog_cohort_v2` from new NASA Exoplanet Archive TOIs and MAST light curves | 2,028 new TOI proxy labels considered; 918 MAST products discovered; 911 passed FITS/TIC/sector checks with SHA-256; source-grouped manifests cover 541 transit-like, 335 artifact-proxy, and 35 eclipse-proxy sources; `audit-cohort` and Ruff pass | Dataset ready; model fitting blocked by insufficient usable eclipse-like samples for grouped CV (14 usable train examples) |
 | 2026-10-31 | Searched the MAST TESS-EBs v1.0 catalog and acquired an additional bright-source tranche | 246 unique, checksum-verified SPOC curves matched to EB catalog labels; fixed feature pipeline yielded 217/219 development feature vectors; 27 source groups assigned to an unopened EB holdout; acquisition and feature-audit manifests saved | Dataset ready for development-only combination; full 4,442-source remainder not queried after MAST service stalled |
 | 2026-10-31 | Froze combined real-data cohort v3 and trained `morphology_real_catalog_v3` | 1,109 labels / 1,127 product records; 772 train, 104 calibration, and 108 selection feature vectors; two new EB fits failed and were reported; grouped 5-fold CV selected RandomForest (macro-F1 0.692, transit recall 0.617); Brier 0.435 / ECE 0.077 are calibration-fit diagnostics; model bundle reload, cohort audit, CLI help, Ruff, and 86 pytest tests passed; both test portions were not opened | Training complete; no independent evaluation claim; prior cohort test cannot be reused and EB holdout remains sealed |
+| 2026-11-10 | Downloaded the v3 real-catalog training dataset through the MAST Portal Download API | 986/986 train/calibration/selection FITS products passed SHA-256 and FITS TIC/sector/table/column checks; 123 test-assigned sources excluded; 1.815 GiB stored in the ignored workspace; acquisition report and trainer-compatible subset manifest written; Python compilation and `git diff --check` passed | Dataset ready for training; catalog labels remain proxies and no model was trained or evaluated |
+| 2026-11-10 | Prepared and trained the fresh PyTorch candidate-sequence model | Locked all optional dependencies; PyTorch 2.15.0+cu132 and CuPy detect the RTX 3050. Fresh source-grouped scikit-learn baseline: 771 train sources, macro-F1 0.698 in 5-fold CV; 3 extraction failures. CNN v3: 986 development sequences, 0 extraction failures, best epoch 6, calibrated selection macro-F1 0.608; checkpoint reload reproduced reported selection metrics exactly. No test FITS opened. Ruff, Python compilation, and diff checks passed; no test suite run. | Experimental artifact saved outside Git; proxy labels and selection metrics do not support an independent accuracy claim |
+| 2026-11-11 | Completed the user-requested 50,000-target MAST corpus acquisition | 50,000/50,000 unique TIC light curves downloaded; no failures; every FITS passed structure, TIC/sector, and time/flux column checks; local SHA-256 recorded; 95,773,392,000 bytes in the ignored workspace. FITS PRIMARY CHECKSUM valid; LIGHTCURVE/APERTURE CHECKSUM invalid; DATASUM absent. Manifest labels remain unset. | Complete as an unlabeled corpus; not a supervised training or evaluation set |
+| 2026-11-11 | Cross-referenced the corpus against the current ExoFOP-TESS TOI catalog | Exact TIC-ID join and same-sector gate: 139 products / 157 TOI events matched; 111 unambiguous `PC`/`PC` transit-like proxies assigned; 28 ambiguous and 49,861 unmatched products remain unlabeled. Label sidecar, source catalog, event matches, and SHA-256 provenance stored outside Git. Ruff, Python compilation, and `git diff --check` passed; no tests run. | Label overlay complete; catalog proxies do not establish independent morphology or planet confirmation |

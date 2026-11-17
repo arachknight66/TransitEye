@@ -68,6 +68,85 @@ The real-substrate injection pilot must use the existing two-minute fallback as 
 assumption; passing that assumption as an explicitly supplied exposure incorrectly labels it
 `user_supplied`. The pilot was rerun with the existing v3 unverified-fallback provenance;
 earlier pilot outputs remain unchanged and are not the accepted evidence.
+Experimental model change (approved 2026-11-10): develop a new PyTorch sequence classifier from
+scratch for detected-candidate morphology. It will not reuse or fine-tune historical classifier
+weights. This remains research-only until it passes scientific and release gates. Freeze a
+source-grouped development protocol and establish a fresh baseline on the same inputs before
+training the neural model. Use only train, calibration, and selection partitions; keep every test
+partition sealed. Catalog labels remain proxies and do not establish candidate-local morphology,
+so results must report this limitation. This does not change class definitions, splits, result
+schemas, or desktop model selection.
+User-requested data expansion (approved 2026-11-10): acquire a separate corpus of 50,000 distinct
+TESS SPOC light-curve targets from MAST Sector 1–13 bulk inventories. Exclude every source identity
+already present in project manifests or local project data; preserve the new corpus as explicitly
+unlabeled and do not treat catalog absence as a negative label. This is a data-only acquisition; it
+does not change existing labels, partitions, model inputs, result schemas, or test access. Use for
+additional ML experiments only after a separate training protocol is frozen. MAST bulk inventories
+are a prioritized target list and do not represent a random sample of all stars.
+Follow-up catalog cross-reference (approved 2026-11-11): join this corpus to the current public
+ExoFOP-TESS TOI table using the exact TIC ID in each frozen product record, and require the TOI's
+listed observing sectors to include that light-curve product's sector before considering a label.
+Write catalog proxy labels to a separate, versioned sidecar; do not mutate the frozen product
+manifest or use TOI IDs, ephemerides, catalog dispositions, or TIC parameters as model features.
+Map TESS dispositions PC/KP/CP to `transit_like`, EB to `eclipse_like`, V to
+`stellar_variability`, and IS to `other_artifact`. Retain the raw TESS and TFOPWG dispositions,
+TOI IDs, sector evidence, catalog snapshot, and hashes. Leave unmatched, off-sector, unsupported,
+ambiguous (including APC), conflicting, and false-positive/false-alarm-only matches unlabeled;
+catalog-derived classes are proxies for the cataloged event, not independent morphology adjudication
+or proof of a planet. Source-group all products from the same TIC in any later partition and freeze
+a separate training/evaluation protocol before modeling.
+User-requested EB-catalog label overlay (approved 2026-11-14): exact-join downloaded EB products to
+the frozen MAST TESS-EB and TESS Ten Thousand catalogs by TIC. Assign an `eclipse_like` catalog proxy
+only when the catalog explicitly lists the product's TESS sector and its primary-eclipse ephemeris
+falls within the product's recorded time interval. The TESS Ten Thousand known-EB table does not
+provide sector evidence, so retain it as context without using it to label a product on its own.
+Keep all other products unlabeled with a reason. Store labels in a separate versioned sidecar; do
+not edit the frozen product manifest or use catalog fields as model features. This is catalog-level
+event evidence, not photometric confirmation in the SPOC curve, source localization, or independent
+morphology ground truth; group all products by TIC in any future partition.
+Follow-up transit-like overlay for the EB cohort (approved 2026-11-14): exact-join the same frozen
+product records to the ExoFOP-TESS TOI snapshot and require that each TOI's listed sectors include
+the product sector. Apply the existing TESS disposition mapping: PC/KP/CP to `transit_like`, EB to
+`eclipse_like`, V to `stellar_variability`, and IS to `other_artifact`; APC, false-positive/false-alarm,
+conflicting, unsupported, or multiple-class same-sector matches remain unlabeled. Keep this TOI
+overlay separate from the EB-catalog overlay and report their product-level overlaps explicitly.
+These are catalog proxies, not candidate-local labels or confirmation; candidate-level training must
+match detections to event ephemerides, and catalog fields remain excluded from model features.
+User-requested confirmed-exoplanet data expansion (approved 2026-11-11): snapshot all confirmed
+planet records from the NASA Exoplanet Archive `pscomppars` table, exact-join host TIC IDs to all
+available MAST SPOC TESS sector light-curve inventories, and acquire every matched product. Preserve
+planet-to-host relationships and all sector observations; do not call every host curve a transit
+positive. Store this as a separate external cohort with archive/catalog manifests, hashes, and
+failures. Confirmed-host identity is contextual metadata, not a TransitEye morphology label or model
+feature; transit morphology remains unlabeled unless an event-level source and sector-specific
+evidence support it. Group all products by astrophysical host in any future partition. This expands
+data availability only and does not alter existing dataset splits, class definitions, or evaluation
+criteria.
+Confirmed-planet event label overlay (2026-11-14): using the frozen `pscomppars` snapshot, assign a
+`transit_like` proxy only when a `discoverymethod=Transit` planet's period, transit epoch, and
+duration predict a transit window overlapping the matched SPOC product's BJD-2457000 time interval.
+The original product manifest stays unchanged and unlabeled. The snapshot contains no ephemeris
+uncertainty columns, so timing uses the stored numeric precision and duration; labels remain
+catalog-derived proxies, not flux-shape confirmation. Unmatched host sectors and incomplete or
+non-overlapping ephemerides stay unlabeled, not negative. Candidate-level use still requires matching
+detected signals to the cataloged planet event; group all sectors and planets from a TIC together.
+User-requested labeled-data model preparation (approved 2026-11-14): prepare an isolated binary
+PyTorch sequence experiment for detected candidates matched to the newly labeled transit-like and
+eclipse-like event proxies. Resolve product and source conflicts, group and deduplicate by TIC,
+exclude any TIC assigned to a prior non-training partition, and freeze fresh source-grouped
+train/calibration/selection/unopened-holdout assignments before reading any light curves. A candidate
+may enter the dataset only after blind detection ephemeris matches a sector- and time-supported
+catalog event. Unlabeled products and unmatched candidates are not negatives. Establish a fresh
+tabular baseline on exactly the same matched development candidates before CNN fitting. This remains
+a two-class research artifact only; it does not train `stellar_variability` or `other_artifact`,
+change the application taxonomy, or integrate with the desktop. Catalog/event labels and candidate
+matches remain proxy evidence, not independent morphology truth.
+After the model and selection procedure were frozen, the user requested the one-time final evaluation
+on this experiment's 631-source holdout. The holdout is now opened and spent. The final report is
+`.transiteye-workspace/models/labeled_candidate_sequence_v1/holdout_evaluation.json`; 364 sources
+produced event-matched candidates, including only nine transit-like candidates. Do not tune or make
+further model choices against this holdout. The results estimate agreement with catalog proxies,
+not independently adjudicated candidate morphology.
 When optional Batman refinement was attempted but returned no model, new results will also carry
 `physical_fit_failed` and an existing `fit_failed` missing-reason value for the physical fit. A
 deliberately skipped refinement receives neither. This is an additive flag and missing-reason entry
@@ -206,7 +285,7 @@ separate desktop entry point (`transiteye-desktop`).
 | Numerical methods | NumPy, SciPy, Wotan, CuPy (`cupy-cuda13x`) / Numba CUDA | Arrays, fitting, robust detrending, and GPU-accelerated kernels with CPU fallback |
 | Detection | Astropy / CUDA-batched BLS and Lomb-Scargle | GPU/CPU periodic dip search, noise-surrogate grids, and stellar variability |
 | Transit modeling | Trapezoid fits, batman | Candidate refinement and exposure integration |
-| Machine learning | scikit-learn | Baselines, random forest, calibration, metrics |
+| Machine learning | scikit-learn, PyTorch (experimental) | Fresh feature baseline and research-only candidate-sequence classifier; neural training is gated on source-separated baseline evidence |
 | Data storage | PyArrow/Parquet, NumPy, SQLite | Results, arrays, and resumable jobs |
 | Desktop | PyQt6 Widgets, PyQtGraph | Linux desktop workflow and interactive plots |
 | Publication figures | Matplotlib | Reproducible export-quality graphics |

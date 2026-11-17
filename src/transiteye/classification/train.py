@@ -234,30 +234,31 @@ def _extract_lc_feature_vector(
     lc: LightCurve,
     feature_names: tuple[str, ...],
     snr_threshold: float = 1.5,
+    device: str = "auto",
 ) -> NDArray[np.float64] | None:
     """Run real preprocessing, detrending, search, refinement, and feature extraction on a LightCurve."""
     try:
         prepared = prepare_light_curve(lc)
-        dual_p1 = two_pass_detrend(prepared, baseline_window_days=0.75, device="auto")
+        dual_p1 = two_pass_detrend(prepared, baseline_window_days=0.75, device=device)
         det = find_candidates(
             dual_p1,
             max_candidates=1,
             snr_threshold=snr_threshold,
-            device="auto",
+            device=device,
         )
         if not det.candidates:
             det = find_candidates(
                 dual_p1,
                 max_candidates=1,
                 snr_threshold=0.5,
-                device="auto",
+                device=device,
             )
         if not det.candidates:
             return None
 
         cand = det.candidates[0]
         candidate_tuples = ((cand.epoch_days or 0.0, cand.period_days or 1.0, cand.duration_hours or 2.0),)
-        dual_final = two_pass_detrend(prepared, candidate_events=candidate_tuples, device="auto")
+        dual_final = two_pass_detrend(prepared, candidate_events=candidate_tuples, device=device)
         crowdsap_str = lc.metadata.get("crowdsap")
         crowdsap = float(crowdsap_str) if crowdsap_str and crowdsap_str != "None" else None
 

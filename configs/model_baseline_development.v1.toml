@@ -1,0 +1,44 @@
+schema_version = 1
+protocol_id = "real_catalog_v3_fresh_sklearn_baseline_v1"
+purpose = "Fresh development-only tabular baseline for the experimental PyTorch sequence model."
+created_date = "2026-11-10"
+random_seed = 42
+
+[runtime]
+requested_device = "cpu"
+resolved_device = "cpu"
+worker_processes = 4
+
+[dataset]
+labels = "manifests/real_catalog_cohort.v3.labels.json"
+splits = "manifests/real_catalog_cohort.v3.splits.json"
+products = ".transiteye-workspace/data/real_catalog_cohort_v3_dev_products.v1.json"
+data_directory = ".transiteye-workspace/data/real_catalog_cohort_v3_dev"
+product_manifest_id = "be22af78c3a062f6"
+split_manifest_id = "ed040a75524d3c72"
+included_partitions = ["train", "calibration", "selection"]
+exclude_test_before_opening_files = true
+group_field = "source_group_id"
+source_product_rule = "latest_sector_then_filename"
+
+[features]
+registry = "MORPHOLOGY_FEATURE_NAMES"
+candidate_extraction = "current_backend_candidate_feature_path"
+synthetic_augmentation = false
+label_conditioned_transforms = false
+
+[baseline]
+estimators = ["random_forest", "hist_gradient_boosting", "logistic_regression"]
+cross_validation = "StratifiedGroupKFold"
+folds = 5
+selection_metric = "macro_f1"
+tie_break_metric = "transit_like_recall"
+calibration_partition = "calibration"
+selection_partition = "selection"
+report_all_extraction_and_fit_failures = true
+
+[reporting]
+primary_metric = "macro_f1"
+additional_metrics = ["per_class_precision", "per_class_recall", "per_class_f1", "transit_like_recall"]
+claim_independent_performance = false
+label_scope = "catalog-derived source-level proxy labels; candidate-local morphology is unverified"

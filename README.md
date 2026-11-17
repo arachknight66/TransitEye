@@ -87,6 +87,64 @@ saved in a desktop session and must be selected again for a new run. The histori
 performance and calibration are not validated for the current pipeline, and an abstention remains
 possible. A transit-like classification does not confirm a planet.
 
+## Experimental PyTorch sequence model
+
+The repository includes a separate, from-scratch candidate-sequence CNN experiment. Install all
+optional dependencies with `uv sync --locked --all-extras`. Restore the frozen development products
+with `python3 scripts/download_training_cohort.py --resume-portal --workers 16`. Run the fresh
+baseline before the sequence model:
+
+```bash
+uv run --no-sync python scripts/train_real_cohort.py \
+  --data-dir .transiteye-workspace/data/real_catalog_cohort_v3_dev \
+  --products .transiteye-workspace/data/real_catalog_cohort_v3_dev_products.v1.json \
+  --labels manifests/real_catalog_cohort.v3.labels.json \
+  --splits manifests/real_catalog_cohort.v3.splits.json \
+  --output-dir .transiteye-workspace/models/morphology_fresh_baseline_v1 \
+  --model-id morphology_fresh_baseline_v1 --workers 4
+uv run --no-sync python scripts/train_sequence_model.py \
+  --output-dir .transiteye-workspace/models/candidate_sequence_cnn_v3 \
+  --workers 4 --maximum-epochs 100 --batch-size 32 --device cuda
+```
+
+The frozen protocols are recorded in `configs/model_baseline_development.v1.toml` and
+`configs/sequence_model_development.v3.toml`; their checksums are included in model reports.
+
+This is a research artifact only. It is not loaded by single-target or batch analysis. Its training
+labels are catalog-derived source-level proxies, not independently adjudicated candidate-level
+morphology; its selection metrics do not establish independent accuracy. The test partition stays
+sealed, and the model must not be presented as planetary confirmation.
+
+### Newly labeled candidate-sequence experiment
+
+The separately approved 2026-11-14 experiment trains a binary candidate-morphology proxy model from
+scratch. To rebuild its cleaned manifest and resume candidate extraction/training, run:
+
+```bash
+uv run --no-sync python scripts/prepare_labeled_sequence_cohort.py
+uv run --no-sync python scripts/train_labeled_candidate_sequence.py \
+  --workers 4 --maximum-epochs 100 --batch-size 32 --device cuda
+```
+
+Its configuration is `configs/labeled_candidate_sequence.v1.toml`; artifacts and per-source
+checkpoints are written outside Git to
+`.transiteye-workspace/models/labeled_candidate_sequence_v1/`. The training command does not open the
+631-source fresh holdout. After model lock, its one-time final evaluation was run with:
+
+```bash
+uv run --no-sync python scripts/evaluate_labeled_candidate_sequence_holdout.py \
+  --workers 4 --device cuda
+```
+
+The run matched 3,940 of 6,255 development sources. On the 386-source selection partition, CNN
+macro-F1 was 0.9254 versus 0.8158 for the same-candidate random-forest baseline; these are model
+selection scores. The final holdout evaluation matched 364 of 631 sources (355 eclipse-like and only
+9 transit-like). CNN macro-F1/balanced accuracy were 0.7429/0.7693; the baseline scored
+0.6135/0.8410. With only nine transit-like examples, per-class and aggregate scores have substantial
+uncertainty, and ordinary accuracy is dominated by the eclipse-like majority. The holdout is now
+spent and must not be reused for tuning. Catalog records remain imperfect proxy labels, and neither
+output confirms an exoplanet.
+
 Launch the interactive desktop application:
 
 ```bash
