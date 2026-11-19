@@ -193,6 +193,54 @@ integral rather than a five-point sum. `supersample <= 1` retains instantaneous-
 any direct application of old classifier evaluation scores to the updated feature pipeline. Batman
 still uses five samples and requires a separate convergence study.
 
+## TIC/KIC lookup extension (approved 2026-11-17)
+
+The next development slice adds mission-qualified TIC and KIC lookup of official MAST light-curve
+products. Discovery, identity validation, original FITS retention, and per-product provenance are
+prerequisites to combined-observation analysis. Kepler quality flags and BKJD time references must
+be handled independently of TESS; catalog metadata and identifiers remain excluded from model
+features. This expands supported inputs without changing morphology classes, dataset partitions,
+or the existing result-bundle schema. Later slices will introduce versioned combined bundles,
+editable processing, and research-only Keras comparisons. No Kepler classifier or exoplanet
+confirmation claim is implied by archive access.
+The first lookup slice uses the already-locked Astroquery MAST client for exact TIC and KIC target
+queries. A live query showed that the previous TIC coordinate search was too slow for this workflow;
+adding Lightkurve as a second archive dependency is deferred unless a later capability requires it.
+The combined-input record retains each FITS product and archive URI independently and maps only
+validated TDB/day time coordinates to a common BJD axis. It does not issue end-to-end joint
+period/depth estimates; standalone preparation and per-observation fitting components are described
+below, and their integration remains future work. Existing result bundle schemas are unchanged.
+New lookup manifests use schema v2 to retain the archive provider needed for later overlap
+resolution. Existing v1 manifests remain readable, and their identifiers and files are unchanged.
+The acquisition record must separately persist verified per-product content hashes. This closes a
+cache-reuse integrity gap: exact target and sector identity alone cannot detect a changed FITS
+payload. Receipts are additive workspace artifacts; discovery manifests and existing result-bundle
+schemas are not rewritten.
+Exact TIC discovery includes official SPOC observations and TESS-SPOC products stored in MAST's
+HLSP collection. Verified target products require explicit, consistent TIME units and BJD reference;
+single-file readers still preserve raw unit declarations even when metadata is incomplete.
+The current combined-input slice adds provider and cadence provenance, per-cadence overlap and
+analysis masks, and explicit selection reasons (including invalid time/flux/error, quality flags,
+unresolved overlap, and overlap exclusion). The default quality policy is mission-specific: the
+existing TESS mask is retained and Kepler uses its own default bitmask. `inspect-target-set` reports
+per-observation cadence totals, overlap winners, selected/excluded counts, reason counts, and
+BJD-TDB coverage. BLS now accepts an explicit maximum trial-period budget and rejects oversized
+search grids. A standalone joint trapezoid fitter shares timing and shape while estimating depth
+and baseline independently for each observation. A separate exposure resolver uses an explicit
+user override or `INT_TIME * NUM_FRM` as a frame-sum boxcar approximation, returns missing when
+these are unavailable, and never treats `TIMEDEL` or aggregate `EXPOSURE`/`LIVETIME` as exposure.
+These backend components are not integrated into end-to-end combined analysis or the desktop UI;
+the exposure resolver's focused tests pass (7 tests). Existing single-file analysis behavior and
+result-bundle schemas remain unchanged; v1 manifests remain readable. No new model training or
+performance claim is made. Cadence width is used only as a sampling-window proxy, not as an exposure
+measurement. With at least three distinct timestamps it uses the lower median of positive spacings;
+with two, `TIMEDEL` is accepted only within 20% of observed spacing; singleton `TIMEDEL` is
+unverified and yields unknown width. Unknown widths in intersecting product spans remain unresolved.
+The combined-preparation component independently normalizes and detrends each observation, retains
+raw cadence-row mappings and the common BJD-TDB origin, and rejects unresolved overlap. Its six
+focused tests pass. It does not run a search or joint fit; the standalone joint fitter and bounded
+BLS search are not wired into an end-to-end combined service or the desktop UI.
+
 ## Product objective
 
 TransitEye will ingest TESS FITS light curves, preserve and denoise scientifically relevant signals,

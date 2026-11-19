@@ -5,8 +5,11 @@ from __future__ import annotations
 import argparse
 import json
 import uuid
+from collections import Counter
 from dataclasses import asdict
 from pathlib import Path
+
+import numpy as np
 
 from transiteye import __version__
 from transiteye.classification.models import ModelBundle
@@ -18,8 +21,21 @@ from transiteye.execution.runner import BatchProgress, BatchRunner
 from transiteye.execution.service import analyze_light_curve
 from transiteye.execution.store import JobStatus, JobStore
 from transiteye.io.fits import read_tess_light_curve
+from transiteye.io.lookup import (
+    ArchiveProduct,
+    TargetReference,
+    acquire_frozen_target_manifest,
+    acquire_target_products,
+    discover_target,
+)
 from transiteye.io.manifest import read_manifest, write_manifest
-from transiteye.io.mast import AstroqueryMastClient, acquire_manifest, build_manifest
+from transiteye.io.mast import (
+    AstroqueryMastClient,
+    acquire_manifest,
+    build_manifest,
+    verify_acquisition_receipt,
+)
+from transiteye.io.observation_set import load_verified_observation_set
 from transiteye.logging import configure_logging
 from transiteye.reporting.figures import generate_vetting_sheet
 
@@ -338,6 +354,102 @@ def _workspace(args: argparse.Namespace) -> int:
     return 0
 
 
+def _lookup_target(args: argparse.Namespace) -> int:
+    target = TargetReference.parse(args.target, catalog=args.catalog)
+    products = discover_target(target)
+    print(json.dumps({
+        "catalog": target.catalog,
+        "target_id": target.canonical_id,
+        "mission": target.mission,
+        "products": [asdict(product) for product in products],
+    }, indent=2, sort_keys=True))
+    return 0
+
+
+def _fetch_target(args: argparse.Namespace) -> int:
+    target = TargetReference.parse(args.target, catalog=args.catalog)
+    products = discover_target(target)
+    if not products:
+        print(json.dumps({"target_id": target.canonical_id, "mission": target.mission, "status": "no_products"}))
+        return 0
+    config = load_config(args.config)
+    ensure_workspace(config)
+    manifest, completed = acquire_target_products(
+        target, products, AstroqueryMastClient(), config.workspace.cache_directory,
+        config.acquisition,
+    )
+    print(json.dumps({
+        "manifest_id": manifest.manifest_id,
+        "manifest_path": str(config.workspace.cache_directory / manifest.manifest_id / "manifest.json"),
+        "verified_count": len(completed),
+        "products": {key: str(path) for key, path in completed.items()},
+    }, indent=2, sort_keys=True))
+    return 0
+
+
+def _inspect_target_set(args: argparse.Namespace) -> int:
+    manifest = read_manifest(args.manifest)
+    catalog = manifest.query.get("catalog")
+    target_id = manifest.query.get("target_id")
+    if catalog not in ("TIC", "KIC") or not target_id:
+        raise ValueError("Manifest is not a TIC/KIC target lookup inventory.")
+    target = TargetReference.parse(target_id, catalog=catalog)
+    products: list[ArchiveProduct] = []
+    downloaded: dict[str, Path] = {}
+    for entry in manifest.entries:
+        filename = entry.resolved_filename()
+        if Path(filename).name != filename:
+            raise ValueError("Manifest contains an unsafe product filename.")
+        mission = {
+            "tess_light_curve": "TESS",
+            "kepler_light_curve": "Kepler",
+        }.get(entry.product_type)
+        if mission is None:
+            raise ValueError(f"Unsupported product type in target inventory: {entry.product_type}")
+        products.append(ArchiveProduct(
+            entry.data_uri, filename, mission, entry.target_id, entry.sector,
+            entry.provider or "unrecorded",
+        ))
+        path = args.manifest.parent / filename
+        verify_acquisition_receipt(manifest, entry, path)
+        downloaded[entry.data_uri] = path
+    result = load_verified_observation_set(target, tuple(products), downloaded)
+    summary = []
+    for observation in result.observations:
+        valid_time = observation.time_bjd_tdb[np.isfinite(observation.time_bjd_tdb)]
+        reason_counts = Counter(observation.selection_reason)
+        summary.append({
+            "archive_uri": observation.archive_uri,
+            "provider": observation.provider,
+            "input_sha256": observation.source.provenance.checksum_sha256,
+            "observation": observation.source.provenance.sector
+            if result.mission == "TESS" else observation.source.provenance.metadata.get("quarter"),
+            "cadence_count": len(observation.source.time_days),
+            "cadence_days": observation.cadence_days,
+            "cadence_source": observation.cadence_source,
+            "overlap_winner_count": int(np.count_nonzero(observation.overlap_mask)),
+            "selected_cadence_count": observation.selected_count,
+            "excluded_cadence_count": observation.excluded_count,
+            "selection_reason_counts": dict(sorted(reason_counts.items())),
+            "bjd_tdb_start": float(np.min(valid_time)) if len(valid_time) else None,
+            "bjd_tdb_end": float(np.max(valid_time)) if len(valid_time) else None,
+        })
+    unresolved_count = sum(
+        item["selection_reason_counts"].get("overlap_unresolved", 0)
+        for item in summary
+    )
+    print(json.dumps({
+        "manifest_id": manifest.manifest_id,
+        "mission": result.mission,
+        "target_id": result.target_id,
+        "observation_count": len(summary),
+        "selected_cadence_count": sum(item["selected_cadence_count"] for item in summary),
+        "overlap_unresolved_count": unresolved_count,
+        "observations": summary,
+    }, indent=2, sort_keys=True))
+    return 0
+
+
 def _discover_manifest(args: argparse.Namespace) -> int:
     manifest = build_manifest(AstroqueryMastClient(), args.target_id, args.sector)
     write_manifest(manifest, args.output)
@@ -353,12 +465,16 @@ def _acquire_manifest(args: argparse.Namespace) -> int:
     config = load_config(args.config)
     ensure_workspace(config)
     manifest = read_manifest(args.manifest)
-    completed = acquire_manifest(
-        AstroqueryMastClient(),
-        manifest,
-        config.workspace.cache_directory,
-        config.acquisition,
-    )
+    if manifest.schema_version == "2":
+        completed = acquire_frozen_target_manifest(
+            manifest, AstroqueryMastClient(), config.workspace.cache_directory,
+            config.acquisition,
+        )
+    else:
+        completed = acquire_manifest(
+            AstroqueryMastClient(), manifest, config.workspace.cache_directory,
+            config.acquisition,
+        )
     print(
         json.dumps(
             {"manifest_id": manifest.manifest_id, "completed": completed}, indent=2, default=str
@@ -428,6 +544,18 @@ def build_parser() -> argparse.ArgumentParser:
     )
     workspace.add_argument("--config", type=Path)
     workspace.set_defaults(handler=_workspace)
+    lookup = subparsers.add_parser("lookup-target", help="find official MAST light curves by TIC or KIC")
+    lookup.add_argument("target", help="qualified TIC or KIC ID, or a number with --catalog")
+    lookup.add_argument("--catalog", choices=["TIC", "KIC"])
+    lookup.set_defaults(handler=_lookup_target)
+    fetch = subparsers.add_parser("fetch-target", help="freeze and acquire verified TIC or KIC light curves")
+    fetch.add_argument("target", help="qualified TIC or KIC ID, or a number with --catalog")
+    fetch.add_argument("--catalog", choices=["TIC", "KIC"])
+    fetch.add_argument("--config", type=Path)
+    fetch.set_defaults(handler=_fetch_target)
+    inspect_set = subparsers.add_parser("inspect-target-set", help="validate a fetched TIC/KIC inventory")
+    inspect_set.add_argument("manifest", type=Path)
+    inspect_set.set_defaults(handler=_inspect_target_set)
     discover = subparsers.add_parser("discover-manifest", help="freeze MAST light-curve discovery")
     discover.add_argument("target_id")
     discover.add_argument("--sector", type=int)

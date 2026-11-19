@@ -121,3 +121,16 @@ def test_acquisition_rejects_checksum_mismatch(tmp_path: Path) -> None:
     manifest = ProductManifest.create("mast", (entry,))
     with pytest.raises(ValueError, match="Checksum mismatch"):
         acquire_manifest(FakeArchiveClient(), manifest, tmp_path, AcquisitionConfig(max_attempts=1))
+
+
+def test_astroquery_download_rejects_noncomplete_status(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def failed_download(data_uri: str, **kwargs: object) -> tuple[str, str, None]:
+        assert data_uri == "mast:product-1"
+        Path(str(kwargs["local_path"])).write_bytes(b"partial payload")
+        return "ERROR", "archive unavailable", None
+
+    monkeypatch.setattr(Observations, "download_file", failed_download)
+    with pytest.raises(ValueError, match="MAST download ERROR.*archive unavailable"):
+        AstroqueryMastClient().download("mast:product-1", tmp_path / "product.fits")

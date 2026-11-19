@@ -6,7 +6,12 @@ import numpy as np
 import pytest
 from astropy.io import fits
 
-from transiteye.io.fits import FitsValidationError, read_tess_light_curve, stitch_light_curves
+from transiteye.io.fits import (
+    FitsValidationError,
+    read_tess_light_curve,
+    stitch_light_curves,
+    validate_day_time_axis,
+)
 
 
 def _write_tess_fixture(path: Path) -> None:
@@ -59,6 +64,39 @@ def test_reader_preserves_delivered_cadences_and_metadata(tmp_path: Path) -> Non
     assert light_curve.metadata["frame_time_seconds"] == "2.0"
     assert light_curve.metadata["integration_time_seconds"] == "1.98"
     assert "exposure_days" not in light_curve.metadata
+
+
+def test_time_units_are_preserved_without_assuming_days(tmp_path: Path) -> None:
+    path = tmp_path / "units_lc.fits"
+    _write_tess_fixture(path)
+    with fits.open(path, mode="update") as hdul:
+        hdul[1].header["TUNIT1"] = "s"
+    curve = read_tess_light_curve(path)
+    assert curve.metadata["time_unit"] is None
+    assert curve.metadata["time_column_unit"] == "s"
+    with pytest.raises(FitsValidationError, match="TIME unit"):
+        validate_day_time_axis(curve)
+
+
+def test_bjd_column_unit_must_match_reference(tmp_path: Path) -> None:
+    path = tmp_path / "bjd_lc.fits"
+    _write_tess_fixture(path)
+    with fits.open(path, mode="update") as hdul:
+        hdul[1].header["TUNIT1"] = "BJD - 2457000"
+    validate_day_time_axis(read_tess_light_curve(path))
+    with fits.open(path, mode="update") as hdul:
+        hdul[1].header["TUNIT1"] = "BJD - 2454833"
+    with pytest.raises(FitsValidationError, match="conflicting TIME unit"):
+        validate_day_time_axis(read_tess_light_curve(path))
+
+
+def test_tess_reader_rejects_conflicting_telescope(tmp_path: Path) -> None:
+    path = tmp_path / "wrong_telescope_lc.fits"
+    _write_tess_fixture(path)
+    with fits.open(path, mode="update") as hdul:
+        hdul[0].header["TELESCOP"] = "Kepler"
+    with pytest.raises(FitsValidationError, match="TELESCOP=Kepler"):
+        read_tess_light_curve(path)
 
 
 def test_reader_falls_back_to_sap_when_pdcsap_is_absent(tmp_path: Path) -> None:

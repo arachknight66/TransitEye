@@ -1,0 +1,31 @@
+{
+  "api_download": "https://www.kaggle.com/api/v1/datasets/download/keplersmachines/kepler-labelled-time-series-data?datasetVersionNumber=3",
+  "archive_bytes": 58642135,
+  "archive_name": "archive.zip",
+  "archive_sha256": "e72e0860bc81b7ff0dd9f644412c6d9a3b3931f211ec0370d4265babc2825ca3",
+  "downloaded_utc": "2026-11-18T05:15:27.442525+00:00",
+  "files": [
+    {
+      "bytes": 262223348,
+      "columns": 3198,
+      "first_column": "LABEL",
+      "name": "exoTrain.csv",
+      "rows": 5087,
+      "sha256": "6f04167636d2fcdce44af6fd5cbef359d8af033ce8457d8c8e917fdb822e044c"
+    },
+    {
+      "bytes": 28907068,
+      "columns": 3198,
+      "first_column": "LABEL",
+      "name": "exoTest.csv",
+      "rows": 570,
+      "sha256": "0b9f9aabcaf4058fd38d99431e61e29eeb031d5073c3b74f6139a917356bd163"
+    }
+  ],
+  "schema_version": 1,
+  "source": "https://www.kaggle.com/datasets/keplersmachines/kepler-labelled-time-series-data",
+  "status": "research_only",
+  "usage_limits": "The CSVs lack source-level FITS provenance needed to verify astrophysical source grouping or event labels. This acquisition is outside the current TransitEye training and locked evaluation protocols.",
+  "version": 3,
+  "workspace_subdirectory": "data/kaggle_kepler_labelled"
+}

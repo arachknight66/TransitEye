@@ -8,6 +8,30 @@ passes and `PROGRESS.md` records the evidence.
 
 ## Working-product remediation (approved 2026-11-01)
 
+## TIC/KIC lookup extension (approved 2026-11-17)
+
+- [ ] Add qualified TIC/TESS and KIC/Kepler archive discovery, frozen product manifests,
+  resumable verified acquisition, and mission-specific FITS ingestion; provide CLI lookup and
+  leave current result bundles readable. Use manifest v2 for provider provenance, retaining v1
+  read compatibility. Verify archive failures, exact identity, units, quality,
+  and time references with mocked and FITS-fixture tests before live smoke checks. Include
+  TESS-SPOC products from the HLSP collection and require explicit, consistent FITS TIME units.
+  Persist
+  per-product verified SHA-256 acquisition receipts outside the discovery manifest and check
+  them on resume and inspection; repeated fetches must preserve the frozen manifest identity.
+- [ ] Combine all supported observations per target with complete input provenance, overlap
+  accounting, observation-specific depths and exposures, bounded resumable search, and explicit
+  incomplete outcomes. Freeze numerical acceptance tests before scientific claims. The current
+  partial slice provides provider/cadence provenance, overlap and analysis masks with reasons, a
+  standalone per-observation preparation with raw-row mapping and common BJD origin, a
+  shared-timing/per-observation-depth fitter, and an explicit BLS trial budget. Preparation rejects
+  unresolved overlap, but search and joint fitting are not yet integrated into one combined service.
+- [ ] Add a typed, editable processing pipeline and desktop controls with original data retained;
+  compare experimental Fourier/wavelet branches against the baseline using injection recovery.
+- [ ] Run an isolated TESS candidate-level random-forest/PyTorch/Keras comparison with exact
+  source grouping and model compatibility metadata. Kepler morphology stays unavailable until a
+  separately frozen, event-supported cohort exists. Existing R4 release gates remain open.
+
 The prior phase gates must be revalidated because the legacy evaluator has label-conditioned features
 and non-independent recovery/coverage references. Historical artifacts remain unchanged and must not
 be used for scientific claims. This new remediation sequence supersedes the ordering of the

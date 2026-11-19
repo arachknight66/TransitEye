@@ -13,10 +13,16 @@
 **Current implementation:** Historical phases are implemented, but their release and scientific gates
 require revalidation. R1 guardrails have passed. The real MAST cohort has a historical locked
 proxy-label evaluation; its test split is already open, and the later EB holdout remains sealed.
-**Last updated:** 2026-11-14
+**Last updated:** 2026-11-18
 **Status:** R1–R3 passed; R4 scientific and release gates remain open.
 
 ## Completed
+
+- [x] Downloaded and verified the full Kaggle Kepler Labelled Time Series Data v3 archive and
+  both CSVs on 2026-11-18. The archive and CSVs occupy 334 MiB on disk in the ignored workspace
+  at `.transiteye-workspace/data/kaggle_kepler_labelled/`.
+  [Acquisition manifest](manifests/kaggle_kepler_labelled.v1.acquisition.json) records SHA-256,
+  byte sizes, and CSV dimensions. Research only. No label-policy or training changes.
 
 - [x] User-requested cleaning and training of the isolated labeled candidate-sequence experiment:
   combined only unambiguous transit-like/eclipsing-like sidecars, deduplicated by product, removed
@@ -283,6 +289,54 @@ proxy-label evaluation; its test split is already open, and the later EB holdout
   remains unchanged.
 
 ## In Progress
+
+- [~] Lookup acquisition integrity follow-up: persist verified per-product SHA-256 receipts
+  outside the frozen discovery manifest, require receipt checks on cache reuse and inspection,
+  and preserve manifest identity on repeated fetch. This is an additive workspace artifact with
+  no change to legacy result bundles or v1 manifest reading. Mocked corruption/retry tests and
+  a bounded live TIC/KIC acquisition smoke are required before closing the first lookup gate.
+  The same gate now checks TESS-SPOC discovery from MAST's HLSP collection and rejects missing
+  or conflicting FITS TIME units instead of assuming days.
+
+- [~] TIC/KIC lookup extension: implement mission-qualified archive discovery, verified
+  acquisition, and Kepler FITS ingestion as the first reviewable slice. Combined analysis,
+  editable transforms, desktop integration, and model comparison follow only after this
+  ingestion slice is verified. Qualified lookup and fetch CLI commands, a target-checking cache
+  validator, and a Kepler FITS reader are implemented. Exact MAST searches returned 47 TESS
+  light-curve products for TIC 307210830 and official Kepler products for KIC 11904151; these
+  were discovery-only checks, not downloaded analyses. Focused lookup tests passed (9 tests),
+  the full headless suite passed (198 tests), locked sync with the desktop extra passed, and
+  Ruff, CLI help, and diff checks passed. Combined analysis, desktop lookup, and model training
+  remain open. No new scientific performance claim is made.
+
+- [~] Combined-observation input foundation: `ObservationSet` retains each verified FITS curve,
+  input checksum and archive URI, maps native TIME to BJD-TDB only with explicit time metadata,
+  and rejects mixed targets or missions, duplicate files, missing products and mission-mismatched
+  FITS. It retains provider and cadence provenance and exposes overlap/analysis masks, overlap
+  winners, and per-cadence reasons; the Kepler quality mask is mission-specific while the existing
+  TESS mask remains unchanged. `inspect-target-set` reports per-observation cadence, overlap-winner,
+  selected/excluded and reason counts plus BJD-TDB coverage. BLS has an explicit optional maximum
+  trial-period budget. A standalone joint trapezoid fitter shares timing/shape and fits depth and
+  baseline separately per observation. Focused lookup/FITS/observation/BLS/joint-fit tests passed
+  (35 tests). These pieces are not wired into end-to-end combined analysis or the UI; flux merging,
+  integrated detection, resumable combined jobs, and user-facing review remain open. No model
+  training or performance claim is made. The phase gate has not passed.
+  Cadence width is a sampling-window proxy, not an exposure measurement. With at least three distinct
+  timestamps it uses the lower median of positive spacings; with two, TIMEDEL is accepted only within
+  20% of measured spacing; singleton TIMEDEL is unknown. Unknown widths in intersecting product spans
+  remain unresolved.
+  The separate exposure resolver uses a user override or `INT_TIME*NUM_FRM` as a frame-sum boxcar
+  approximation, reports missing when unavailable, and ignores `TIMEDEL` and aggregate
+  `EXPOSURE`/`LIVETIME`; it is not integrated into combined analysis. Its focused tests passed
+  (7 tests). The 35 passing focused tests above apply to the preceding observation/BLS/joint-fit
+  slice.
+  `prepare_observation_set` independently normalizes and detrends each observation, retains original
+  cadence-row mapping and common BJD-TDB origin, and rejects unresolved overlap. Its focused tests
+  passed (6 tests). This preparation does not run a search or joint fit; those components remain
+  unwired to an end-to-end combined service.
+  New lookup manifests now use v2 to retain the MAST provider; v1 remains readable without
+  rewriting its existing files or IDs. The v1/v2 round trip and focused lookup tests passed;
+  the full headless suite passed (208 tests), with Ruff, CLI help, and diff checks passing.
 
 - [~] User-requested confirmed-exoplanet TESS data: NASA Exoplanet Archive `pscomppars` currently
   returns 6,464 confirmed planets across 4,857 host names; 6,157 planet rows map to 4,561 distinct
@@ -754,3 +808,10 @@ catalog-derived labels, validated exposure integration and the larger evaluation
 | 2026-11-10 | Prepared and trained the fresh PyTorch candidate-sequence model | Locked all optional dependencies; PyTorch 2.15.0+cu132 and CuPy detect the RTX 3050. Fresh source-grouped scikit-learn baseline: 771 train sources, macro-F1 0.698 in 5-fold CV; 3 extraction failures. CNN v3: 986 development sequences, 0 extraction failures, best epoch 6, calibrated selection macro-F1 0.608; checkpoint reload reproduced reported selection metrics exactly. No test FITS opened. Ruff, Python compilation, and diff checks passed; no test suite run. | Experimental artifact saved outside Git; proxy labels and selection metrics do not support an independent accuracy claim |
 | 2026-11-11 | Completed the user-requested 50,000-target MAST corpus acquisition | 50,000/50,000 unique TIC light curves downloaded; no failures; every FITS passed structure, TIC/sector, and time/flux column checks; local SHA-256 recorded; 95,773,392,000 bytes in the ignored workspace. FITS PRIMARY CHECKSUM valid; LIGHTCURVE/APERTURE CHECKSUM invalid; DATASUM absent. Manifest labels remain unset. | Complete as an unlabeled corpus; not a supervised training or evaluation set |
 | 2026-11-11 | Cross-referenced the corpus against the current ExoFOP-TESS TOI catalog | Exact TIC-ID join and same-sector gate: 139 products / 157 TOI events matched; 111 unambiguous `PC`/`PC` transit-like proxies assigned; 28 ambiguous and 49,861 unmatched products remain unlabeled. Label sidecar, source catalog, event matches, and SHA-256 provenance stored outside Git. Ruff, Python compilation, and `git diff --check` passed; no tests run. | Label overlay complete; catalog proxies do not establish independent morphology or planet confirmation |
+
+### Colab training from downloaded TESS FITS (2026-11-19)
+
+Staged 21,148 development product records across 6,255 sources for the raw-FITS
+training notebook. Verified the notebook structure and code-cell syntax, and read,
+quality-filtered and detrended a checksummed sector 1 observation for TIC 24704862
+from the staged folder. Full extraction and model training on Colab remain pending.

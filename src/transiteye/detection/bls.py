@@ -26,6 +26,10 @@ class BlsPeriodogram:
     sde: float
 
 
+class BlsSearchBudgetExceeded(ValueError):
+    """The requested BLS period grid exceeds its explicit trial-period budget."""
+
+
 def run_bls(
     time_days: NDArray[np.float64],
     flux: NDArray[np.float64],
@@ -37,8 +41,17 @@ def run_bls(
     num_durations: int = 15,
     oversample: float = 5.0,
     device: str = "auto",
+    *,
+    max_trial_periods: int | None = None,
 ) -> BlsPeriodogram:
-    """Run an uncertainty-weighted BLS search across trial periods and durations."""
+    """Run BLS, rejecting an oversized period grid when a budget is supplied."""
+    if max_trial_periods is not None and (
+        isinstance(max_trial_periods, bool)
+        or not isinstance(max_trial_periods, (int, np.integer))
+        or max_trial_periods < 1
+    ):
+        raise ValueError("max_trial_periods must be a positive integer or None.")
+
     length = len(time_days)
     if length < 50:
         raise ValueError("BLS requires at least 50 cadences.")
@@ -61,6 +74,29 @@ def run_bls(
     # Astropy BoxLeastSquares model
     model = BoxLeastSquares(time_days, flux, dy=flux_err)
 
+    if max_trial_periods is not None:
+        # Astropy's autoperiod uses df = frequency_factor * min(duration) / baseline**2.
+        # Its rounded endpoint can add at most one period outside our requested bounds.
+        model_baseline = float(np.ptp(time_days))
+        if (
+            np.isfinite(model_baseline)
+            and model_baseline > 0
+            and np.isfinite(min_period)
+            and np.isfinite(max_period)
+            and np.isfinite(oversample)
+            and min_period > 0
+            and max_period >= min_period
+            and oversample > 0
+        ):
+            frequency_step = oversample * float(np.min(durations_days)) / model_baseline**2
+            frequency_span = 1.0 / min_period - 1.0 / max_period
+            estimated_steps = frequency_span / frequency_step if frequency_step > 0 else float("inf")
+            if estimated_steps > max_trial_periods + 1:
+                raise BlsSearchBudgetExceeded(
+                    f"BLS trial-period grid exceeds max_trial_periods={max_trial_periods}; "
+                    "reduce the requested search range or change the explicit budget."
+                )
+
     # Trial periods grid
     periods = model.autoperiod(
         durations_days,
@@ -73,6 +109,11 @@ def run_bls(
     periods = periods[(periods >= min_period) & (periods <= max_period)]
     if periods.size == 0:
         raise ValueError("No trial periods fall within the requested BLS search range.")
+    if max_trial_periods is not None and periods.size > max_trial_periods:
+        raise BlsSearchBudgetExceeded(
+            f"BLS trial-period grid has {periods.size} periods, exceeding "
+            f"max_trial_periods={max_trial_periods}."
+        )
 
     # Run BLS
     power_results = model.power(periods, durations_days)

@@ -6,7 +6,13 @@ import numpy as np
 import pytest
 
 from transiteye.domain.models import LightCurve, Provenance
-from transiteye.preprocessing.quality import DEFAULT_QUALITY_MASK, ExclusionReason, assess_quality
+from transiteye.preprocessing.quality import (
+    DEFAULT_QUALITY_MASK,
+    KEPLER_DEFAULT_QUALITY_MASK,
+    ExclusionReason,
+    assess_quality,
+    quality_mask_for_mission,
+)
 from transiteye.preprocessing.representation import (
     compute_cdpp_proxy,
     compute_robust_ptp_scatter,
@@ -77,6 +83,28 @@ def test_negative_dips_are_never_filtered_as_outliers() -> None:
 
     # In-dip cadences MUST remain VALID
     assert np.all(reasons[50:55] == ExclusionReason.VALID)
+
+
+def test_mission_quality_masks_keep_informational_kepler_flags() -> None:
+    assert quality_mask_for_mission("TESS") == DEFAULT_QUALITY_MASK
+    assert quality_mask_for_mission("Kepler") == KEPLER_DEFAULT_QUALITY_MASK
+    assert quality_mask_for_mission("Kepler") != DEFAULT_QUALITY_MASK
+    with pytest.raises(ValueError, match="Unsupported mission"):
+        quality_mask_for_mission("K2")
+
+    # Kepler aperture cosmic ray correction is informational; manual exclusion is not.
+    lc = _make_light_curve(
+        np.array([1.0, 2.0, 3.0]),
+        np.array([100.0, 100.0, 100.0]),
+        quality=np.array([0, 128, 256], dtype=np.int64),
+    )
+    reasons = assess_quality(
+        lc, quality_mask=quality_mask_for_mission("Kepler"),
+        reject_positive_outliers_sigma=None,
+    )
+    assert reasons[0] == ExclusionReason.VALID
+    assert reasons[1] == ExclusionReason.VALID
+    assert reasons[2] & ExclusionReason.QUALITY_FLAG
 
 
 def test_gap_segmentation() -> None:

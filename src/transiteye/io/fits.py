@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
@@ -15,6 +16,30 @@ from transiteye.domain import LightCurve, Provenance
 
 class FitsValidationError(ValueError):
     """Raised when a local FITS product cannot support TransitEye analysis."""
+
+
+def validate_day_time_axis(curve: LightCurve) -> None:
+    """Require explicit TDB/day coordinates and a matching BJD reference."""
+    if curve.provenance.time_system != "TDB":
+        raise FitsValidationError("Light curve requires TDB time coordinates.")
+    try:
+        reference = float(curve.provenance.time_reference or "")
+    except ValueError as error:
+        raise FitsValidationError("Light curve has no valid BJD reference.") from error
+    if not np.isfinite(reference) or not 2_400_000 <= reference <= 2_600_000:
+        raise FitsValidationError("Light curve has no valid BJD reference.")
+    units = (curve.metadata.get("time_unit"), curve.metadata.get("time_column_unit"))
+    if not any(unit is not None for unit in units):
+        raise FitsValidationError("Light curve has no explicit TIME unit.")
+    for unit in units:
+        if unit is None:
+            continue
+        text = str(unit).strip().lower()
+        if text in ("d", "day", "days"):
+            continue
+        match = re.fullmatch(r"bjd\s*-\s*(\d+(?:\.\d+)?)", text)
+        if match is None or abs(float(match.group(1)) - reference) >= 1e-7:
+            raise FitsValidationError(f"Unsupported or conflicting TIME unit: {unit}")
 
 
 def _string(value: Any) -> str | None:
@@ -61,6 +86,10 @@ def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX"
                 )
             primary = hdul[0].header
             extension = hdul[1].header
+            for keyword in ("MISSION", "TELESCOP"):
+                declared = _string(primary.get(keyword, extension.get(keyword)))
+                if declared is not None and declared.casefold() != "tess":
+                    raise FitsValidationError(f"Expected TESS FITS, found {keyword}={declared}.")
             table = hdul[1].data
             if table is None or table.names is None:
                 raise FitsValidationError("FITS light-curve table is empty.")
@@ -111,7 +140,8 @@ def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX"
                 provenance=provenance,
                 metadata={
                     "filename": source.name,
-                    "time_unit": _string(extension.get("TIMEUNIT")) or "d",
+                    "time_unit": _string(extension.get("TIMEUNIT", primary.get("TIMEUNIT"))),
+                    "time_column_unit": _string(extension.get(f"TUNIT{table.names.index('TIME') + 1}")),
                     "crowdsap": _string(extension.get("CROWDSAP", primary.get("CROWDSAP"))),
                     "flfrcsap": _string(extension.get("FLFRCSAP", primary.get("FLFRCSAP"))),
                     "teff": _string(primary.get("TEFF", extension.get("TEFF"))),
@@ -123,6 +153,79 @@ def read_tess_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX"
                     "frame_time_seconds": _string(extension.get("FRAMETIM", primary.get("FRAMETIM"))),
                     "integration_time_seconds": _string(extension.get("INT_TIME", primary.get("INT_TIME"))),
                     "readout_time_seconds": _string(extension.get("READTIME", primary.get("READTIME"))),
+                },
+            )
+    except OSError as error:
+        raise FitsValidationError(f"Could not open FITS file {source}: {error}") from error
+
+
+def read_kepler_light_curve(path: Path | str, flux_preference: str = "PDCSAP_FLUX") -> LightCurve:
+    """Read an official Kepler light curve without applying a quality mask.
+
+    Kepler's native TIME values use the FITS BJD reference (normally BKJD), which
+    is retained rather than silently interpreted as TESS BTJD.
+    """
+    source = Path(path).expanduser().resolve()
+    if not source.is_file():
+        raise FitsValidationError(f"FITS file does not exist: {source}")
+    try:
+        with fits.open(source, memmap=False) as hdul:
+            if len(hdul) < 2 or not isinstance(hdul[1], fits.BinTableHDU):
+                raise FitsValidationError("Expected a Kepler light-curve binary table.")
+            primary, extension = hdul[0].header, hdul[1].header
+            declared_mission = _string(primary.get("MISSION", extension.get("MISSION")))
+            if declared_mission is not None and declared_mission.casefold() != "kepler":
+                raise FitsValidationError(f"Expected Kepler FITS, found mission {declared_mission}.")
+            telescope = _string(primary.get("TELESCOP", extension.get("TELESCOP")))
+            if telescope is not None and telescope.casefold() != "kepler":
+                raise FitsValidationError(f"Expected Kepler FITS, found TELESCOP={telescope}.")
+            table = hdul[1].data
+            if table is None or table.names is None or "TIME" not in table.names:
+                raise FitsValidationError("Kepler FITS light-curve table lacks TIME.")
+            selected_flux = next(
+                (name for name in (flux_preference, "PDCSAP_FLUX", "SAP_FLUX") if name in table.names),
+                None,
+            )
+            if selected_flux is None:
+                raise FitsValidationError("Kepler FITS lacks PDCSAP_FLUX and SAP_FLUX.")
+            target = primary.get("KEPLERID", extension.get("KEPLERID"))
+            if target is None:
+                raise FitsValidationError("Kepler FITS lacks KEPLERID.")
+            quarter = primary.get("QUARTER", extension.get("QUARTER"))
+            provenance = Provenance(
+                source_uri=f"file://{source}",
+                source_path=str(source),
+                checksum_sha256=_checksum(source),
+                product_type="kepler_light_curve",
+                target_id=str(int(target)),
+                sector=None,
+                time_system=_string(extension.get("TIMESYS", primary.get("TIMESYS"))),
+                time_reference=_time_reference(primary, extension),
+                metadata={
+                    "mission": "Kepler",
+                    "quarter": "" if quarter is None else str(int(quarter)),
+                    "selected_flux": selected_flux,
+                    **{
+                        key: str(value)
+                        for key in ("TIMEDEL", "NUM_FRM", "FRAMETIM", "INT_TIME", "READTIME", "EXPOSURE", "LIVETIME")
+                        if (value := extension.get(key, primary.get(key))) is not None
+                    },
+                },
+            )
+            return LightCurve(
+                time_days=np.asarray(table["TIME"], dtype=np.float64),
+                flux=np.asarray(table[selected_flux], dtype=np.float64),
+                flux_error=_column(table, selected_flux + "_ERR", np.dtype(np.float64)),
+                quality=_column(table, "SAP_QUALITY", np.dtype(np.int64)),
+                cadence_number=_column(table, "CADENCENO", np.dtype(np.int64)),
+                centroid_column=_column(table, "MOM_CENTR1", np.dtype(np.float64)),
+                centroid_row=_column(table, "MOM_CENTR2", np.dtype(np.float64)),
+                flux_kind=selected_flux,
+                flux_unit=_string(extension.get(f"TUNIT{table.names.index(selected_flux) + 1}")),
+                provenance=provenance,
+                metadata={
+                    "time_unit": _string(extension.get("TIMEUNIT", primary.get("TIMEUNIT"))),
+                    "time_column_unit": _string(extension.get(f"TUNIT{table.names.index('TIME') + 1}")),
                 },
             )
     except OSError as error:

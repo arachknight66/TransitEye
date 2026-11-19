@@ -18,21 +18,28 @@ class ExclusionReason(IntFlag):
     NON_POSITIVE_FLUX = 1 << 1
     INVALID_ERROR = 1 << 2
     TESS_QUALITY_FLAG = 1 << 3
+    QUALITY_FLAG = TESS_QUALITY_FLAG  # Mission-neutral alias; retain saved flag value.
     SIGMA_OUTLIER = 1 << 4
 
 
-# Default conservative TESS SPOC quality bitmask:
-# Bits: 1 (Attitude tweak), 2 (Safe mode), 3 (Coarse point), 4 (Earth point),
-# 6 (Desaturation/momentum dump), 8 (Manual exclude), 10 (Impulsive outlier),
-# 11 (Cosmic ray in collateral), 12 (Straylight/Earth or Moon in FOV).
-# Value: 1 | 2 | 4 | 8 | 32 | 128 | 512 | 1024 | 2048 = 3759? Wait:
-# Bit 1 = 1, Bit 2 = 2, Bit 3 = 4, Bit 4 = 8, Bit 6 = 32, Bit 8 = 128,
-# Bit 10 = 512, Bit 11 = 1024, Bit 12 = 2048:
-# 1 + 2 + 4 + 8 + 32 + 128 + 512 + 1024 + 2048 = 3759 = 0x0EEF?
-# Let's check 0x0BEE:
-# 0x0BEE = 0b101111101110 = bits 2, 3, 4, 6, 7, 8, 9, 10, 12.
-# To support standard TESS flags, we define DEFAULT_QUALITY_MASK = 0x0BEE
+# Historical TESS mask retained for single-file result compatibility.
 DEFAULT_QUALITY_MASK: int = 0x0BEE
+
+# Lightkurve's Kepler default: attitude tweak, safe/coarse/Earth pointing,
+# desaturation, manual exclusion, detector anomaly, no data, thruster firing.
+# Corrected aperture cosmic rays (128) remain eligible.
+KEPLER_DEFAULT_QUALITY_MASK: int = (
+    1 | 2 | 4 | 8 | 32 | 256 | 16384 | 65536 | 1048576
+)
+
+
+def quality_mask_for_mission(mission: str) -> int:
+    """Return the recorded default quality policy for a supported mission."""
+    if mission == "TESS":
+        return DEFAULT_QUALITY_MASK
+    if mission == "Kepler":
+        return KEPLER_DEFAULT_QUALITY_MASK
+    raise ValueError(f"Unsupported mission for quality policy: {mission}")
 
 
 def assess_quality(
@@ -43,7 +50,7 @@ def assess_quality(
     """Evaluate quality and record bitmask exclusion reasons for each cadence.
 
     Negative excursions (potential transits or eclipses) are preserved unconditionally.
-    Only invalid numerical values, non-positive fluxes, TESS quality flags, and extreme
+    Only invalid numerical values, non-positive fluxes, selected quality flags, and extreme
     positive-only spikes (e.g. flares/cosmic rays) receive exclusion reasons.
     """
     length = len(light_curve.time_days)
@@ -65,10 +72,10 @@ def assess_quality(
         invalid_err = ~np.isfinite(light_curve.flux_error) | (light_curve.flux_error <= 0)
         reasons[invalid_err] |= ExclusionReason.INVALID_ERROR
 
-    # 4. Check TESS QUALITY flags
+    # 4. Check the caller's recorded mission-specific QUALITY mask.
     if light_curve.quality is not None and quality_mask > 0:
         flagged = (light_curve.quality & quality_mask) != 0
-        reasons[flagged] |= ExclusionReason.TESS_QUALITY_FLAG
+        reasons[flagged] |= ExclusionReason.QUALITY_FLAG
 
     # 5. Optional positive outlier rejection (flares, cosmic rays)
     if reject_positive_outliers_sigma is not None:

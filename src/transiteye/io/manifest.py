@@ -7,6 +7,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any
 
 
@@ -21,6 +22,7 @@ class ManifestEntry:
     product_type: str
     expected_sha256: str | None = None
     local_filename: str | None = None
+    provider: str | None = None
 
     def resolved_filename(self) -> str:
         """Return a stable local file name without trusting a remote path."""
@@ -45,6 +47,7 @@ class ProductManifest:
         source: str,
         entries: tuple[ManifestEntry, ...],
         query: dict[str, str] | None = None,
+        schema_version: str = "1",
     ) -> ProductManifest:
         """Create a deterministic identifier from sorted entry content and query metadata."""
 
@@ -54,7 +57,7 @@ class ProductManifest:
                 entry_to_dict(entry) for entry in sorted(entries, key=lambda item: item.product_id)
             ],
             "query": query or {},
-            "schema_version": "1",
+            "schema_version": schema_version,
         }
         canonical = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
         manifest_id = hashlib.sha256(canonical).hexdigest()[:16]
@@ -64,11 +67,12 @@ class ProductManifest:
             source=source,
             entries=entries,
             query=query or {},
+            schema_version=schema_version,
         )
 
 
 def entry_to_dict(entry: ManifestEntry) -> dict[str, Any]:
-    return {
+    document = {
         "product_id": entry.product_id,
         "data_uri": entry.data_uri,
         "target_id": entry.target_id,
@@ -77,6 +81,9 @@ def entry_to_dict(entry: ManifestEntry) -> dict[str, Any]:
         "expected_sha256": entry.expected_sha256,
         "local_filename": entry.local_filename,
     }
+    if entry.provider is not None:
+        document["provider"] = entry.provider
+    return document
 
 
 def manifest_to_dict(manifest: ProductManifest) -> dict[str, Any]:
@@ -97,6 +104,39 @@ def write_manifest(manifest: ProductManifest, path: Path) -> None:
     path.write_text(
         json.dumps(manifest_to_dict(manifest), indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+
+
+def write_immutable_json(document: dict[str, Any], path: Path) -> None:
+    """Publish complete JSON atomically without replacing a prior snapshot."""
+
+    if path.exists():
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(dir=path.parent) as temporary_root:
+        temporary = Path(temporary_root) / path.name
+        temporary.write_text(
+            json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        try:
+            path.hardlink_to(temporary)
+        except FileExistsError:
+            # Another process published a complete snapshot first.
+            pass
+
+
+def freeze_manifest(manifest: ProductManifest, path: Path) -> ProductManifest:
+    """Freeze discovery once and return the original record on identical rediscovery."""
+
+    proposed = manifest_to_dict(manifest)
+    write_immutable_json(proposed, path)
+    frozen = read_manifest(path)
+    original = manifest_to_dict(frozen)
+    for document in (original, proposed):
+        document.pop("created_at")
+        document["entries"].sort(key=lambda entry: entry["product_id"])
+    if original != proposed:
+        raise ValueError(f"Frozen archive manifest differs from the discovered inventory: {path}")
+    return frozen
 
 
 def read_manifest(path: Path) -> ProductManifest:

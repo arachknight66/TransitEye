@@ -31,6 +31,34 @@ Analyze a local SPOC or TESS-SPOC light curve end to end:
 uv run --no-sync transiteye analyze-fits path/to/lightcurve.fits --device auto
 ```
 
+Preview official archive products for a qualified ID, then freeze and fetch them into the
+configured workspace:
+
+```bash
+uv run --no-sync transiteye lookup-target "TIC 307210830"
+uv run --no-sync transiteye fetch-target "KIC 11904151" --config path/to/config.toml
+```
+
+Bare numeric IDs require `--catalog TIC` or `--catalog KIC`. Fetching verifies the FITS target
+identity and retains a manifest alongside the files. Kepler FITS ingestion preserves native
+quality flags and time references. Combined-observation analysis and Kepler classification remain
+under development; `analyze-fits` still supports TESS only.
+New lookup manifests use v2 to retain the archive provider; older manifests remain readable.
+Use `transiteye inspect-target-set PATH/TO/manifest.json` to validate every fetched product and
+inspect its BJD-TDB coverage. The report includes cadence counts, overlap winners, selected and
+excluded counts, and selection-reason counts. The backend preserves provider/cadence provenance
+and separate overlap and analysis masks; Kepler quality filtering uses its own mission-specific
+mask. Cadence width is a sampling-window proxy, not exposure: with at least three distinct timestamps
+it uses the lower median positive spacing; with two, TIMEDEL is accepted only within 20% of measured
+spacing; singleton TIMEDEL is unknown. Intersecting spans with unknown widths remain unresolved.
+Combined preparation independently normalizes/detrends each observation and retains raw-row indices
+and the common BJD-TDB origin; it rejects unresolved overlap (6 focused tests pass). Standalone BLS
+and joint fitting are not wired into this preparation or an end-to-end service. The separate exposure
+resolver accepts a user override or uses `INT_TIME * NUM_FRM` as a frame-sum boxcar approximation; it
+does not use `TIMEDEL` or aggregate `EXPOSURE`/`LIVETIME` as exposure (7 focused tests pass).
+Single-file analysis behavior and result-bundle schemas are unchanged, and v1 lookup manifests
+remain readable. This slice adds no model training or performance claim.
+
 When the per-cadence exposure is independently known, pass `--exposure-seconds` to individual or
 batch analysis. Otherwise the result explicitly flags the historical two-minute fit assumption.
 The supplied duration is an effective boxcar approximation; it does not model separate frame readout
@@ -116,6 +144,18 @@ morphology; its selection metrics do not establish independent accuracy. The tes
 sealed, and the model must not be presented as planetary confirmation.
 
 ### Newly labeled candidate-sequence experiment
+
+To train in Google Colab from the downloaded TESS archive FITS files, open
+[the full light-curve training notebook](notebooks/TransitEye_raw_TESS_FITS_training.ipynb).
+Upload the prepared `.transiteye-workspace/colab/TransitEye-FITS` folder to My Drive.
+Run `python scripts/prepare_colab_fits.py` to recreate the folder from the local labeled cohort.
+The notebook verifies the original file hashes and rebuilds candidate sequences from the flux.
+
+For training from an existing extraction cache, upload [the candidate training notebook](notebooks/TransitEye_candidate_training.ipynb)
+and run its cells with `matched_candidate_sequences.npz` from the existing experiment directory.
+It trains the forest and CNN on the frozen development partitions and exports both models and the
+calibration report. For the downloaded Kaggle CSV, [the Kepler experiment](notebooks/Kepler_CSV_experiment.ipynb)
+fits two exploratory forests using flux quantiles with and without Fourier features.
 
 The separately approved 2026-11-14 experiment trains a binary candidate-morphology proxy model from
 scratch. To rebuild its cleaned manifest and resume candidate extraction/training, run:
